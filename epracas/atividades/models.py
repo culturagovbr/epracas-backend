@@ -41,7 +41,7 @@ class Subarea(models.Model):
     descricao = models.CharField(max_length=100)
 
 class Atividade(models.Model):
-    nome = = models.CharField(max_length=255)
+    nome = models.CharField(max_length=255)
     descricao = models.TextField()
     tipo = models.ForeignKey(Tipo)
     area = models.ForeignKey(Area)
