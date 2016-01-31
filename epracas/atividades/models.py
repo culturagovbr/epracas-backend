@@ -1,20 +1,21 @@
 from django.db import models
+from django.forms import ModelForm
 
 # Create your models here.
 
-class Tipos(models.Model):
+class Tipo(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=100)
 
-class Espacos(models.Model):
+class Espaco(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=100)
 
-class FaixasEtarias(models.Model):
+class FaixasEtaria(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=100)
 
-class Parceiros(models.Model):
+class Parceiro(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=100)
 
@@ -30,23 +31,24 @@ class Periodicidade(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=100)
 
-
-class Areas(models.Model):
+class Area(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=100)
 
-class Subareas(models.Model):
-    area = models.ForeignKey(Areas, on_delete=models.CASCADE)
+class Subarea(models.Model):
+    area = models.ForeignKey(Area, on_delete=models.CASCADE)
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=100)
 
-class Atividades(models.Model):
-    tipo = models.ForeignKey(Tipos)
-    area = models.ForeignKey(Areas)
-    subarea = models.ForeignKey(Subareas)
-    espacos = models.ManyToManyField(Espacos)
+class Atividade(models.Model):
+    nome = = models.CharField(max_length=255)
+    descricao = models.TextField()
+    tipo = models.ForeignKey(Tipo)
+    area = models.ForeignKey(Area)
+    subarea = models.ForeignKey(Subarea)
+    espacos = models.ManyToManyField(Espaco)
     parceiros = models.CharField(max_length=255)
-    faixas_etarias = models.ManyToManyField(FaixasEtarias)
+    faixas_etarias = models.ManyToManyField(FaixasEtaria)
     publico = models.ManyToManyField(Publico)
     abrangencia = models.ForeignKey(Abrangencia)
     data_inicio = models.DateField()
