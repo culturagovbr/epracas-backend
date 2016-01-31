@@ -3,13 +3,13 @@ from django.contrib import admin
 import atividades.models as models
 
 # Register your models here.
-admin.site.register(models.Tipos)
-admin.site.register(models.Espacos)
-admin.site.register(models.FaixasEtarias)
-admin.site.register(models.Parceiros)
+admin.site.register(models.Tipo)
+admin.site.register(models.Espaco)
+admin.site.register(models.FaixasEtaria)
+admin.site.register(models.Parceiro)
 admin.site.register(models.Publico)
 admin.site.register(models.Abrangencia)
 admin.site.register(models.Periodicidade)
-admin.site.register(models.Areas)
-admin.site.register(models.Subareas)
-admin.site.register(models.Atividades)
+admin.site.register(models.Area)
+admin.site.register(models.Subarea)
+admin.site.register(models.Atividade)
