@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-import models
+import atividades.models as models
 
 # Register your models here.
 admin.site.register(models.Tipos)

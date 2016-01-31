@@ -41,7 +41,7 @@ class Subareas(models.Model):
     descricao = models.CharField(max_length=100)
 
 class Atividades(models.Model):
-    tipo = models.ForeignKey(Tipo)
+    tipo = models.ForeignKey(Tipos)
     area = models.ForeignKey(Areas)
     subarea = models.ForeignKey(Subareas)
     espacos = models.ManyToManyField(Espacos)
