@@ -52,6 +52,6 @@ class Atividades(models.Model):
     data_inicio = models.DateField()
     data_termino = models.DateField()
     periodicidade = models.ForeignKey(Periodicidades)
-    hora_inicio = models.DateField()
-    hora_termino = models.DateField()
+    hora_inicio = models.TimeField()
+    hora_termino = models.TimeField()
     publico_esperado = models.IntegerField()
