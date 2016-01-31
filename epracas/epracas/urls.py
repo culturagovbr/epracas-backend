@@ -16,10 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from atividades.views import CriarAtividade, ModificarAtividade
+from atividades.views import CriarAtividade, ModificarAtividade, ListarAtividade, ExcluirAtividade
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'atividade/add/$', CriarAtividade.as_view(), name='atividade-add'),
     url(r'atividade/(?P<pk>[0-9]+)/$', ModificarAtividade.as_view(), name='atividade-update'),
+    url(r'^atividade/$', ListarAtividade.as_view(), name='atividade-list'),
+    url(r'^atividade/excluir/(?P<pk>[0-9]+)/$', ExcluirAtividade.as_view(), name='atividade-delete'),
 ]
