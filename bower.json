@@ -1,0 +1,22 @@
+{
+  "name": "e-pracas",
+  "homepage": "https://github.com/culturagovbr/e-pracas",
+  "authors": [
+    "avaloni <avaloni@users.noreply.github.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "AGPL",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "fullcalendar": "^2.6.0"
+  }
+}

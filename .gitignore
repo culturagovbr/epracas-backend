@@ -57,4 +57,8 @@ docs/_build/
 # PyBuilder
 target/
 
+# Npm/Bower
+bower_components/
+node_modules/
+
 epracas/db.sqlite3
