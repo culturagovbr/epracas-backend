@@ -57,12 +57,20 @@ class Tipo(models.Model):
     def __str__(self):
         return self.nome
 
+    def natural_key(self):
+        return (self.nome)
+
+
 class Espaco(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField()
 
     def __str__(self):
         return self.nome
+
+    def natural_key(self):
+        return (self.nome)
+
 
 class FaixasEtaria(models.Model):
     nome = models.CharField(max_length=100)
@@ -71,12 +79,20 @@ class FaixasEtaria(models.Model):
     def __str__(self):
         return self.nome
 
+    def natural_key(self):
+        return (self.nome)
+
+
 class Parceiro(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField()
 
     def __str__(self):
         return self.nome
+
+    def natural_key(self):
+        return (self.nome)
+
 
 class Publico(models.Model):
     nome = models.CharField(max_length=100)
@@ -85,12 +101,20 @@ class Publico(models.Model):
     def __str__(self):
         return self.nome
 
+    def natural_key(self):
+        return (self.nome)
+
+
 class Abrangencia(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField()
 
     def __str__(self):
         return self.nome
+
+    def natural_key(self):
+        return (self.nome)
+
 
 class Periodicidade(models.Model):
     nome = models.CharField(max_length=100)
@@ -99,12 +123,20 @@ class Periodicidade(models.Model):
     def __str__(self):
         return self.nome
 
+    def natural_key(self):
+        return (self.nome)
+
+
 class Area(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField()
 
     def __str__(self):
         return self.nome
+
+    def natural_key(self):
+        return (self.nome)
+
 
 class Subarea(models.Model):
     area = models.ForeignKey(Area)
@@ -113,6 +145,10 @@ class Subarea(models.Model):
 
     def __str__(self):
         return self.nome
+
+    def natural_key(self):
+        return (self.nome)
+
 
 class Atividade(models.Model):
     nome = models.CharField(max_length=255)
