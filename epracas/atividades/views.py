@@ -1,11 +1,9 @@
-from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.core import serializers
 from django.core.urlresolvers import reverse_lazy
 from atividades.models import Atividade
 from atividades.forms import AtividadesForm
 from django.views.generic.list import ListView
-from django.utils import timezone
+
 import json
 
 
