@@ -1,33 +1,41 @@
 from django.db import models
 
-# Create your models here.
-''' Modelos de dados para os CEUS '''
 
+# Create your models here.
+# Modelos de dados para os CEUS '''
 class SituacaoCeu(models.Model):
     nome = models.CharField(max_length=255)
     descricao = models.TextField()
+
     def __str__(self):
         return self.nome
+
 
 class Regiao(models.Model):
     nome = models.CharField(max_length=100)
     sigla = models.CharField(max_length=5)
+
     def __str__(self):
         return self.nome
+
 
 class Estado(models.Model):
     nome = models.CharField(max_length=100)
     codIbge = models.IntegerField()
     regiao = models.ForeignKey(Regiao)
+
     def __str__(self):
         return self.nome
+
 
 class Municipio(models.Model):
     nome = models.CharField(max_length=255)
     codIbge = models.IntegerField()
     estado = models.ForeignKey(Estado)
+
     def __str__(self):
         return self.nome
+
 
 class Responsavel(models.Model):
     nome = models.CharField(max_length=255)
@@ -35,6 +43,7 @@ class Responsavel(models.Model):
 
     def __str__(self):
         return self.nome
+
 
 class Ceu(models.Model):
     nome = models.CharField(max_length=255)
@@ -48,8 +57,8 @@ class Ceu(models.Model):
     def __str__(self):
         return self.nome
 
-''' Modelos de dados para as Atividades '''
 
+# Modelos de dados para as Atividades '''
 class Tipo(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.TextField()
