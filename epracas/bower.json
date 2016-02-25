@@ -17,6 +17,7 @@
     "tests"
   ],
   "dependencies": {
-    "fullcalendar": "^2.6.0"
+    "fullcalendar": "^2.6.0",
+    "bootstrap-material-design": "~0.5.8"
   }
 }
