@@ -1,3 +1,8 @@
+{% load staticfiles %}
+<link rel='stylesheet' href="{% static 'bower_components/fullcalendar/dist/fullcalendar.css' %}" />
+<script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+<script src="{% static 'bower_components/fullcalendar/dist/fullcalendar.js' %}"></script>
 <h1>Atividades</h1>
 <ul>
 {% for atividade in object_list %}
@@ -6,5 +11,10 @@
     <li>Nenhuma Atividade Encontrada.</li>
 {% endfor %}
 </ul>
-{{atividades}}
+<div id='calendar'></div>
+<script>
+$(document).ready(function() {
+    $('#calendar').fullCalendar()
+});
+</script>
 <a href="/atividade/add/">Criar uma Atividade</a>
