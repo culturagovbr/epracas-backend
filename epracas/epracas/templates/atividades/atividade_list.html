@@ -14,7 +14,9 @@
 <div id='calendar'></div>
 <script>
 $(document).ready(function() {
-    $('#calendar').fullCalendar()
+    $('#calendar').fullCalendar({
+        events: {{atividades}}
+    })
 });
 </script>
 <a href="/atividade/add/">Criar uma Atividade</a>
