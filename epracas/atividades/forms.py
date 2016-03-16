@@ -6,4 +6,5 @@ from atividades.models import Atividade
 class AtividadesForm(ModelForm):
     class Meta:
         model = Atividade
-        exclude = ['ceu']
+        fields = '__all__'
+        # exclude = ['ceu']
