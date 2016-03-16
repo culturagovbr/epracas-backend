@@ -44,6 +44,7 @@ DJANGO_APPS = (
     'django.contrib.admin',
 )
 THIRD_PARTY_APPS = (
+    'smart_selects',
 )
 
 # Apps specific for this project go here.
@@ -140,3 +141,5 @@ STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+USE_DJANGO_JQUERY = False
