@@ -31,9 +31,10 @@ class ListarAtividade(ListView):
                               {
                                   'title': a['nome'],
                                   'allDay': 'false',
-                                  'start': a['data_inicio'].strftime('%Y-%m-%d'),
-                                  'end': a['data_termino'].strftime('%Y-%m-%d'),
-                                  'url': reverse('atividade-update', args=[a['id']])
+                                  'start': a['data_inicio'].isoformat(),
+                                  'end': a['data_termino'].isoformat(),
+                                  'url': reverse('atividade-update', args=[a['id']]),
+                                  'allDay': False
                                   }, atividades_data))
         context['atividades'] = json.dumps(atividades)
         return context
