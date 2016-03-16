@@ -1,5 +1,7 @@
 from django.db import models
 
+from smart_selects.db_fields import ChainedForeignKey
+
 
 # Create your models here.
 # Modelos de dados para os CEUS '''
@@ -11,18 +13,9 @@ class SituacaoCeu(models.Model):
         return self.nome
 
 
-class Regiao(models.Model):
-    nome = models.CharField(max_length=100)
-    sigla = models.CharField(max_length=5)
-
-    def __str__(self):
-        return self.nome
-
-
 class Estado(models.Model):
     nome = models.CharField(max_length=100)
-    codIbge = models.IntegerField()
-    regiao = models.ForeignKey(Regiao)
+    cod_ibge = models.IntegerField()
 
     def __str__(self):
         return self.nome
@@ -30,7 +23,7 @@ class Estado(models.Model):
 
 class Municipio(models.Model):
     nome = models.CharField(max_length=255)
-    codIbge = models.IntegerField()
+    cod_ibge = models.IntegerField()
     estado = models.ForeignKey(Estado)
 
     def __str__(self):
@@ -170,7 +163,14 @@ class Atividade(models.Model):
     publico_esperado = models.IntegerField()
     tipo = models.ForeignKey(Tipo)
     area = models.ForeignKey(Area)
-    subarea = models.ForeignKey(Subarea)
+    subarea = ChainedForeignKey(
+        Subarea,
+        chained_field='area',
+        chained_model_field='area',
+        show_all=False,
+        auto_choose=True,
+        blank=True,
+    )
     espacos = models.ManyToManyField(Espaco)
     faixas_etarias = models.ManyToManyField(FaixasEtaria)
     publico = models.ManyToManyField(Publico)
