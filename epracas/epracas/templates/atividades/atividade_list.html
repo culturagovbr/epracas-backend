@@ -1,22 +1,29 @@
 {% load staticfiles %}
-<link rel='stylesheet' href="{% static 'bower_components/fullcalendar/dist/fullcalendar.css' %}" />
-<script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
-<script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
-<script src="{% static 'bower_components/fullcalendar/dist/fullcalendar.js' %}"></script>
-<h1>Atividades</h1>
-<ul>
-{% for atividade in object_list %}
-    <li>{{ atividade.data_inicio|date }} - {{ atividade.nome }} [<a href="/atividade/{{ atividade.pk }}">EDITAR</a>] [<a href="/atividade/excluir/{{ atividade.pk }}">EXCLUIR</a>]</li>
-{% empty %}
-    <li>Nenhuma Atividade Encontrada.</li>
-{% endfor %}
-</ul>
-<div id='calendar'></div>
-<script>
-$(document).ready(function() {
-    $('#calendar').fullCalendar({
-        events: {{atividades}}
-    })
-});
-</script>
-<a href="/atividade/add/">Criar uma Atividade</a>
+
+<head>
+    <link rel='stylesheet' href="{% static 'bower_components/fullcalendar/dist/fullcalendar.css' %}" />
+    <script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
+    <script src="{% static 'bower_components/moment/min/moment.min.js' %}"></script>
+    <script src="{% static 'bower_components/fullcalendar/dist/fullcalendar.js' %}"></script>
+    <script src="{% static 'smart-selects/admin/js/chainedfk.js' %}"></script>
+</head>
+
+<body>
+    <h1>Atividades</h1>
+    <ul>
+        {% for atividade in object_list %}
+        <li>{{ atividade.data_inicio|date }} - {{ atividade.nome }} [<a href="/atividade/{{ atividade.pk }}">EDITAR</a>] [<a href="/atividade/excluir/{{ atividade.pk }}">EXCLUIR</a>]</li>
+        {% empty %}
+        <li>Nenhuma Atividade Encontrada.</li>
+        {% endfor %}
+    </ul>
+    <div id='calendar'></div>
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                events: {{atividades | safe}},
+            })
+        });
+    </script>
+    <a href="/atividade/add/">Criar uma Atividade</a>
+</body>
