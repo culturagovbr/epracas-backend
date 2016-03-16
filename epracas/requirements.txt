@@ -1,1 +1,7 @@
 Django==1.9.1
+django-smart-selects==1.2.2
+psycopg2==2.5.4
+six==1.8.0
+sqlparse==0.1.13
+static3==0.5.1
+wheel==0.24.0
