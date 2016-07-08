@@ -5,3 +5,4 @@ six==1.8.0
 sqlparse==0.1.13
 static3==0.5.1
 wheel==0.24.0
+dj-database-url==0.4.1
