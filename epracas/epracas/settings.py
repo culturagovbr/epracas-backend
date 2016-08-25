@@ -28,7 +28,7 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if os.getenv('DEBUG') or os.get('DEBUG') != "False":
+if os.getenv('DEBUG') or os.getenv('DEBUG') != "False":
     DEBUG = True
 else:
     DEBUG = False
@@ -59,6 +59,7 @@ THIRD_PARTY_APPS = (
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'atividades',
+    'core',
 )
 
 INSTALLED_APPS = INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
