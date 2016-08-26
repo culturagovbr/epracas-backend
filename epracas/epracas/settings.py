@@ -54,6 +54,7 @@ DJANGO_APPS = (
 )
 THIRD_PARTY_APPS = (
     'smart_selects',
+    'test_without_migrations',
 )
 
 # Apps specific for this project go here.
