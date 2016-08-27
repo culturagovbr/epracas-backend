@@ -1,9 +1,12 @@
+import uuid
+
 from django.db import models
 from localflavor.br.br_states import STATE_CHOICES
 
 from .choices import MODELO_CHOICES, REGIOES_CHOICES, SITUACAO_CHOICES
 
 class Praca(models.Model):
+    id_pub = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     contrato = models.IntegerField('Nº de Contrato', max_length=10)
     regiao = models.CharField(
             'Região',

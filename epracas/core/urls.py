@@ -1,11 +1,11 @@
 from django.conf.urls import include, url
 
-from .views import PracaListView
+from .views import PracaViewSet
 
-from rest_framework.routers import DefaultRouter
+from rest_framework import routers 
 
-router = DefaultRouter()
-router.register(r'pracas', PracaListView)
+router = routers.SimpleRouter()
+router.register(r'pracas', PracaViewSet) 
 
 urlpatterns = [
     url(r'^', include(router.urls)),
