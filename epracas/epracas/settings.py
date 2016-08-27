@@ -151,3 +151,14 @@ STATICFILES_DIRS = (
 )
 
 USE_DJANGO_JQUERY = False
+
+if os.getenv('TEST_ENV'):
+    # Desabilita as migracoes quando usarmos a configuracao de settings
+    MIGRATION_MODULES = {
+        'core': None,
+        'atividades': None
+    }
+
+    # Usamos o backend em memoria para facilitar os testes
+    EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
+
