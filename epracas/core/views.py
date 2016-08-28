@@ -1,9 +1,9 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Praca
 from .serializers import PracaSerializer
 
 
-class PracaViewSet(ReadOnlyModelViewSet):
+class PracaViewSet(ModelViewSet):
     queryset = Praca.objects.all()
     serializer_class = PracaSerializer
