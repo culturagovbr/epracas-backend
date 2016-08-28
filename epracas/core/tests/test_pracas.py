@@ -1,8 +1,6 @@
 import pytest
 import json
 
-from collections import OrderedDict
-
 from django.test import TestCase
 
 from django.core.urlresolvers import reverse
@@ -10,7 +8,7 @@ from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from .models import Praca
+from core.models import Praca
 
 @pytest.mark.django_db
 class PracaTest(APITestCase):
@@ -93,4 +91,21 @@ class PracaTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-
+@pytest.mark.django_db
+def test_create_a_new_praca(client):
+    praca = {
+            'contrato': '36338510',
+            'regiao': 'n',
+            'uf': 'PA',
+            'municipio': 'Abaetetuba',
+            'modelo': 'm',
+            'situacao': 'i'
+    }
+    response = client.post(
+            reverse('core:praca-list'),
+            praca,
+            format='json'
+    )
+    assert response.status_code == status.HTTP_201_CREATED
+    assert '36338510' in bytes.decode(response.content)
+    assert Praca.objects.count() == 1
