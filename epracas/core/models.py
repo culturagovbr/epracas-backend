@@ -29,6 +29,11 @@ class Praca(models.Model):
 
 
 class Gestor(models.Model):
+    id_pub = models.UUIDField(
+            primary_key=True,
+            default=uuid.uuid4,
+            editable=False
+    )
     nome = models.CharField(_('Nome'), max_length=250, blank=False, null=False)
 
 

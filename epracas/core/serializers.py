@@ -24,5 +24,6 @@ class GestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gestor
         fields = (
+                'id_pub',
                 'nome',
         )
