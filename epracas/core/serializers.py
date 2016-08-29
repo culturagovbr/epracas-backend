@@ -19,3 +19,10 @@ class PracaSerializer(serializers.ModelSerializer):
                 'situacao'
                 )
 
+
+class GestorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Gestor
+        fields = (
+                'nome',
+        )

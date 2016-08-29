@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.utils.translation import ugettext as _
 from localflavor.br.br_states import STATE_CHOICES
 
 from .choices import MODELO_CHOICES, REGIOES_CHOICES, SITUACAO_CHOICES
@@ -28,6 +29,6 @@ class Praca(models.Model):
 
 
 class Gestor(models.Model):
-   pass
+    nome = models.CharField(_('Nome'), max_length=250, blank=False, null=False)
 
 
