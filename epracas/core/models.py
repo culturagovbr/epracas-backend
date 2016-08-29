@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from rest_framework.reverse import reverse
 from django.utils.translation import ugettext as _
 from localflavor.br.br_states import STATE_CHOICES
 
@@ -49,6 +50,9 @@ class Gestor(models.Model):
             choices=REGIOES_CHOICES,
             blank=True
     )
+
+    def get_absolute_url(self):
+        return reverse('core:gestor-detail', kwargs={'pk': self.id_pub})
 
 
 class ProcessoAdmissao(models.Model):
