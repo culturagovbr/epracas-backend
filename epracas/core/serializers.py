@@ -26,4 +26,8 @@ class GestorSerializer(serializers.ModelSerializer):
         fields = (
                 'id_pub',
                 'nome',
+                'endereco',
+                'cidade',
+                'uf',
+                'regiao'
         )

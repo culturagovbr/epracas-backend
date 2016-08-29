@@ -35,5 +35,19 @@ class Gestor(models.Model):
             editable=False
     )
     nome = models.CharField(_('Nome'), max_length=250, blank=False, null=False)
+    endereco = models.TextField(_('Endereço'), blank=True)
+    cidade = models.CharField(_('Cidade'), max_length=140, blank=True)
+    uf = models.CharField(
+            _('UF(Estado)'),
+            max_length=2,
+            choices=STATE_CHOICES,
+            blank=True
+    )
+    regiao = models.CharField(
+            _('Região'),
+            max_length=2,
+            choices=REGIOES_CHOICES,
+            blank=True
+    )
 
 
