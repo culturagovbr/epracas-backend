@@ -51,3 +51,10 @@ class Gestor(models.Model):
     )
 
 
+class ProcessoAdmissao(models.Model):
+    id_pub = models.UUIDField(
+            primary_key=True,
+            default=uuid.uuid4,
+            editable=False
+    )
+

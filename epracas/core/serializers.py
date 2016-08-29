@@ -3,7 +3,7 @@ from rest_framework import serializers
 from localflavor.br.br_states import STATE_CHOICES
 from .choices import MODELO_CHOICES, REGIOES_CHOICES, SITUACAO_CHOICES
 
-from .models import Praca, Gestor
+from .models import Praca, Gestor, ProcessoAdmissao
 
 
 class PracaSerializer(serializers.ModelSerializer):
@@ -31,3 +31,12 @@ class GestorSerializer(serializers.ModelSerializer):
                 'uf',
                 'regiao'
         )
+
+
+class ProcessoAdmissaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProcessoAdmissao
+        fields = (
+                'id_pub',
+        )
+
