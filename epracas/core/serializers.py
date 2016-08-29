@@ -3,7 +3,7 @@ from rest_framework import serializers
 from localflavor.br.br_states import STATE_CHOICES
 from .choices import MODELO_CHOICES, REGIOES_CHOICES, SITUACAO_CHOICES
 
-from .models import Praca
+from .models import Praca, Gestor
 
 
 class PracaSerializer(serializers.ModelSerializer):

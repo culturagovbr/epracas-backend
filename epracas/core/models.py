@@ -25,3 +25,9 @@ class Praca(models.Model):
             max_length=1,
             choices=SITUACAO_CHOICES
             )
+
+
+class Gestor(models.Model):
+   pass
+
+
