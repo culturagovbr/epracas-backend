@@ -38,5 +38,6 @@ class ProcessoAdmissaoSerializer(serializers.ModelSerializer):
         model = ProcessoAdmissao
         fields = (
                 'id_pub',
+                'gestor',
         )
 

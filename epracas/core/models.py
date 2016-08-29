@@ -61,4 +61,5 @@ class ProcessoAdmissao(models.Model):
             default=uuid.uuid4,
             editable=False
     )
+    gestor = models.ForeignKey(Gestor)
 
