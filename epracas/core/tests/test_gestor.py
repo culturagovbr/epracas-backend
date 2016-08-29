@@ -87,3 +87,30 @@ def test_return_a_created_gestor(client):
             )
     assert response.status_code == status.HTTP_200_OK
     assert gestor['nome'] in bytes.decode(response.content)
+
+
+@pytest.mark.django_db
+def test_persist_a_gestors_address(client):
+    """TODO: Docstring for test_persist_a_gestors_address.
+    :returns: TODO
+
+    """
+    gestor = {
+            'nome': 'Fulano Cicrano',
+            'endereco': 'Conj 10, Casa 19',
+            'cidade': 'Altamira',
+            'uf': 'PA',
+            'regiao': 'n'
+    }
+
+    response = client.post(
+            reverse('core:gestor-list'),
+            gestor,
+            format='json'
+    )
+    response_content = json.loads(bytes.decode(response.content))
+    response_content.pop('id_pub')
+
+    assert response.status_code == status.HTTP_201_CREATED
+
+    assert gestor == response_content
