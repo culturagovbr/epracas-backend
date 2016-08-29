@@ -4,6 +4,8 @@ import json
 from rest_framework import status
 from rest_framework.reverse import reverse
 
+from model_mommy import mommy
+
 from core.models import Gestor
 
 
@@ -154,3 +156,22 @@ def test_update_a_gestors_address(client):
 
     assert update.status_code == status.HTTP_200_OK
     assert 'Conj 11, Casa 20' in update_content
+
+
+@pytest.mark.django_db
+def test_return_a_FQDN_URL_from_Gestor_method(client):
+    """TODO: Docstring for return_a_FQDN_URL_from_Gestor_method.
+    :returns: TODO
+
+    """
+
+    gestor = mommy.make(Gestor, nome='Fulano Cicrano')
+    url = reverse(
+            'core:gestor-detail',
+            kwargs={'pk': gestor.id_pub},
+            )
+    response = client.get(url, format='json')
+    gestor_url = gestor.get_absolute_url()
+
+    assert response.status_code == status.HTTP_200_OK
+    assert gestor_url == url 
