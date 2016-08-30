@@ -7,7 +7,7 @@ dj-database-url==0.4.1
 djangorestframework==3.4.6
 
 
-pendulum==0.5.3
+pendulum>=0.5.4
 model-mommy==1.2.6
 
 # Pacotes nescessários para a suite de testes
