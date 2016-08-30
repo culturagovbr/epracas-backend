@@ -62,4 +62,10 @@ class ProcessoAdmissao(models.Model):
             editable=False
     )
     gestor = models.ForeignKey(Gestor)
+    data_abertura = models.DateTimeField(
+            _('Data de Abertura do Processo'),
+            auto_now_add=True,
+            editable=False,
+            blank=False
+    )
 
