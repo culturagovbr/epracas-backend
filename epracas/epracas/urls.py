@@ -20,7 +20,11 @@ from atividades.views import CriarAtividade, ModificarAtividade, ListarAtividade
 
 urlpatterns = [
     url(r'^api/v1/', include('core.urls', namespace='core')),
+
     url(r'^admin/', admin.site.urls),
+
+    url(r'^docs/', include('rest_framework_docs.urls')),
+
     url(r'atividade/add/$', CriarAtividade.as_view(), name='atividade-add'),
     url(r'atividade/(?P<pk>[0-9]+)/$', ModificarAtividade.as_view(), name='atividade-update'),
     url(r'^$', ListarAtividade.as_view(), name='atividade-list'),
