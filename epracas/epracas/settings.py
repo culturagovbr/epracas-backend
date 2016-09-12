@@ -54,7 +54,8 @@ DJANGO_APPS = (
 )
 THIRD_PARTY_APPS = (
     'smart_selects',
-    'test_without_migrations',
+    'rest_framework_docs',
+    'corsheaders',
 )
 
 # Apps specific for this project go here.
@@ -68,6 +69,7 @@ INSTALLED_APPS = INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -162,3 +164,9 @@ if os.getenv('TEST_ENV'):
     # Usamos o backend em memoria para facilitar os testes
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 
+    CORS_ORIGIN_ALLOW_ALL = os.getenv('DEBUG', False)
+
+    # Define CORS to allow client in development mode
+    CORS_ORIGIN_WHITELIST = (
+        'localhost:5000',
+    )
