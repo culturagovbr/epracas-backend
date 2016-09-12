@@ -1,3 +1,4 @@
+from rest_framework import filters
 from rest_framework.viewsets import ModelViewSet
 
 from .models import Praca, Gestor, ProcessoAdmissao
@@ -8,9 +9,21 @@ from .serializers import (
         )
 
 
-class PracaViewSet(ModelViewSet):
+class DefaultMixin(object):
+    filter_backends = (
+            filters.DjangoFilterBackend,
+            filters.SearchFilter,
+            )
+
+class PracaViewSet(DefaultMixin, ModelViewSet):
     queryset = Praca.objects.all()
     serializer_class = PracaSerializer
+    search_fields = (
+            'municipio',
+            'uf',
+            'modelo',
+            'situacao',
+            )
 
 
 class GestorViewSet(ModelViewSet):
@@ -18,6 +31,7 @@ class GestorViewSet(ModelViewSet):
     serializer_class = GestorSerializer
 
 
-class ProcessoViewSet(ModelViewSet):
+class ProcessoViewSet(DefaultMixin, ModelViewSet):
     queryset = ProcessoAdmissao.objects.all()
     serializer_class = ProcessoAdmissaoSerializer
+    search_fields = ('gestor',)

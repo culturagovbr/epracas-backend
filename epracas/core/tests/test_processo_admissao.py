@@ -1,5 +1,7 @@
 import pytest
 import json
+import pendulum
+import datetime
 
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -55,8 +57,6 @@ def test_return_today_date_when_create_a_new_process(client):
     :returns: TODO
 
     """
-    import pendulum
-    import datetime
 
     gestor = mommy.make(Gestor, nome="Fulano Cicrano")
     processo = mommy.make(ProcessoAdmissao, gestor=gestor)
@@ -69,3 +69,27 @@ def test_return_today_date_when_create_a_new_process(client):
     )
 
     assert data_abertura.is_today() == True
+
+
+@pytest.mark.django_db
+def test_return_data_abertura_in_get_response(client):
+    """TODO: Docstring for test_return_data_abertura_in_get_response.
+    :returns: TODO
+
+    """
+    gestor = mommy.make(Gestor, nome="Fulano Cicrano")
+    processo = mommy.make(ProcessoAdmissao, gestor=gestor)
+
+    url = reverse('core:processoadmissao-list') + '?gestor={}'.format(gestor.id_pub)
+
+    response = client.get(url)
+
+    date = pendulum.instance(
+        processo.data_abertura.replace(tzinfo=None),
+        tz='America/Sao_Paulo'
+        )
+
+    response_data = bytes.decode(response.content)
+    dict_data = json.loads(response_data)[0]
+
+    assert 'data_abertura' in dict_data
