@@ -7,8 +7,27 @@ from localflavor.br.br_states import STATE_CHOICES
 
 from .choices import MODELO_CHOICES, REGIOES_CHOICES, SITUACAO_CHOICES
 
-class Praca(models.Model):
-    id_pub = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+class IdPubIdentifier(models.Model):
+    id_pub = models.UUIDField(
+            _('ID Público'),
+            primary_key=True,
+            default=uuid.uuid4,
+            editable=False
+    )
+
+    def get_absolute_url(self):
+        app_name = self._meta.app_label
+        basename = self._meta.object_name.lower()
+        url = app_name + ':' + basename + '-detail'
+
+        return reverse(url, kwargs={'pk': self.id_pub})
+
+    class Meta:
+        abstract = True
+
+
+
+class Praca(IdPubIdentifier):
     contrato = models.IntegerField('Nº de Contrato', max_length=10)
     regiao = models.CharField(
             'Região',
@@ -29,12 +48,7 @@ class Praca(models.Model):
             )
 
 
-class Gestor(models.Model):
-    id_pub = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-    )
+class Gestor(IdPubIdentifier):
     nome = models.CharField(_('Nome'), max_length=250, blank=False, null=False)
     endereco = models.TextField(_('Endereço'), blank=True)
     cidade = models.CharField(_('Cidade'), max_length=140, blank=True)
@@ -51,16 +65,8 @@ class Gestor(models.Model):
             blank=True
     )
 
-    def get_absolute_url(self):
-        return reverse('core:gestor-detail', kwargs={'pk': self.id_pub})
 
-
-class ProcessoAdmissao(models.Model):
-    id_pub = models.UUIDField(
-            primary_key=True,
-            default=uuid.uuid4,
-            editable=False
-    )
+class ProcessoAdmissao(IdPubIdentifier):
     gestor = models.ForeignKey(Gestor)
     data_abertura = models.DateTimeField(
             _('Data de Abertura do Processo'),
