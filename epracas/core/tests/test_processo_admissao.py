@@ -93,3 +93,25 @@ def test_return_data_abertura_in_get_response(client):
     dict_data = json.loads(response_data)[0]
 
     assert 'data_abertura' in dict_data
+
+
+@pytest.mark.django_db
+def test_return_process_status_from_an_ente(client):
+    """TODO: Docstring for test_return_process_status_from_an_ente.
+    :returns: TODO
+
+    """
+
+    gestor = mommy.make(Gestor, nome="Fulano Cicrano")
+    processo = mommy.make(ProcessoAdmissao, gestor=gestor)
+
+    url = reverse(
+            'core:processoadmissao-detail',
+            kwargs={'pk': processo.id_pub},
+            )
+
+    response = client.get(url)
+    response_aprovado = response.data['aprovado']
+
+    assert isinstance(processo.aprovado, bool) == True
+    assert response_aprovado == processo.aprovado

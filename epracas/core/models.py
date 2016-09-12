@@ -74,4 +74,8 @@ class ProcessoAdmissao(IdPubIdentifier):
             editable=False,
             blank=False
     )
+    aprovado = models.BooleanField(
+            _('Processo aprovado'),
+            default=False,
+            )
 

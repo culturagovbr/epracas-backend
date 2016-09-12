@@ -40,5 +40,6 @@ class ProcessoAdmissaoSerializer(serializers.ModelSerializer):
                 'id_pub',
                 'gestor',
                 'data_abertura',
+                'aprovado',
         )
 

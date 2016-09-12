@@ -169,7 +169,7 @@ def test_return_a_FQDN_URL_from_Gestor_method(client):
     url = reverse(
             'core:gestor-detail',
             kwargs={'pk': gestor.id_pub},
-            )
+          )
     response = client.get(url, format='json')
     gestor_url = gestor.get_absolute_url()
 
