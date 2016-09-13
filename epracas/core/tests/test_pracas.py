@@ -8,7 +8,10 @@ from django.core.urlresolvers import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
+from model_mommy import mommy
+
 from core.models import Praca
+
 
 @pytest.mark.django_db
 class PracaTest(APITestCase):
@@ -109,3 +112,25 @@ def test_create_a_new_praca(client):
     assert response.status_code == status.HTTP_201_CREATED
     assert '36338510' in bytes.decode(response.content)
     assert Praca.objects.count() == 1
+
+@pytest.mark.django_db
+def test_retorna_as_5_pracas_mais_proximas(client):
+
+    data = {
+            'lat': -15.7833,
+            'long':  -47.9167
+    }
+
+    for i in range(10):
+        praca = mommy.make(Praca, _fill_optional=['lat', 'long'])
+
+
+    response = client.post(
+            reverse('core:distancia'),
+            data,
+            format='json'
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 5
+    assert sorted(response.data, key=lambda praca: praca['distancia']) == response.data
