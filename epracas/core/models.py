@@ -46,6 +46,25 @@ class Praca(IdPubIdentifier):
             max_length=1,
             choices=SITUACAO_CHOICES
             )
+    lat = models.DecimalField(
+            _('Latitude'),
+            max_digits=9,
+            decimal_places=6,
+            null=True,
+            )
+    long = models.DecimalField(
+            _('Longitutde'),
+            max_digits=9,
+            decimal_places=6,
+            null=True
+            )
+
+    def get_latlong(self):
+        return (self.lat, self.long)
+
+    def get_distance(self, origin):
+        from geopy.distance import vincenty
+        return vincenty(origin, self.get_latlong()).meters
 
 
 class Gestor(IdPubIdentifier):
