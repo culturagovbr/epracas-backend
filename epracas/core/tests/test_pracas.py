@@ -41,6 +41,33 @@ def test_return_a_list_of_Pracas(client):
     assert len(response.data) == 5
     assert isinstance(response.data, list)
 
+def test_if_an_instance_of_list_result_has_some_properties(client):
+    """
+    Testa se um um dos itens(praca) de uma lista(pracas) tem
+    as propriedades: url, id_pub, nome, municipio, uf, modelo,
+    modelo_descricao, situacao e situacao_descricao.
+    """
+    fields = [
+            'url',
+            'id_pub',
+            'nome',
+            'municipio',
+            'uf',
+            'modelo',
+            'modelo_descricao',
+            'situacao',
+            'situacao_descricao',
+            ]
+
+    praca = mommy.make_many(Praca, quantity=5)
+
+    response = client.get(list_url, format='json')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 5
+    for field in fields:
+        assert field in response.data[0]
+
 def test_returning_a_praca(client):
     """
     Testa o retorno de uma Praça especifica
@@ -76,7 +103,6 @@ def test_create_a_new_praca(client):
             'modelo': 'g',
             'situacao': 'i'
             }
-    # praca = mommy.make(Praca, contrato=36338510)
 
     response = client.post(
             reverse('core:praca-list'),
