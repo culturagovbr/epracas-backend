@@ -13,97 +13,71 @@ from model_mommy import mommy
 from core.models import Praca
 
 
-@pytest.mark.django_db
-class PracaTest(APITestCase):
+pytestmark = pytest.mark.django_db
 
-    def setUp(self):
 
-        self.list_url = reverse('core:praca-list')
-        self.data = {
-            'contrato': '1111111111',
-            'regiao': 'co',
-            'uf': 'df',
-            'municipio': 'Brasilia',
+list_url = reverse('core:praca-list')
+
+
+def test_get_URL_OK_from_Pracas(client):
+    """
+    Retorna 200 OK para a URL do endpoint que lista as Praças.
+    """
+
+    response = client.get(list_url, format='json')
+
+    assert response.status_code == status.HTTP_200_OK
+
+def test_return_a_list_of_Pracas(client):
+    """
+    Testa o retorno de uma lista de Praças
+    """
+
+    mommy.make_many(Praca, quantity=5)
+
+    response = client.get(list_url, format='json')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 5
+    assert isinstance(response.data, list)
+
+def test_returning_a_praca(client):
+    """
+    Testa o retorno de uma Praça especifica
+    """
+
+    praca = mommy.make(Praca)
+
+    response = client.get(
+        reverse('core:praca-detail', kwargs={'pk' : praca.pk}), 
+        format='json'
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert str(praca.pk) in response.data['id_pub']
+
+def test_not_returning_a_praca_giving_wrong_args(client):
+
+    mommy.make(Praca)
+
+    response = client.get(
+            reverse('core:praca-detail', kwargs={'pk': 1}),
+            format='json'
+    )
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+
+def test_create_a_new_praca(client):
+
+    praca = {
+            'nome': 'Praça Fulano Cicrano',
+            'contrato': '36338510',
+            'regiao': 'n',
+            'uf': 'AM',
+            'municipio': 'Manaus',
             'modelo': 'g',
             'situacao': 'i'
             }
+    # praca = mommy.make(Praca, contrato=36338510)
 
-    def test_get_URL_OK_from_Pracas(self):
-
-        response = self.client.get(self.list_url, format='json')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_return_a_list_of_Pracas(self):
-
-        praca = Praca()
-        praca.contrato = '1'*10
-        praca.regiao = 'co' 
-        praca.UF = 'DF'
-        praca.municipio = 'Brasilia'
-        praca.modelo = 'g'
-        praca.situacao = 'i'
-        praca.save()
-
-        response = self.client.get(self.list_url, format='json')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data), 1)
-        self.assertIsInstance(response.data, list)
-
-    def test_returning_a_praca(self):
-
-        data = self.data
-
-        praca = Praca()
-        praca.contrato = data['contrato']
-        praca.regiao = data['regiao']
-        praca.UF = data['uf']
-        praca.municipio = data['municipio']
-        praca.modelo = data['modelo']
-        praca.situacao = data['situacao']
-        praca.save()
-
-        response = self.client.get(
-            reverse('core:praca-detail', kwargs={'pk' : praca.pk}), 
-            format='json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertContains(
-                response,
-                praca.pk,
-                status_code=status.HTTP_200_OK
-        )
-
-    def test_not_returning_a_praca_giving_wrong_args(self):
-
-        data = self.data
-
-        praca = Praca()
-        praca.contrato = data['contrato']
-        praca.regiao = data['regiao']
-        praca.UF = data['uf']
-        praca.municipio = data['municipio']
-        praca.modelo = data['modelo']
-        praca.situacao = data['situacao']
-        praca.save()
-
-        response = self.client.get(
-                reverse('core:praca-detail', kwargs={'pk': 1}),
-                format='json'
-        )
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-@pytest.mark.django_db
-def test_create_a_new_praca(client):
-    praca = {
-            'contrato': '36338510',
-            'regiao': 'n',
-            'uf': 'PA',
-            'municipio': 'Abaetetuba',
-            'modelo': 'm',
-            'situacao': 'i'
-    }
     response = client.post(
             reverse('core:praca-list'),
             praca,
@@ -113,7 +87,6 @@ def test_create_a_new_praca(client):
     assert '36338510' in bytes.decode(response.content)
     assert Praca.objects.count() == 1
 
-@pytest.mark.django_db
 def test_retorna_as_5_pracas_mais_proximas(client):
 
     data = {
