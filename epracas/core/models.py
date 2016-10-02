@@ -28,6 +28,11 @@ class IdPubIdentifier(models.Model):
 
 
 class Praca(IdPubIdentifier):
+    nome = models.CharField(
+            _('Nome da Praça'),
+            max_length=250,
+            blank=True,
+            )
     contrato = models.IntegerField('Nº de Contrato', max_length=10)
     regiao = models.CharField(
             'Região',

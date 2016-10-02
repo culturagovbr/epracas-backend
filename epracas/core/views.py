@@ -9,6 +9,7 @@ from core.models import Praca, Gestor, ProcessoAdmissao
 
 from .serializers import (
         PracaSerializer, 
+        PracaListSerializer,
         GestorSerializer,
         ProcessoAdmissaoSerializer
         )
@@ -20,15 +21,28 @@ class DefaultMixin(object):
             filters.SearchFilter,
             )
 
-class PracaViewSet(DefaultMixin, ModelViewSet):
-    queryset = Praca.objects.all()
+
+class MultiSerializerViewSet(ModelViewSet):
+
+    def get_serializer_class(self):
+        if self.action in self.serializers:
+            return self.serializers.get(
+                    self.action,
+                    self.serializers[self.action]
+                    )
+        else:
+            return self.serializer_class
+
+
+class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
+
     serializer_class = PracaSerializer
-    search_fields = (
-            'municipio',
-            'uf',
-            'modelo',
-            'situacao',
-            )
+    queryset = Praca.objects.all()
+
+    serializers = {
+            'list': PracaListSerializer,
+            }
+
 
 
 class GestorViewSet(ModelViewSet):
