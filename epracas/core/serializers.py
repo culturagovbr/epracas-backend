@@ -44,6 +44,7 @@ class PracaSerializer(serializers.ModelSerializer):
         fields = ( 
                 'url',
                 'nome',
+                'slug',
                 'id_pub',
                 'contrato',
                 'regiao',

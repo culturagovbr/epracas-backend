@@ -33,6 +33,11 @@ class Praca(IdPubIdentifier):
             max_length=250,
             blank=True,
             )
+    slug = models.SlugField(
+            _('Nome Publico'),
+            max_length=250,
+            blank=True,
+            )
     contrato = models.IntegerField('Nº de Contrato', max_length=10)
     regiao = models.CharField(
             'Região',
