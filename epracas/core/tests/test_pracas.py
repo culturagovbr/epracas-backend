@@ -182,3 +182,22 @@ def test_defining_a_name_if_user_leave_it_blank(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['nome'] == "CEU de Brasilia - DF"
+
+def test_defining_a_slug_from_the_name(client):
+    """
+    Testa a construção automática de um slug a partir do nome da Praça
+    """
+
+    from django.utils.text import slugify
+
+    praca = mommy.make(Praca, nome="Praça Fulano Cicrano")
+
+    slug = slugify(praca.nome)
+
+    response = client.get(
+            reverse('core:praca-detail', kwargs={'pk': praca.id_pub}),
+            format='json'
+            )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['slug'] == slug
