@@ -221,3 +221,21 @@ def test_defining_a_name_and_a_slug(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['slug'] == slug
+
+def test_returning_an_image_for_header(client):
+    """
+    Testa o retorno de um parametro com uma URL de uma imagem do cabeçalho
+    para a pagina de uma Praça.
+    """
+
+    praca = mommy.make(Praca)
+
+    response = client.get(
+            reverse('core:praca-detail', kwargs={'pk': praca.id_pub}),
+            format='json'
+            )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert 'header_img' in response.data
+
+
