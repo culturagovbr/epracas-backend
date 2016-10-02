@@ -82,6 +82,37 @@ def test_returning_a_praca(client):
     assert response.status_code == status.HTTP_200_OK
     assert str(praca.pk) in response.data['id_pub']
 
+def test_return_a_praca_with_some_properties(client):
+    """
+    Testa o retorno de uma praça especifica com as seguintes propriedades:
+    url, id_pub, nome, municipio, uf, modelo, modelo_descricao, situacao e
+    situacao_descricao.
+
+    """
+
+    fields = [
+            'url',
+            'id_pub',
+            'nome',
+            'municipio',
+            'uf',
+            'modelo',
+            'modelo_descricao',
+            'situacao',
+            'situacao_descricao',
+            ]
+
+    praca = mommy.make(Praca)
+
+    response = client.get(
+            reverse('core:praca-detail', kwargs={'pk': praca.pk}),
+            format='json'
+            )
+
+    assert response.status_code == status.HTTP_200_OK
+    for field in fields:
+        assert field in response.data
+
 def test_not_returning_a_praca_giving_wrong_args(client):
 
     mommy.make(Praca)
