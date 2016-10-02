@@ -85,7 +85,7 @@ def test_returning_a_praca(client):
 def test_return_a_praca_with_some_properties(client):
     """
     Testa o retorno de uma praça especifica com as seguintes propriedades:
-    url, id_pub, nome, municipio, uf, modelo, modelo_descricao, situacao e
+    url, id_pub, nome, slug, municipio, uf, modelo, modelo_descricao, situacao e
     situacao_descricao.
 
     """
@@ -94,6 +94,7 @@ def test_return_a_praca_with_some_properties(client):
             'url',
             'id_pub',
             'nome',
+            'slug',
             'municipio',
             'uf',
             'modelo',
