@@ -31,16 +31,28 @@ class PracaListSerializer(serializers.ModelSerializer):
 
 
 class PracaSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    modelo_descricao = serializers.CharField(
+            source='get_modelo_display',
+            read_only=True)
+    situacao_descricao = serializers.CharField(
+            source='get_situacao_display',
+            read_only=True)
+
     class Meta:
         model = Praca
         fields = ( 
+                'url',
+                'nome',
                 'id_pub',
                 'contrato',
                 'regiao',
                 'uf',
                 'municipio',
                 'modelo',
-                'situacao'
+                'modelo_descricao',
+                'situacao',
+                'situacao_descricao'
                 )
 
 
