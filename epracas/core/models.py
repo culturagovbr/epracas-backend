@@ -71,6 +71,14 @@ class Praca(IdPubIdentifier):
         from geopy.distance import vincenty
         return vincenty(origin, self.get_latlong()).meters
 
+    def save(self, *args, **kwargs):
+        if not self.nome:
+            self.nome = "CEU de {} - {}".format(self.municipio, self.uf.upper())
+            super(Praca, self).save(*args, **kwargs)
+        else:
+            super(Praca, self).save(*args, **kwargs)
+
+
 
 class Gestor(IdPubIdentifier):
     nome = models.CharField(_('Nome'), max_length=250, blank=False, null=False)
