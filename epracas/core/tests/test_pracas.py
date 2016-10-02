@@ -164,3 +164,20 @@ def test_retorna_as_5_pracas_mais_proximas(client):
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 5
     assert sorted(response.data, key=lambda praca: praca['distancia']) == response.data
+
+def test_defining_a_name_if_user_leave_it_blank(client):
+    """
+    Testa a situação onde um usuário deixa o nome da Praça em branco
+    e o sistema define o nome da praça como CEU + Nome da Cidade e UF
+
+    """
+
+    praca = mommy.make(Praca, nome="", municipio="Brasilia", uf="DF")
+
+    response = client.get(
+            reverse('core:praca-detail', kwargs={'pk': praca.id_pub}),
+            format='json'
+            )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['nome'] == "CEU de Brasilia - DF"
