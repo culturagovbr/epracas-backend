@@ -79,6 +79,13 @@ class Praca(IdPubIdentifier):
     def save(self, *args, **kwargs):
         if not self.nome:
             self.nome = "CEU de {} - {}".format(self.municipio, self.uf.upper())
+            if not self.slug:
+                from django.utils.text import slugify
+                self.slug = slugify(self.nome)
+                super(Praca, self).save(*args, **kwargs)
+        elif not self.slug:
+            from django.utils.text import slugify
+            self.slug = slugify(self.nome)
             super(Praca, self).save(*args, **kwargs)
         else:
             super(Praca, self).save(*args, **kwargs)
