@@ -1,5 +1,5 @@
 runserver:
-	DEBUG="true" python ./manage.py runserver
+	DEBUG=True TEST_ENV=True python ./manage.py runserver
 
 test:
 	DEBUG=True TEST_ENV=True py.test --ds=epracas.settings -s --create-db
