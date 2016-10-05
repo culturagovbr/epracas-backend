@@ -26,6 +26,11 @@ class IdPubIdentifier(models.Model):
         abstract = True
 
 
+def upload_to(instance, filename):
+    ext = filename.split('.')[-1]
+    id_pub = instance.id_pub
+    return '{}/images/header.{}'.format(id_pub, ext)
+
 
 class Praca(IdPubIdentifier):
     nome = models.CharField(
@@ -61,12 +66,18 @@ class Praca(IdPubIdentifier):
             max_digits=9,
             decimal_places=6,
             null=True,
+            blank=True
             )
     long = models.DecimalField(
             _('Longitutde'),
             max_digits=9,
             decimal_places=6,
-            null=True
+            null=True,
+            blank=True
+            )
+    header_img = models.FileField(
+            blank=True,
+            upload_to=upload_to,
             )
 
     def get_latlong(self):

@@ -127,6 +127,17 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Django Rest Framework Configuration
+REST_FRAMEWORK = {
+    # Default Parser Classes
+    # http://www.django-rest-framework.org/api-guide/parsers
+    # 'DEFAULT_PARSER_CLASSES': {
+    #     'rest_framework.parsers.JSONParser',
+    #     'rest_framework.parsers.FormParser',
+    #     'rest_framework.parsers.MultiPartParser',
+    # },        
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -151,6 +162,11 @@ STATIC_ROOT = 'staticfiles'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+# Media files (Public Images from e-pracas entities)
+# https://docs.djangoproject.com/en/1.10/ref/settings/#media-root
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 USE_DJANGO_JQUERY = False
 

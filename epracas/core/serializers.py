@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from localflavor.br.br_states import STATE_CHOICES
@@ -53,8 +54,29 @@ class PracaSerializer(serializers.ModelSerializer):
                 'modelo',
                 'modelo_descricao',
                 'situacao',
-                'situacao_descricao'
+                'situacao_descricao',
+                'header_img'
                 )
+
+
+class PracaUploadSerializer(serializers.ModelSerializer):
+    header_url = serializers.SerializerMethodField()
+
+    def get_header_url(self, obj):
+        request = self.context.get('request')
+        is_secure = request.is_secure()
+        host = request.get_host()
+        media_url = settings.MEDIA_URL
+        path = obj.header_img
+        if is_secure:
+            return "https://{}{}{}".format(host, media_url, path)
+        else:
+            return "http://{}{}{}".format(host, media_url, path)
+
+    class Meta:
+        model = Praca
+        fields = ('id_pub', 'header_img', 'header_url')
+
 
 
 class GestorSerializer(serializers.ModelSerializer):

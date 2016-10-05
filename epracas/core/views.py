@@ -1,17 +1,27 @@
 import json
 
+from django.shortcuts import get_object_or_404
+
 from rest_framework import filters
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.parsers import (
+    JSONParser,
+    MultiPartParser,
+    FormParser,
+    FileUploadParser
+    )
 
 from core.models import Praca, Gestor, ProcessoAdmissao
 
 from .serializers import (
         PracaSerializer, 
         PracaListSerializer,
+        PracaUploadSerializer,
         GestorSerializer,
-        ProcessoAdmissaoSerializer
+        ProcessoAdmissaoSerializer,
         )
 
 
@@ -38,11 +48,27 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
 
     serializer_class = PracaSerializer
     queryset = Praca.objects.all()
+    parser_classes = (MultiPartParser, )
 
     serializers = {
             'list': PracaListSerializer,
             }
 
+
+class PracaUploadHeader(DefaultMixin, APIView):
+
+    parser_classes = (MultiPartParser, FormParser, )
+
+    def post(self, request, pk):
+        praca = get_object_or_404(Praca, pk=pk)
+        praca.header_img = request.FILES['header_img']
+        praca.clean_fields()
+        praca.save()
+
+        serializer = PracaUploadSerializer(
+                praca,
+                context={'request': request})
+        return Response(serializer.data)
 
 
 class GestorViewSet(ModelViewSet):
