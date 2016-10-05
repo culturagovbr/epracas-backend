@@ -13,7 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from django.contrib import admin
 
 from atividades.views import CriarAtividade, ModificarAtividade, ListarAtividade, ExcluirAtividade
@@ -30,4 +32,5 @@ urlpatterns = [
     url(r'^$', ListarAtividade.as_view(), name='atividade-list'),
     url(r'^atividade/excluir/(?P<pk>[0-9]+)/$', ExcluirAtividade.as_view(), name='atividade-delete'),
     url(r'^chaining/', include('smart_selects.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
