@@ -6,7 +6,6 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 
 from rest_framework import status
-from rest_framework.test import APITestCase
 
 from model_mommy import mommy
 
@@ -14,7 +13,6 @@ from core.models import Praca
 
 
 pytestmark = pytest.mark.django_db
-
 
 list_url = reverse('core:praca-list')
 
@@ -222,20 +220,26 @@ def test_defining_a_name_and_a_slug(client):
     assert response.status_code == status.HTTP_200_OK
     assert response.data['slug'] == slug
 
-def test_returning_an_image_for_header(client):
+def test_upload_an_image_as_public_page_header(client):
     """
-    Testa o retorno de um parametro com uma URL de uma imagem do cabeçalho
-    para a pagina de uma Praça.
+    Testa o envio de uma imagem para ser utilizada no cabeçalho da pagina
+    publica de uma Praça.
+
     """
 
     praca = mommy.make(Praca)
 
-    response = client.get(
-            reverse('core:praca-detail', kwargs={'pk': praca.id_pub}),
-            format='json'
-            )
+    file_test = open('/home/decko/test.jpg', 'rb')
+
+    response = client.post(
+        reverse('core:praca-header_upload', kwargs={'pk': praca.id_pub}),
+            {'header_img' : file_test},
+            format='multipart',
+        )
 
     assert response.status_code == status.HTTP_200_OK
     assert 'header_img' in response.data
+    assert 'header.jpg' in response.data['header_img']
 
-
+    download_header = client.get(response.data['header_url'])
+    assert download_header.status_code == status.HTTP_200_OK
