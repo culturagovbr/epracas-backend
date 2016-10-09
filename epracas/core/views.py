@@ -14,14 +14,14 @@ from rest_framework.parsers import (
     FileUploadParser
     )
 
-from core.models import Praca, Gestor, ProcessoAdmissao
+from core.models import Praca, Gestor, ProcessoVinculacao
 
 from .serializers import (
         PracaSerializer, 
         PracaListSerializer,
         PracaUploadSerializer,
         GestorSerializer,
-        ProcessoAdmissaoSerializer,
+        ProcessoVinculacaoSerializer,
         )
 
 
@@ -77,8 +77,8 @@ class GestorViewSet(ModelViewSet):
 
 
 class ProcessoViewSet(DefaultMixin, ModelViewSet):
-    queryset = ProcessoAdmissao.objects.all()
-    serializer_class = ProcessoAdmissaoSerializer
+    queryset = ProcessoVinculacao.objects.all()
+    serializer_class = ProcessoVinculacaoSerializer
     search_fields = ('gestor',)
 
 

@@ -4,7 +4,7 @@ from rest_framework import serializers
 from localflavor.br.br_states import STATE_CHOICES
 from .choices import MODELO_CHOICES, REGIOES_CHOICES, SITUACAO_CHOICES
 
-from .models import Praca, Gestor, ProcessoAdmissao
+from .models import Praca, Gestor, Agenda, ProcessoVinculacao
 
 
 class PracaListSerializer(serializers.ModelSerializer):
@@ -107,9 +107,9 @@ class GestorSerializer(serializers.ModelSerializer):
         )
 
 
-class ProcessoAdmissaoSerializer(serializers.ModelSerializer):
+class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ProcessoAdmissao
+        model = ProcessoVinculacao
         fields = (
                 'id_pub',
                 'gestor',

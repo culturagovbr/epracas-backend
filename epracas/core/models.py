@@ -121,7 +121,7 @@ class Gestor(IdPubIdentifier):
     )
 
 
-class ProcessoAdmissao(IdPubIdentifier):
+class ProcessoVinculacao(IdPubIdentifier):
     gestor = models.ForeignKey(Gestor)
     data_abertura = models.DateTimeField(
             _('Data de Abertura do Processo'),
