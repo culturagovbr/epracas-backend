@@ -5,6 +5,7 @@ from .views import (
         PracaUploadHeader,
         GestorViewSet,
         ProcessoViewSet,
+        AgendaViewSet,
         DistanceView,
         )
 
@@ -15,6 +16,7 @@ router = routers.SimpleRouter()
 router.register(r'pracas', PracaViewSet) 
 router.register(r'gestor', GestorViewSet)
 router.register(r'processo', ProcessoViewSet)
+router.register(r'agenda', AgendaViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

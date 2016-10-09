@@ -107,6 +107,29 @@ class GestorSerializer(serializers.ModelSerializer):
         )
 
 
+class AgendaSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    praca_url = serializers.URLField(
+            source='praca.get_absolute_url',
+            read_only=True)
+    class Meta:
+        model = Agenda
+        fields = (
+                'url',
+                'id_pub',
+                'praca_url',
+                'praca',
+                'titulo',
+                'data_inicio',
+                'data_encerramento',
+                'hora_inicio',
+                'hora_encerramento',
+                'descricao',
+                'local'
+        )
+        depth = 1
+
+
 class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProcessoVinculacao

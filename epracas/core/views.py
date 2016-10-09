@@ -14,13 +14,14 @@ from rest_framework.parsers import (
     FileUploadParser
     )
 
-from core.models import Praca, Gestor, ProcessoVinculacao
+from core.models import Praca, Gestor, Agenda, ProcessoVinculacao
 
 from .serializers import (
         PracaSerializer, 
         PracaListSerializer,
         PracaUploadSerializer,
         GestorSerializer,
+        AgendaSerializer,
         ProcessoVinculacaoSerializer,
         )
 
@@ -80,6 +81,12 @@ class ProcessoViewSet(DefaultMixin, ModelViewSet):
     queryset = ProcessoVinculacao.objects.all()
     serializer_class = ProcessoVinculacaoSerializer
     search_fields = ('gestor',)
+
+
+class AgendaViewSet(DefaultMixin, ModelViewSet):
+    queryset = Agenda.objects.all()
+    serializer_class = AgendaSerializer
+    # lookup_field = 'id_pub'
 
 
 class DistanceView(DefaultMixin, APIView):

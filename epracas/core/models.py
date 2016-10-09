@@ -134,3 +134,43 @@ class ProcessoVinculacao(IdPubIdentifier):
             default=False,
             )
 
+
+class Agenda(IdPubIdentifier):
+    praca = models.ForeignKey(Praca)
+    titulo = models.CharField(
+            _('Titulo do Evento'),
+            max_length=140,
+            blank=False,
+            )
+    data_inicio = models.DateField(
+            _('Data de Inicio da atividade'),
+            )
+    data_encerramento = models.DateField(
+            _('Data de Encerramento da atividade'),
+            blank=True,
+            null=True,
+            )
+    hora_inicio = models.TimeField(
+            _('Horario de Inicio da atividade'),
+            blank=False,
+            null=True
+            )
+    hora_encerramento = models.TimeField(
+            _('Horario de encerramento da atividade'),
+            blank=False,
+            null=True
+            )
+    local = models.CharField(
+            _('Esta atividade será realizada em que parte da Praça?'),
+            max_length=100,
+            blank=False,
+            null=False
+            )
+    descricao = models.TextField(
+            _('Descrição da Atividade'),
+            blank=True,
+            null=True
+            )
+
+    class Meta:
+        ordering = ['data_inicio', 'hora_inicio', 'data_encerramento']
