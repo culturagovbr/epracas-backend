@@ -39,6 +39,21 @@ class PracaSerializer(serializers.ModelSerializer):
     situacao_descricao = serializers.CharField(
             source='get_situacao_display',
             read_only=True)
+    header_url = serializers.SerializerMethodField()
+
+    def get_header_url(self, obj):
+        request = self.context.get('request')
+        is_secure = request.is_secure()
+        host = request.get_host()
+        media_url = settings.MEDIA_URL
+        path = obj.header_img
+        if path:
+            if is_secure:
+                return "https://{}{}{}".format(host, media_url, path)
+            else:
+                return "http://{}{}{}".format(host, media_url, path)
+        return ""
+
 
     class Meta:
         model = Praca
@@ -55,7 +70,7 @@ class PracaSerializer(serializers.ModelSerializer):
                 'modelo_descricao',
                 'situacao',
                 'situacao_descricao',
-                'header_img'
+                'header_url'
                 )
 
 
