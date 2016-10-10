@@ -57,7 +57,7 @@ def test_if_an_instance_of_list_result_has_some_properties(client):
             'situacao_descricao',
             ]
 
-    praca = mommy.make_many(Praca, quantity=5)
+    pracas = mommy.make_many(Praca, quantity=5)
 
     response = client.get(list_url, format='json')
 
@@ -95,6 +95,7 @@ def test_return_a_praca_with_some_properties(client):
             'slug',
             'municipio',
             'uf',
+            'agenda',
             'modelo',
             'modelo_descricao',
             'situacao',
