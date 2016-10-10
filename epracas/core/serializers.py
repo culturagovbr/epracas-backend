@@ -31,6 +31,29 @@ class PracaListSerializer(serializers.ModelSerializer):
                 )
 
 
+class AgendaSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    praca_url = serializers.URLField(
+            source='praca.get_absolute_url',
+            read_only=True)
+    class Meta:
+        model = Agenda
+        fields = (
+                'url',
+                'id_pub',
+                'praca_url',
+                'praca',
+                'titulo',
+                'data_inicio',
+                'data_encerramento',
+                'hora_inicio',
+                'hora_encerramento',
+                'descricao',
+                'local'
+        )
+        depth = 1
+
+
 class PracaSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     modelo_descricao = serializers.CharField(
@@ -40,6 +63,7 @@ class PracaSerializer(serializers.ModelSerializer):
             source='get_situacao_display',
             read_only=True)
     header_url = serializers.SerializerMethodField()
+    agenda = AgendaSerializer(many=True, read_only=True)
 
     def get_header_url(self, obj):
         request = self.context.get('request')
@@ -66,6 +90,7 @@ class PracaSerializer(serializers.ModelSerializer):
                 'regiao',
                 'uf',
                 'municipio',
+                'agenda',
                 'modelo',
                 'modelo_descricao',
                 'situacao',
@@ -107,27 +132,6 @@ class GestorSerializer(serializers.ModelSerializer):
         )
 
 
-class AgendaSerializer(serializers.ModelSerializer):
-    url = serializers.URLField(source='get_absolute_url', read_only=True)
-    praca_url = serializers.URLField(
-            source='praca.get_absolute_url',
-            read_only=True)
-    class Meta:
-        model = Agenda
-        fields = (
-                'url',
-                'id_pub',
-                'praca_url',
-                'praca',
-                'titulo',
-                'data_inicio',
-                'data_encerramento',
-                'hora_inicio',
-                'hora_encerramento',
-                'descricao',
-                'local'
-        )
-        depth = 1
 
 
 class ProcessoVinculacaoSerializer(serializers.ModelSerializer):

@@ -60,3 +60,15 @@ def test_return_event_properties(client):
     for field in fields:
         assert field in response.data
 
+
+def test_return_events_related_with_a_Praca(client):
+
+	praca = mommy.make('Praca')
+	evento = mommy.make('Agenda', praca=praca)
+
+	response = client.get(
+			reverse('core:praca-detail', kwargs={'pk': praca.id_pub})
+			)
+
+	assert response.status_code == status.HTTP_200_OK
+	assert 'agenda' in response.data

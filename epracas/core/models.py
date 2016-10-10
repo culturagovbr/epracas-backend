@@ -136,7 +136,7 @@ class ProcessoVinculacao(IdPubIdentifier):
 
 
 class Agenda(IdPubIdentifier):
-    praca = models.ForeignKey(Praca)
+    praca = models.ForeignKey(Praca, related_name='agenda')
     titulo = models.CharField(
             _('Titulo do Evento'),
             max_length=140,
