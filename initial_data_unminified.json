@@ -1,0 +1,979 @@
+[
+    {
+        "model": "atividades.abrangencia",
+        "pk": 1,
+        "fields": {
+            "nome": "Bairro da Praça CEU",
+            "descricao": "Bairro da Praça CEU"
+        }
+    },
+    {
+        "model": "atividades.abrangencia",
+        "pk": 2,
+        "fields": {
+            "nome": "Bairros do entorno",
+            "descricao": "Bairros do entorno"
+        }
+    },
+    {
+        "model": "atividades.abrangencia",
+        "pk": 3,
+        "fields": {
+            "nome": "Município",
+            "descricao": "Município"
+        }
+    },
+    {
+        "model": "atividades.abrangencia",
+        "pk": 4,
+        "fields": {
+            "nome": "Municípios do entorno",
+            "descricao": "Municípios do entorno"
+        }
+    },
+    {
+        "model": "atividades.abrangencia",
+        "pk": 5,
+        "fields": {
+            "nome": "Estado",
+            "descricao": "Estado"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 1,
+        "fields": {
+            "nome": "Artes Cênicas",
+            "descricao": "Artes Cênicas"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 2,
+        "fields": {
+            "nome": "Audiovisual",
+            "descricao": "Audiovisual"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 3,
+        "fields": {
+            "nome": "Música",
+            "descricao": "Música"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 4,
+        "fields": {
+            "nome": "Artes Visuais",
+            "descricao": "Artes Visuais"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 5,
+        "fields": {
+            "nome": "Patrimônio Cultural",
+            "descricao": "Patrimônio Cultural"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 6,
+        "fields": {
+            "nome": "Livro, Leitura e Literatura",
+            "descricao": "Livro, Leitura e Literatura"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 7,
+        "fields": {
+            "nome": "Esportes",
+            "descricao": "Esportes"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 8,
+        "fields": {
+            "nome": "Assistência Social",
+            "descricao": "Assistência Social"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 9,
+        "fields": {
+            "nome": "Saúde",
+            "descricao": "Saúde"
+        }
+    },
+    {
+        "model": "atividades.area",
+        "pk": 10,
+        "fields": {
+            "nome": "Outros",
+            "descricao": "Outros"
+        }
+    },
+    {
+        "model": "atividades.espaco",
+        "pk": 1,
+        "fields": {
+            "nome": "Cineteatro",
+            "descricao": "Cineteatro"
+        }
+    },
+    {
+        "model": "atividades.espaco",
+        "pk": 2,
+        "fields": {
+            "nome": "Biblioteca",
+            "descricao": "Biblioteca"
+        }
+    },
+    {
+        "model": "atividades.espaco",
+        "pk": 3,
+        "fields": {
+            "nome": "Laboratório multimídia",
+            "descricao": "Laboratório multimídia"
+        }
+    },
+    {
+        "model": "atividades.espaco",
+        "pk": 4,
+        "fields": {
+            "nome": "Quadra",
+            "descricao": "Quadra"
+        }
+    },
+    {
+        "model": "atividades.espaco",
+        "pk": 5,
+        "fields": {
+            "nome": "Sala multiuso",
+            "descricao": "Sala multiuso"
+        }
+    },
+    {
+        "model": "atividades.espaco",
+        "pk": 6,
+        "fields": {
+            "nome": "CRAS",
+            "descricao": "CRAS"
+        }
+    },
+    {
+        "model": "atividades.espaco",
+        "pk": 7,
+        "fields": {
+            "nome": "Pista de skate",
+            "descricao": "Pista de skate"
+        }
+    },
+    {
+        "model": "atividades.espaco",
+        "pk": 8,
+        "fields": {
+            "nome": "Áreas externas",
+            "descricao": "Áreas externas"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 1,
+        "fields": {
+            "nome": "Apresentação",
+            "descricao": "Apresentação"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 2,
+        "fields": {
+            "nome": "Atendimento",
+            "descricao": "Atendimento"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 3,
+        "fields": {
+            "nome": "Comercialização de produtos",
+            "descricao": "Comercialização de produtos"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 4,
+        "fields": {
+            "nome": "Curso",
+            "descricao": "Curso"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 5,
+        "fields": {
+            "nome": "Espetáculo",
+            "descricao": "Espetáculo"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 6,
+        "fields": {
+            "nome": "Exposição",
+            "descricao": "Exposição"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 7,
+        "fields": {
+            "nome": "Feira de trocas",
+            "descricao": "Feira de trocas"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 8,
+        "fields": {
+            "nome": "Oficina",
+            "descricao": "Oficina"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 9,
+        "fields": {
+            "nome": "Palestra",
+            "descricao": "Palestra"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 10,
+        "fields": {
+            "nome": "Reunião",
+            "descricao": "Reunião"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 11,
+        "fields": {
+            "nome": "Seminário",
+            "descricao": "Seminário"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 12,
+        "fields": {
+            "nome": "Show",
+            "descricao": "Show"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 13,
+        "fields": {
+            "nome": "Festas",
+            "descricao": "Festas"
+        }
+    },
+    {
+        "model": "atividades.tipo",
+        "pk": 14,
+        "fields": {
+            "nome": "Outros",
+            "descricao": "Outros"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 1,
+        "fields": {
+            "area": 1,
+            "nome": "Circo",
+            "descricao": "Circo"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 2,
+        "fields": {
+            "area": 1,
+            "nome": "Dança",
+            "descricao": "Dança"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 3,
+        "fields": {
+            "area": 1,
+            "nome": "Mímica",
+            "descricao": "Mímica"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 4,
+        "fields": {
+            "area": 1,
+            "nome": "Ópera",
+            "descricao": "Ópera"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 5,
+        "fields": {
+            "area": 1,
+            "nome": "Teatro",
+            "descricao": "Teatro"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 6,
+        "fields": {
+            "area": 2,
+            "nome": "Exibição Cinematográfica",
+            "descricao": "Exibição Cinematográfica"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 7,
+        "fields": {
+            "area": 2,
+            "nome": "Preservação/Restauração da Memória Cinematográfica",
+            "descricao": "Preservação/Restauração da Memória Cinematográfica"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 8,
+        "fields": {
+            "area": 2,
+            "nome": "Produção Cinematográfica",
+            "descricao": "Produção Cinematográfica"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 9,
+        "fields": {
+            "area": 2,
+            "nome": "Produção Radiofônica",
+            "descricao": "Produção Radiofônica"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 10,
+        "fields": {
+            "area": 2,
+            "nome": "Produção Televisiva",
+            "descricao": "Produção Televisiva"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 11,
+        "fields": {
+            "area": 2,
+            "nome": "Rádios/TVs Comunitárias",
+            "descricao": "Rádios/TVs Comunitárias"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 12,
+        "fields": {
+            "area": 3,
+            "nome": "Música Erudita",
+            "descricao": "Música Erudita"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 13,
+        "fields": {
+            "area": 3,
+            "nome": "Música Instrumental",
+            "descricao": "Música Instrumental"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 14,
+        "fields": {
+            "area": 3,
+            "nome": "Música Popular",
+            "descricao": "Música Popular"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 15,
+        "fields": {
+            "area": 3,
+            "nome": "Orquestra",
+            "descricao": "Orquestra"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 16,
+        "fields": {
+            "area": 3,
+            "nome": "Música em Geral",
+            "descricao": "Música em Geral"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 17,
+        "fields": {
+            "area": 4,
+            "nome": "Fotografia",
+            "descricao": "Fotografia"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 18,
+        "fields": {
+            "area": 4,
+            "nome": "Gráficas",
+            "descricao": "Gráficas"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 19,
+        "fields": {
+            "area": 4,
+            "nome": "Plásticas",
+            "descricao": "Plásticas"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 20,
+        "fields": {
+            "area": 5,
+            "nome": "Acervo",
+            "descricao": "Acervo"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 21,
+        "fields": {
+            "area": 5,
+            "nome": "Afro Brasileira",
+            "descricao": "Afro Brasileira"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 22,
+        "fields": {
+            "area": 5,
+            "nome": "Arqueológico",
+            "descricao": "Arqueológico"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 23,
+        "fields": {
+            "area": 5,
+            "nome": "Arquitetônico",
+            "descricao": "Arquitetônico"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 24,
+        "fields": {
+            "area": 5,
+            "nome": "Artesanato",
+            "descricao": "Artesanato"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 25,
+        "fields": {
+            "area": 5,
+            "nome": "Ecológico",
+            "descricao": "Ecológico"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 26,
+        "fields": {
+            "area": 5,
+            "nome": "Folclore",
+            "descricao": "Folclore"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 27,
+        "fields": {
+            "area": 5,
+            "nome": "Histórico",
+            "descricao": "Histórico"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 28,
+        "fields": {
+            "area": 5,
+            "nome": "Indígena",
+            "descricao": "Indígena"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 29,
+        "fields": {
+            "area": 5,
+            "nome": "Museu",
+            "descricao": "Museu"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 30,
+        "fields": {
+            "area": 6,
+            "nome": "Edição de Livros e outros",
+            "descricao": "Edição de Livros e outros"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 31,
+        "fields": {
+            "area": 6,
+            "nome": "Evento literário",
+            "descricao": "Evento literário"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 32,
+        "fields": {
+            "area": 6,
+            "nome": "Leitura",
+            "descricao": "Leitura"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 33,
+        "fields": {
+            "area": 6,
+            "nome": "Contação de história",
+            "descricao": "Contação de história"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 34,
+        "fields": {
+            "area": 6,
+            "nome": "Sarau",
+            "descricao": "Sarau"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 35,
+        "fields": {
+            "area": 7,
+            "nome": "Futebol",
+            "descricao": "Futebol"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 36,
+        "fields": {
+            "area": 7,
+            "nome": "Vôlei",
+            "descricao": "Vôlei"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 37,
+        "fields": {
+            "area": 7,
+            "nome": "Basquete",
+            "descricao": "Basquete"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 38,
+        "fields": {
+            "area": 7,
+            "nome": "Skate",
+            "descricao": "Skate"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 39,
+        "fields": {
+            "area": 7,
+            "nome": "Handebol",
+            "descricao": "Handebol"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 40,
+        "fields": {
+            "area": 7,
+            "nome": "Futevôlei",
+            "descricao": "Futevôlei"
+        }
+    },
+    {
+        "model": "atividades.subarea",
+        "pk": 41,
+        "fields": {
+            "area": 7,
+            "nome": "Capoeira",
+            "descricao": "Capoeira"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 1,
+        "fields": {
+            "nome": "Egressos do sistema prisional",
+            "descricao": "Egressos do sistema prisional"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 2,
+        "fields": {
+            "nome": "Famílias de presos do sistema carcerário",
+            "descricao": "Famílias de presos do sistema carcerário"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 3,
+        "fields": {
+            "nome": "Jovens em medidas socioeducativas",
+            "descricao": "Jovens em medidas socioeducativas"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 4,
+        "fields": {
+            "nome": "Pessoas ou grupos vítimas de violência",
+            "descricao": "Pessoas ou grupos vítimas de violência"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 5,
+        "fields": {
+            "nome": "Pessoas em sofrimento psíquico",
+            "descricao": "Pessoas em sofrimento psíquico"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 6,
+        "fields": {
+            "nome": "População em situação de rua",
+            "descricao": "População em situação de rua"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 7,
+        "fields": {
+            "nome": "Catadores de material reciclável",
+            "descricao": "Catadores de material reciclável"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 8,
+        "fields": {
+            "nome": "Atingidos por empreendimento de Infraestrutura",
+            "descricao": "Atingidos por empreendimento de Infraestrutura"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 9,
+        "fields": {
+            "nome": "Imigrantes",
+            "descricao": "Imigrantes"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 10,
+        "fields": {
+            "nome": "Familias acampadas",
+            "descricao": "Familias acampadas"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 11,
+        "fields": {
+            "nome": "Agricultores familiares",
+            "descricao": "Agricultores familiares"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 12,
+        "fields": {
+            "nome": "Assentados da Reforma Agrária",
+            "descricao": "Assentados da Reforma Agrária"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 13,
+        "fields": {
+            "nome": "Povos e Comunidades Tradicionais de Matriz Africana",
+            "descricao": "Povos e Comunidades Tradicionais de Matriz Africana"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 14,
+        "fields": {
+            "nome": "Quilombolas",
+            "descricao": "Quilombolas"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 15,
+        "fields": {
+            "nome": "Indígenas",
+            "descricao": "Indígenas"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 16,
+        "fields": {
+            "nome": "Extrativistas",
+            "descricao": "Extrativistas"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 17,
+        "fields": {
+            "nome": "Pescadores artesanais",
+            "descricao": "Pescadores artesanais"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 18,
+        "fields": {
+            "nome": "Ribeirinhos",
+            "descricao": "Ribeirinhos"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 19,
+        "fields": {
+            "nome": "Sertanejos",
+            "descricao": "Sertanejos"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 20,
+        "fields": {
+            "nome": "Ciganos",
+            "descricao": "Ciganos"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 21,
+        "fields": {
+            "nome": "População LGBT",
+            "descricao": "População de Lésbicas, Gays, Bissexuais, Travestis, Transexuais e Transgêneros -LGBT"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 22,
+        "fields": {
+            "nome": "Mulheres",
+            "descricao": "Mulheres"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 23,
+        "fields": {
+            "nome": "Pessoas com deficiência",
+            "descricao": "Pessoas com deficiência"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 24,
+        "fields": {
+            "nome": "População negra",
+            "descricao": "População negra"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 25,
+        "fields": {
+            "nome": "Estudantes",
+            "descricao": "Estudantes"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 26,
+        "fields": {
+            "nome": "Grupos Artísticos e Culturais Independentes",
+            "descricao": "Grupos Artísticos e Culturais Independentes"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 27,
+        "fields": {
+            "nome": "Mestres, praticantes, brincantes e grupos das culturas populares, urbanas e rurais",
+            "descricao": "Mestres, praticantes, brincantes e grupos das culturas populares, urbanas e rurais"
+        }
+    },
+    {
+        "model": "atividades.publico",
+        "pk": 28,
+        "fields": {
+            "nome": "Não específico",
+            "descricao": "Não específico"
+        }
+    },
+    {
+        "model": "atividades.faixasetaria",
+        "pk": 1,
+        "fields": {
+            "nome": "Crianças",
+            "descricao": "Crianças"
+        }
+    },
+    {
+        "model": "atividades.faixasetaria",
+        "pk": 2,
+        "fields": {
+            "nome": "Adolescentes",
+            "descricao": "Adolescentes"
+        }
+    },
+    {
+        "model": "atividades.faixasetaria",
+        "pk": 3,
+        "fields": {
+            "nome": "Jovens",
+            "descricao": "Jovens"
+        }
+    },
+    {
+        "model": "atividades.faixasetaria",
+        "pk": 4,
+        "fields": {
+            "nome": "Adultos",
+            "descricao": "Adultos"
+        }
+    },
+    {
+        "model": "atividades.faixasetaria",
+        "pk": 5,
+        "fields": {
+            "nome": "Idosos",
+            "descricao": "Idosos"
+        }
+    },
+    {
+        "model": "atividades.faixasetaria",
+        "pk": 6,
+        "fields": {
+            "nome": "Livre",
+            "descricao": "Livre"
+        }
+    },
+    {
+        "model": "atividades.periodicidade",
+        "pk": 1,
+        "fields": {
+            "nome": "Diário",
+            "descricao": "Diário"
+        }
+    },
+    {
+        "model": "atividades.periodicidade",
+        "pk": 2,
+        "fields": {
+            "nome": "Semanal",
+            "descricao": "Semanal"
+        }
+    },
+    {
+        "model": "atividades.periodicidade",
+        "pk": 3,
+        "fields": {
+            "nome": "Quinzenal",
+            "descricao": "Quinzenal"
+        }
+    },
+    {
+        "model": "atividades.periodicidade",
+        "pk": 4,
+        "fields": {
+            "nome": "Mensal",
+            "descricao": "Mensal"
+        }
+    },
+    {
+        "model": "atividades.periodicidade",
+        "pk": 5,
+        "fields": {
+            "nome": "Não se repete - atividade pontual",
+            "descricao": "Não se repete - atividade pontual"
+        }
+    }
+]
