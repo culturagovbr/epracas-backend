@@ -34,7 +34,7 @@ else:
     DEBUG = False
 
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', ['localhost'])
+ALLOWED_HOSTS = (os.getenv('ALLOWED_HOSTS', 'localhost').split(','))
 
 
 # Application definition
@@ -169,6 +169,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 USE_DJANGO_JQUERY = False
+
+CORS_ORIGIN_WHITELIST = ALLOWED_HOSTS
 
 if os.getenv('TEST_ENV'):
     # Desabilita as migracoes quando usarmos a configuracao de settings
