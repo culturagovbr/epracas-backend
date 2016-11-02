@@ -50,7 +50,7 @@ DJANGO_APPS = (
     # 'django.contrib.humanize',
 
     # Admin
-    'django.contrib.admin',
+    # 'django.contrib.admin',
 )
 THIRD_PARTY_APPS = (
     'smart_selects',
@@ -60,7 +60,8 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'atividades',
+    # 'atividades',
+    'authentication',
     'core',
 )
 
@@ -135,9 +136,12 @@ REST_FRAMEWORK = {
     #     'rest_framework.parsers.JSONParser',
     #     'rest_framework.parsers.FormParser',
     #     'rest_framework.parsers.MultiPartParser',
-    # },        
+    # },
 }
 
+
+# Custom User Model
+AUTH_USER_MODEL = 'authentication.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -176,7 +180,8 @@ if os.getenv('TEST_ENV'):
     # Desabilita as migracoes quando usarmos a configuracao de settings
     MIGRATION_MODULES = {
         'core': None,
-        'atividades': None
+        'atividades': None,
+        'authentication': None,
     }
 
     # Usamos o backend em memoria para facilitar os testes
@@ -188,3 +193,11 @@ if os.getenv('TEST_ENV'):
     CORS_ORIGIN_WHITELIST = (
         'localhost:5000',
     )
+
+OIDC_AUTH = {
+        'OIDC_ENDPOINT': 'https://alpha.id.cultura.gov.br',
+        'OIDC_AUDIENCES': ('12_5d1bf045zqo8o408g8cs8ogwco0kko4wwwk08sk8gwkosk08o0',),
+        'OIDC_RESOLVE_USER_FUNCTION': 'oidc_auth.authentication.get_user_by_id',
+        'JWT_AUTH_HEADER_PREFIX': 'JWT',
+        'BEARER_AUTH_HEADER_PREFIX': 'Bearer',
+}
