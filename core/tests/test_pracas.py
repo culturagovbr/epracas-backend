@@ -128,7 +128,7 @@ def test_create_a_new_praca(client):
     praca = {
             'nome': 'Praça Fulano Cicrano',
             'contrato': '36338510',
-            'regiao': 'n',
+            'regiao': 'N',
             'uf': 'AM',
             'municipio': 'Manaus',
             'modelo': 'g',

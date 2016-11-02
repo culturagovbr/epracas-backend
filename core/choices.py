@@ -1,9 +1,9 @@
 REGIOES_CHOICES = (
-    ('n', 'Norte'),
-    ('ne', 'Nordeste'),
-    ('co', 'Centro-Oeste'),
-    ('se', 'Sudeste'),
-    ('s', 'Sul')
+    ('N', 'Norte'),
+    ('NE', 'Nordeste'),
+    ('CO', 'Centro-Oeste'),
+    ('SE', 'Sudeste'),
+    ('S', 'Sul')
 )
 
 MODELO_CHOICES = (

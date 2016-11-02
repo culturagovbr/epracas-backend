@@ -102,7 +102,7 @@ def test_persist_a_gestors_address(client):
             'endereco': 'Conj 10, Casa 19',
             'cidade': 'Altamira',
             'uf': 'PA',
-            'regiao': 'n'
+            'regiao': 'N'
     }
 
     response = client.post(
@@ -131,7 +131,7 @@ def test_update_a_gestors_address(client):
             'endereco': 'Conj 10, Casa 19',
             'cidade': 'Altamira',
             'uf': 'PA',
-            'regiao': 'n'
+            'regiao': 'N'
     }
 
     post = client.post(
