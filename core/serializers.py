@@ -1,8 +1,6 @@
 from django.conf import settings
-from rest_framework import serializers
 
-from localflavor.br.br_states import STATE_CHOICES
-from .choices import MODELO_CHOICES, REGIOES_CHOICES, SITUACAO_CHOICES
+from rest_framework import serializers
 
 from .models import Praca, Gestor, Agenda, ProcessoVinculacao
 
@@ -35,7 +33,9 @@ class AgendaSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     praca_url = serializers.URLField(
             source='praca.get_absolute_url',
-            read_only=True)
+            read_only=True
+        )
+
     class Meta:
         model = Agenda
         fields = (
@@ -78,15 +78,17 @@ class PracaSerializer(serializers.ModelSerializer):
                 return "http://{}{}{}".format(host, media_url, path)
         return ""
 
-
     class Meta:
         model = Praca
-        fields = ( 
+        fields = (
                 'url',
                 'nome',
                 'slug',
                 'id_pub',
                 'contrato',
+                'logradouro',
+                'cep',
+                'bairro',
                 'regiao',
                 'uf',
                 'municipio',
@@ -95,7 +97,9 @@ class PracaSerializer(serializers.ModelSerializer):
                 'modelo_descricao',
                 'situacao',
                 'situacao_descricao',
-                'header_url'
+                'header_url',
+                'lat',
+                'long',
                 )
 
 
@@ -118,7 +122,6 @@ class PracaUploadSerializer(serializers.ModelSerializer):
         fields = ('id_pub', 'header_img', 'header_url')
 
 
-
 class GestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gestor
@@ -132,8 +135,6 @@ class GestorSerializer(serializers.ModelSerializer):
         )
 
 
-
-
 class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProcessoVinculacao
@@ -143,4 +144,3 @@ class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
                 'data_abertura',
                 'aprovado',
         )
-

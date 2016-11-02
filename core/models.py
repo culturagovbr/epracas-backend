@@ -7,6 +7,7 @@ from localflavor.br.br_states import STATE_CHOICES
 
 from .choices import MODELO_CHOICES, REGIOES_CHOICES, SITUACAO_CHOICES
 
+
 class IdPubIdentifier(models.Model):
     id_pub = models.UUIDField(
             _('ID Público'),
@@ -44,6 +45,18 @@ class Praca(IdPubIdentifier):
             blank=True,
             )
     contrato = models.IntegerField('Nº de Contrato', max_length=10)
+    logradouro = models.CharField(
+            _('Logradouro'),
+            max_length=200,
+            blank=True, null=True
+    )
+    cep = models.IntegerField(_('CEP'), blank=True, null=True)
+    bairro = models.CharField(
+            _('Bairro'),
+            max_length=100,
+            blank=True,
+            null=True
+    )
     regiao = models.CharField(
             'Região',
             max_length=2,
