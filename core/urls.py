@@ -1,6 +1,9 @@
 from django.conf.urls import include, url
 
-from .views import PracaViewSet, PracaUploadHeader, DistanceView
+from .views import PracaViewSet
+from .views import PracaUploadHeader
+from .views import DistanceView
+from .views import PracaVinculoUpload
 from .views import GestorViewSet
 from .views import ProcessoViewSet
 from .views import AgendaViewSet
@@ -24,8 +27,8 @@ urlpatterns = [
         PracaUploadHeader.as_view(),
         name='praca-header_upload'
         ),
-    # url(r'^pracas/(?P<pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/vinculo_upload/$',
-    #     PracaVinculoUpload.as_view(),
-    #     name='praca-vinculo_upload'
-    #     ),
+    url(r'^pracas/(?P<pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/vinculo_upload/$',
+        PracaVinculoUpload.as_view(),
+        name='praca-vinculo_upload'
+        ),
 ]

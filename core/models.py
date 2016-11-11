@@ -1,6 +1,8 @@
 import uuid
 
+from django.conf import settings
 from django.db import models
+from django.utils.text import slugify
 from rest_framework.reverse import reverse
 from django.utils.translation import ugettext as _
 from localflavor.br.br_states import STATE_CHOICES
@@ -27,10 +29,20 @@ class IdPubIdentifier(models.Model):
         abstract = True
 
 
-def upload_to(instance, filename):
+def upload_header_to(instance, filename):
     ext = filename.split('.')[-1]
     id_pub = instance.id_pub
     return '{}/images/header.{}'.format(id_pub, ext)
+
+
+def upload_doc_to(instance, filename):
+    new_name = slugify(filename.split('.')[:-1])
+    ext = filename.split('.')[-1]
+    id_pub = instance.processo.praca.id_pub
+    return '{id_pub}/docs/{new_name}.{ext}'.format(
+        id_pub=id_pub,
+        new_name=new_name,
+        ext=ext)
 
 
 class Praca(IdPubIdentifier):
@@ -90,7 +102,7 @@ class Praca(IdPubIdentifier):
             )
     header_img = models.FileField(
             blank=True,
-            upload_to=upload_to,
+            upload_to=upload_header_to,
             )
 
     def get_latlong(self):
@@ -102,7 +114,8 @@ class Praca(IdPubIdentifier):
 
     def save(self, *args, **kwargs):
         if not self.nome:
-            self.nome = "CEU de {} - {}".format(self.municipio, self.uf.upper())
+            self.nome = "Praça CEU de {} - {}".format(
+                self.municipio, self.uf.upper())
             if not self.slug:
                 from django.utils.text import slugify
                 self.slug = slugify(self.nome)
@@ -113,7 +126,6 @@ class Praca(IdPubIdentifier):
             super(Praca, self).save(*args, **kwargs)
         else:
             super(Praca, self).save(*args, **kwargs)
-
 
 
 class Gestor(IdPubIdentifier):
@@ -135,17 +147,55 @@ class Gestor(IdPubIdentifier):
 
 
 class ProcessoVinculacao(IdPubIdentifier):
-    gestor = models.ForeignKey(Gestor)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    praca = models.ForeignKey(Praca)
     data_abertura = models.DateTimeField(
-            _('Data de Abertura do Processo'),
-            auto_now_add=True,
-            editable=False,
-            blank=False
-    )
+        _('Data de Abertura do Processo'),
+        auto_now_add=True,
+        editable=False,
+        blank=False
+        )
+    data_finalizacao = models.DateTimeField(
+        _('Data de Conclusão do Processo de Vinculação'),
+        null=True,
+        blank=True
+        )
     aprovado = models.BooleanField(
-            _('Processo aprovado'),
-            default=False,
-            )
+        _('Processo aprovado'),
+        default=False,
+        )
+    valido = models.BooleanField(
+        _('Processo Válido'),
+        default=True,
+        )
+
+
+class ArquivosProcessoVinculacao(IdPubIdentifier):
+    processo = models.ForeignKey(ProcessoVinculacao, related_name='files')
+    data_envio = models.DateTimeField(
+        _('Data de Envio do Arquivo'),
+        auto_now_add=True,
+        blank=False
+        )
+    tipo = models.CharField(
+        _('Tipo de Arquivo'),
+        max_length=8
+        )
+    arquivo = models.FileField(upload_to=upload_doc_to)
+    verificado = models.BooleanField(
+        _('Arquivo verificado pelo gestor do Ministério'),
+        default=False,
+        )
+    comentarios = models.TextField(
+        _('Comentários sobre o arquivo'),
+        null=True,
+        blank=True
+        )
+    verificado_por = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        )
 
 
 class Agenda(IdPubIdentifier):
@@ -155,10 +205,10 @@ class Agenda(IdPubIdentifier):
             max_length=140,
             blank=False,
             )
-    data_inicio = models.DateField(
+    data_inicio = models.DateTimeField(
             _('Data de Inicio da atividade'),
             )
-    data_encerramento = models.DateField(
+    data_encerramento = models.DateTimeField(
             _('Data de Encerramento da atividade'),
             blank=True,
             null=True,
@@ -176,8 +226,8 @@ class Agenda(IdPubIdentifier):
     local = models.CharField(
             _('Esta atividade será realizada em que parte da Praça?'),
             max_length=100,
-            blank=False,
-            null=False
+            blank=True,
+            null=True
             )
     descricao = models.TextField(
             _('Descrição da Atividade'),
