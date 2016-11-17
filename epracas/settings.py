@@ -176,6 +176,7 @@ USE_DJANGO_JQUERY = False
 
 CORS_ORIGIN_WHITELIST = ALLOWED_HOSTS
 
+
 if os.getenv('TEST_ENV'):
     # Desabilita as migracoes quando usarmos a configuracao de settings
     MIGRATION_MODULES = {
@@ -195,8 +196,14 @@ if os.getenv('TEST_ENV'):
     )
 
 OIDC_AUTH = {
-        'OIDC_ENDPOINT': 'https://alpha.id.cultura.gov.br',
-        'OIDC_AUDIENCES': ('12_5d1bf045zqo8o408g8cs8ogwco0kko4wwwk08sk8gwkosk08o0',),
+        'OIDC_ENDPOINT': os.getenv(
+            'OIDC_ENDPOINT',
+            'https://alpha.id.cultura.gov.br'
+            ),
+        'OIDC_AUDIENCES': list(os.getenv(
+            'OIDC_AUDIENCES',
+            '12_5d1bf045zqo8o408g8cs8ogwco0kko4wwwk08sk8gwkosk08o0'
+            )),
         'OIDC_RESOLVE_USER_FUNCTION': 'oidc_auth.authentication.get_user_by_id',
         'JWT_AUTH_HEADER_PREFIX': 'JWT',
         'BEARER_AUTH_HEADER_PREFIX': 'Bearer',
