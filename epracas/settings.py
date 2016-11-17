@@ -53,7 +53,6 @@ DJANGO_APPS = (
     # 'django.contrib.admin',
 )
 THIRD_PARTY_APPS = (
-    'smart_selects',
     'rest_framework_docs',
     'corsheaders',
 )
