@@ -207,3 +207,12 @@ OIDC_AUTH = {
         'JWT_AUTH_HEADER_PREFIX': 'JWT',
         'BEARER_AUTH_HEADER_PREFIX': 'Bearer',
 }
+
+if os.getenv('RAVEN_DSN_URL'):
+    import raven
+    RAVEN_CONFIG = {
+            'dsn': os.getenv('RAVEN_DSN_URL'),
+            # If you are using git, you can also automatically configure the
+            # release based on the git info.
+            'release': raven.fetch_git_sha(BASE_DIR),
+    }
