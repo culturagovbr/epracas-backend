@@ -200,7 +200,8 @@ if os.getenv('TEST_ENV'):
 OIDC_AUTH = {
         'OIDC_ENDPOINT': os.getenv(
             'OIDC_ENDPOINT',
-            'https://alpha.id.cultura.gov.br'
+            # 'https://alpha.id.cultura.gov.br'
+            'http://example.com'
             ),
         'OIDC_AUDIENCES': os.getenv(
             'OIDC_AUDIENCES',

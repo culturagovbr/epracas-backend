@@ -180,7 +180,7 @@ def test_defining_a_name_if_user_leave_it_blank(client):
             )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['nome'] == "CEU de Brasilia - DF"
+    assert response.data['nome'] == "Praça CEU de Brasilia - DF"
 
 def test_defining_a_slug_from_the_name(client):
     """

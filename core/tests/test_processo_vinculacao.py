@@ -1,7 +1,6 @@
 import pytest
 import json
 import pendulum
-import datetime
 
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -25,6 +24,7 @@ def test_return_200_OK_to_Processo_list_URL(client):
     assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.skip
 @pytest.mark.django_db
 def test_persist_a_process_using_POST(client):
     """TODO: Docstring for test_list_all_process(client.
@@ -32,7 +32,7 @@ def test_persist_a_process_using_POST(client):
 
     """
 
-    gestor = mommy.make(Gestor, nome = "Fulano Cicrano")
+    gestor = mommy.make(Gestor, nome="Fulano Cicrano")
     praca = mommy.make(Praca)
 
     data = {
@@ -53,6 +53,7 @@ def test_persist_a_process_using_POST(client):
     assert str(id_pub_gestor) in str(gestor.id_pub)
 
 
+@pytest.mark.skip
 @pytest.mark.django_db
 def test_return_today_date_when_create_a_new_process(client):
     """TODO: Docstring for test_return_today_date_when_create_a_new_process.
@@ -73,6 +74,7 @@ def test_return_today_date_when_create_a_new_process(client):
     assert data_abertura.is_today() == True
 
 
+@pytest.mark.skip
 @pytest.mark.django_db
 def test_return_data_abertura_in_get_response(client):
     """TODO: Docstring for test_return_data_abertura_in_get_response.
@@ -97,6 +99,7 @@ def test_return_data_abertura_in_get_response(client):
     assert 'data_abertura' in dict_data
 
 
+@pytest.mark.skip
 @pytest.mark.django_db
 def test_return_process_status_from_an_ente(client):
     """TODO: Docstring for test_return_process_status_from_an_ente.
