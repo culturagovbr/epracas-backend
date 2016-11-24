@@ -24,4 +24,4 @@ pytest-mock==1.5.0
 pytest-spec==1.0.1
 pytest-sugar==0.7.1
 pytest-watch==4.1.0
-pytest-xdist==1.14
+pytest-xdist==1.15
