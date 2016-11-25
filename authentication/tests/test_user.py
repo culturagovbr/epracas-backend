@@ -79,7 +79,7 @@ def test_posting_user_information_without_a_valid_id_token(client):
 
 
 @pytest.mark.skip
-def test_posting_user_information_with_a_valid_id_token(client):
+def test_posting_user_information_with_a_valid_id_token(authentication, client):
     """
     Testa o envio de informações de usuário para o endpoint correto,
     utilizando o cabeçalho com identificação JWT.
