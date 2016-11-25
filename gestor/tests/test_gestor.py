@@ -6,7 +6,7 @@ from rest_framework.reverse import reverse
 
 from model_mommy import mommy
 
-from core.models import Gestor
+from gestor.models import Gestor
 
 
 @pytest.mark.django_db
@@ -16,7 +16,7 @@ def test_return_200_ok_gestor_endpoint(client):
 
     """
 
-    response = client.get(reverse('core:gestor-list'))
+    response = client.get(reverse('gestor:gestor-list'))
     assert response.status_code == status.HTTP_200_OK
 
 @pytest.mark.django_db
@@ -31,7 +31,7 @@ def test_persist_a_gestor_name(client):
     }
 
     response = client.post(
-            reverse('core:gestor-list'),
+            reverse('gestor:gestor-list'),
             gestor,
             format='json'
     )
@@ -54,7 +54,7 @@ def test_return_an_id_pub_for_a_created_gestor(client):
     }
 
     response = client.post(
-            reverse('core:gestor-list'),
+            reverse('gestor:gestor-list'),
             gestor,
             format='json'
     )
@@ -75,7 +75,7 @@ def test_return_a_created_gestor(client):
     }
 
     post = client.post(
-            reverse('core:gestor-list'),
+            reverse('gestor:gestor-list'),
             gestor,
             format='json'
     )
@@ -84,7 +84,7 @@ def test_return_a_created_gestor(client):
     id_pub = json.loads(bytes.decode(post.content))['id_pub']
 
     response = client.get(
-            reverse('core:gestor-detail', kwargs={'pk': id_pub}),
+            reverse('gestor:gestor-detail', kwargs={'pk': id_pub}),
             format='json'
             )
     assert response.status_code == status.HTTP_200_OK
@@ -106,7 +106,7 @@ def test_persist_a_gestors_address(client):
     }
 
     response = client.post(
-            reverse('core:gestor-list'),
+            reverse('gestor:gestor-list'),
             gestor,
             format='json'
     )
@@ -135,7 +135,7 @@ def test_update_a_gestors_address(client):
     }
 
     post = client.post(
-            reverse('core:gestor-list'),
+            reverse('gestor:gestor-list'),
             gestor,
             format='json'
     )
@@ -144,7 +144,7 @@ def test_update_a_gestors_address(client):
     id_pub = json.loads(bytes.decode(post.content)).pop('id_pub')
 
     update = client.put(
-            reverse('core:gestor-detail', kwargs={'pk': id_pub}),
+            reverse('gestor:gestor-detail', kwargs={'pk': id_pub}),
             json.dumps({
                 'nome': 'Fulano Cicrano',
                 'endereco': 'Conj 11, Casa 20'
@@ -167,11 +167,11 @@ def test_return_a_FQDN_URL_from_Gestor_method(client):
 
     gestor = mommy.make(Gestor, nome='Fulano Cicrano')
     url = reverse(
-            'core:gestor-detail',
+            'gestor:gestor-detail',
             kwargs={'pk': gestor.id_pub},
           )
     response = client.get(url, format='json')
     gestor_url = gestor.get_absolute_url()
 
     assert response.status_code == status.HTTP_200_OK
-    assert gestor_url == url 
+    assert gestor_url == url

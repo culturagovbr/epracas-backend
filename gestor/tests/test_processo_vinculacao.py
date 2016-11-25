@@ -7,7 +7,9 @@ from rest_framework.reverse import reverse
 
 from model_mommy import mommy
 
-from core.models import Praca, Gestor, ProcessoVinculacao
+from pracas.models import Praca
+from gestor.models import Gestor
+from gestor.models import ProcessoVinculacao
 
 
 @pytest.mark.django_db
@@ -18,7 +20,7 @@ def test_return_200_OK_to_Processo_list_URL(client):
     """
 
     response = client.get(
-            reverse('core:processovinculacao-list'),
+            reverse('gestor:processovinculacao-list'),
             format='json'
     )
     assert response.status_code == status.HTTP_200_OK
@@ -41,7 +43,7 @@ def test_persist_a_process_using_POST(client):
     }
 
     post = client.post(
-            reverse('core:processovinculacao-list'),
+            reverse('processo:processovinculacao-list'),
             data,
             format='json'
     )
@@ -84,7 +86,7 @@ def test_return_data_abertura_in_get_response(client):
     gestor = mommy.make(Gestor, nome="Fulano Cicrano")
     processo = mommy.make(ProcessoVinculacao, gestor=gestor)
 
-    url = reverse('core:processovinculacao-list') + '?gestor={}'.format(gestor.id_pub)
+    url = reverse('gestor:processovinculacao-list') + '?gestor={}'.format(gestor.id_pub)
 
     response = client.get(url)
 
@@ -111,7 +113,7 @@ def test_return_process_status_from_an_ente(client):
     processo = mommy.make(ProcessoVinculacao, gestor=gestor)
 
     url = reverse(
-            'core:processovinculacao-detail',
+            'gestor:processovinculacao-detail',
             kwargs={'pk': processo.id_pub},
             )
 

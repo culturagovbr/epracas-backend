@@ -1,45 +1,12 @@
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse_lazy, reverse
-from atividades.models import Atividade
-from atividades.forms import AtividadesForm
-from django.views.generic.list import ListView
+from rest_framework.viewsets import ModelViewSet
 
-import json
+from core.views import DefaultMixin
 
-
-# Create your views here.
-class CriarAtividade(CreateView):
-    form_class = AtividadesForm
-    template_name = 'atividades/atividade_form.html'
-    success_url = reverse_lazy('atividade-list')
+from .models import Agenda
+from .serializers import AgendaSerializer
 
 
-class ModificarAtividade(UpdateView):
-    model = Atividade
-    form_class = AtividadesForm
-    template_name = 'atividades/atividade_form.html'
-    success_url = reverse_lazy('atividade-list')
-
-
-class ListarAtividade(ListView):
-    model = Atividade
-
-    def get_context_data(self, **kwargs):
-        context = super(ListarAtividade, self).get_context_data(**kwargs)
-        atividades_data = Atividade.objects.all().values('id', 'nome', 'data_inicio', 'data_termino')
-        atividades = list(map(lambda a:
-                              {
-                                  'title': a['nome'],
-                                  'allDay': 'false',
-                                  'start': a['data_inicio'].isoformat(),
-                                  'end': a['data_termino'].isoformat(),
-                                  'url': reverse('atividade-update', args=[a['id']]),
-                                  'allDay': False
-                                  }, atividades_data))
-        context['atividades'] = json.dumps(atividades)
-        return context
-
-
-class ExcluirAtividade(DeleteView):
-    model = Atividade
-    success_url = reverse_lazy('atividade-list')
+class AgendaViewSet(DefaultMixin, ModelViewSet):
+    partial = True
+    queryset = Agenda.objects.all()
+    serializer_class = AgendaSerializer

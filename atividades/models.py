@@ -1,182 +1,122 @@
 from django.db import models
+from django.utils.translation import ugettext as _
 
-from smart_selects.db_fields import ChainedForeignKey
+from core.models import IdPubIdentifier
 
-
-# Create your models here.
-# Modelos de dados para os CEUS '''
-class SituacaoCeu(models.Model):
-    nome = models.CharField(max_length=255)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
+from pracas.models import Praca
 
 
-class Estado(models.Model):
-    nome = models.CharField(max_length=100)
-    cod_ibge = models.IntegerField()
-
-    def __str__(self):
-        return self.nome
-
-
-class Municipio(models.Model):
-    nome = models.CharField(max_length=255)
-    cod_ibge = models.IntegerField()
-    estado = models.ForeignKey(Estado)
-
-    def __str__(self):
-        return self.nome
-
-
-class Responsavel(models.Model):
-    nome = models.CharField(max_length=255)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-
-class Ceu(models.Model):
-    nome = models.CharField(max_length=255)
-    descricao = models.TextField()
-    latitude = models.FloatField()
-    longitude = models.FloatField()
-    responsavel = models.ForeignKey(Responsavel)
-    municipio = models.ForeignKey(Municipio)
-    situacao = models.ForeignKey(SituacaoCeu)
-
-    def __str__(self):
-        return self.nome
-
-
-# Modelos de dados para as Atividades '''
-class Tipo(models.Model):
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class Espaco(models.Model):
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class FaixasEtaria(models.Model):
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class Parceiro(models.Model):
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class Publico(models.Model):
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class Abrangencia(models.Model):
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class Periodicidade(models.Model):
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class Area(models.Model):
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class Subarea(models.Model):
-    area = models.ForeignKey(Area)
-    nome = models.CharField(max_length=100)
-    descricao = models.TextField()
-
-    def __str__(self):
-        return self.nome
-
-    def natural_key(self):
-        return (self.nome)
-
-
-class Atividade(models.Model):
-    nome = models.CharField(max_length=255)
-    descricao = models.TextField()
-    parceiros = models.CharField(max_length=255)
-    data_inicio = models.DateTimeField()
-    data_termino = models.DateTimeField()
-    # hora_inicio = models.TimeField()
-    # hora_termino = models.TimeField()
-    publico_esperado = models.IntegerField()
-    tipo = models.ForeignKey(Tipo)
-    area = models.ForeignKey(Area)
-    subarea = ChainedForeignKey(
-        Subarea,
-        chained_field='area',
-        chained_model_field='area',
-        show_all=False,
-        auto_choose=True,
+class Agenda(IdPubIdentifier):
+    praca = models.ForeignKey(Praca, related_name='agenda')
+    titulo = models.CharField(
+            _('Titulo do Evento'),
+            max_length=140,
+            blank=False,
+            )
+    justificativa = models.TextField(
+            _('Justificativa da Atividade'),
+            blank=True,
+            null=True
+            )
+    espaco = models.CharField(
+        _('Espaço de Realização do Atividade'),
         blank=True,
-    )
-    espacos = models.ManyToManyField(Espaco)
-    faixas_etarias = models.ManyToManyField(FaixasEtaria)
-    publico = models.ManyToManyField(Publico)
-    abrangencia = models.ForeignKey(Abrangencia)
-    periodicidade = models.ForeignKey(Periodicidade)
-    ceu = models.ForeignKey(Ceu)
+        null=True,
+        max_length=200,
+        )
+    tipo = models.CharField(
+        _('Categoria da Atividade'),
+        max_length=200,
+        )
+    publico = models.CharField(
+        _('Publico alvo da atividade'),
+        max_length=200,
+        )
+    carga_horaria = models.IntegerField(
+        _('Carga Horaria da Atividade')
+        )
+    publico_esperado = models.IntegerField(
+        _('Publico Esperado para a Atividade')
+        )
+    data_inicio = models.DateTimeField(
+            _('Data de Inicio da atividade'),
+            )
+    data_encerramento = models.DateTimeField(
+            _('Data de Encerramento da atividade'),
+            blank=True,
+            null=True,
+            )
+    hora_inicio = models.TimeField(
+            _('Horario de Inicio da atividade'),
+            blank=False,
+            null=True
+            )
+    hora_encerramento = models.TimeField(
+            _('Horario de encerramento da atividade'),
+            blank=False,
+            null=True
+            )
+    local = models.CharField(
+            _('Esta atividade será realizada em que parte da Praça?'),
+            max_length=100,
+            blank=True,
+            null=True
+            )
+    descricao = models.TextField(
+            _('Descrição da Atividade'),
+            blank=True,
+            null=True
+            )
 
-    def __str__(self):
-        return self.nome
+    class Meta:
+        ordering = ['data_inicio', 'hora_inicio', 'data_encerramento']
+
+
+class Relatorio(IdPubIdentifier):
+    agenda = models.OneToOneField(Agenda, related_name='relatorio')
+    realizado = models.BooleanField(
+        _('Evento Realizado com Sucesso')
+        )
+    publico_presente = models.IntegerField(
+        _('Publico presente a atividade')
+        )
+    pontos_positivos = models.TextField(
+        _('Pontos Positivos da Atividade'),
+        blank=True,
+        null=True,
+        )
+    pontos_negativos = models.TextField(
+        _('Pontos Negativos da Atividade'),
+        blank=True,
+        null=True,
+        )
+
+
+# class Atividade(models.Model):
+#     nome = models.CharField(max_length=255)
+#     descricao = models.TextField()
+#     parceiros = models.CharField(max_length=255)
+#     data_inicio = models.DateTimeField()
+#     data_termino = models.DateTimeField()
+#     # hora_inicio = models.TimeField()
+#     # hora_termino = models.TimeField()
+#     publico_esperado = models.IntegerField()
+#     tipo = models.ForeignKey(Tipo)
+#     area = models.ForeignKey(Area)
+#     subarea = ChainedForeignKey(
+#         Subarea,
+#         chained_field='area',
+#         chained_model_field='area',
+#         show_all=False,
+#         auto_choose=True,
+#         blank=True,
+#     )
+#     espacos = models.ManyToManyField(Espaco)
+#     faixas_etarias = models.ManyToManyField(FaixasEtaria)
+#     publico = models.ManyToManyField(Publico)
+#     abrangencia = models.ForeignKey(Abrangencia)
+#     periodicidade = models.ForeignKey(Periodicidade)
+#     ceu = models.ForeignKey(Ceu)
+
+#     def __str__(self):
+#         return self.nome
