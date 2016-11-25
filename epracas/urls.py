@@ -20,8 +20,12 @@ from django.contrib import admin
 
 
 urlpatterns = [
-    url(r'^api/v1/', include('core.urls', namespace='core')),
+    # url(r'^api/v1/', include('core.urls', namespace='core')),
     url(r'^api/v1/', include('authentication.urls', namespace='auth')),
+    url(r'^api/v1/', include('pracas.urls', namespace='pracas')),
+    url(r'^api/v1/', include('gestor.urls', namespace='gestor')),
+    url(r'^api/v1/', include('atividades.urls', namespace='atividades')),
+
 
     url(r'^admin/', admin.site.urls),
 

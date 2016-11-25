@@ -62,9 +62,11 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    # 'atividades',
     'authentication',
     'core',
+    'pracas',
+    'gestor',
+    'atividades',
 )
 
 INSTALLED_APPS = INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -185,6 +187,8 @@ if os.getenv('TEST_ENV'):
         'core': None,
         'atividades': None,
         'authentication': None,
+        'pracas': None,
+        'gestor': None,
     }
 
     # Usamos o backend em memoria para facilitar os testes
