@@ -96,3 +96,8 @@ class Praca(IdPubIdentifier):
             super(Praca, self).save(*args, **kwargs)
         else:
             super(Praca, self).save(*args, **kwargs)
+
+        class Meta:
+            ordering = ['uf', 'municipio']
+            verbose_name = 'praca'
+            verbose_name_plural = 'pracas'
