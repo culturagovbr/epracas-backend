@@ -56,6 +56,11 @@ class Praca(IdPubIdentifier):
             max_length=1,
             choices=SITUACAO_CHOICES
             )
+    data_inauguracao = models.DateField(
+        _('Data de Inauguração'),
+        blank=True,
+        null=True
+        )
     lat = models.DecimalField(
             _('Latitude'),
             max_digits=9,
