@@ -2,8 +2,37 @@ from django.db import models
 from django.utils.translation import ugettext as _
 
 from core.models import IdPubIdentifier
+from core.choices import FAIXA_ETARIA_CHOICES
 
 from pracas.models import Praca
+
+
+class Area(IdPubIdentifier):
+    nome = models.CharField(
+        _('Área de Atividade'),
+        max_length=200
+        )
+    parent = models.ForeignKey(
+        'self',
+        related_name="child",
+        null=True,
+        on_delete=models.CASCADE,
+        )
+    slug = models.SlugField(
+        _('Slug'),
+        max_length=400,
+        blank=True
+        )
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            from django.utils.text import slugify
+            if self.parent:
+                self.slug = slugify("{} - {}".format(self.parent, self.nome))
+                super(Area, self).save(*args, **kwargs)
+            else:
+                self.slug = slugify(self.nome)
+                super(Area, self).save(*args, **kwargs)
 
 
 class Agenda(IdPubIdentifier):
@@ -13,11 +42,17 @@ class Agenda(IdPubIdentifier):
             max_length=140,
             blank=False,
             )
+    # area = models.ForeignKey(Area)
     justificativa = models.TextField(
             _('Justificativa da Atividade'),
             blank=True,
             null=True
             )
+    # faixa_etaria = models.CharField(
+    #     _('Faixa Etaria do Publico Alvo'),
+    #     choices=FAIXA_ETARIA_CHOICES,
+    #     max_length=1
+    #     )
     espaco = models.CharField(
         _('Espaço de Realização do Atividade'),
         blank=True,

@@ -47,17 +47,20 @@ def test_return_event_properties(client):
             'titulo',
             'descricao',
             'justificativa',
-            'espaco',
             'tipo',
-            'publico',
-            'carga_horaria',
-            'publico_esperado',
+            'area',
+            'espaco',
+            # 'parceiros',
+            'faixa_etaria',
+            'publico_participante',
+            'abrangencia_territorial',
             'data_inicio',
             'data_encerramento',
+            'periodicidade',
             'hora_inicio',
             'hora_encerramento',
-            'descricao',
-            'local',
+            'carga_horaria',
+            'publico_esperado',
     ]
 
     praca = mommy.make('Praca')
@@ -115,7 +118,7 @@ def test_closing_an_event_occurrence(authentication):
         format='json',
         )
 
-    import ipdb
-    ipdb.set_trace()
+    # import ipdb
+    # ipdb.set_trace()
     assert response.status_code == status.HTTP_200_OK
     assert json.dumps(request_data) in str(response.content)

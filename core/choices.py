@@ -18,3 +18,11 @@ SITUACAO_CHOICES = (
     ('i', 'Inaugurada'),
 )
 
+FAIXA_ETARIA_CHOICES = (
+    ('c', 'Crianças'),
+    ('a', 'Adolescentes'),
+    ('j', 'Jovens'),
+    ('g', 'Adultos'),
+    ('i', 'Idosos'),
+    ('l', 'Livre'),
+)
