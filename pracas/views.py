@@ -5,6 +5,7 @@ from rest_framework.parsers import FormParser
 from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
 from oidc_auth.authentication import JSONWebTokenAuthentication
 
@@ -16,10 +17,13 @@ from gestor.models import ArquivosProcessoVinculacao
 from gestor.serializers import ProcessoVinculacaoSerializer
 
 from .models import Praca
+from .models import Parceiro
 
 from .serializers import PracaSerializer
 from .serializers import PracaListSerializer
 from .serializers import HeaderUploadSerializer
+
+from .serializers import ParceiroSerialier
 
 
 class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
@@ -104,3 +108,14 @@ class DistanceView(DefaultMixin, APIView):
             pracas.append(praca)
 
         return Response(pracas)
+
+
+class ParceiroViewSet(DefaultMixin, ModelViewSet):
+
+    serializer_class = ParceiroSerialier
+    queryset = Parceiro.objects.all()
+    # search_fields = ('nome', 'municipio', 'uf')
+
+    # serializers = {
+    #         'list': PracaListSerializer,
+    #         }

@@ -6,6 +6,8 @@ from core.choices import MODELO_CHOICES
 from core.choices import REGIOES_CHOICES
 from core.choices import SITUACAO_CHOICES
 
+from .choices import PARCEIRO_RAMO_ATIVIDADE
+
 from core.models import IdPubIdentifier
 
 
@@ -62,23 +64,23 @@ class Praca(IdPubIdentifier):
         null=True
         )
     lat = models.DecimalField(
-            _('Latitude'),
-            max_digits=9,
-            decimal_places=6,
-            null=True,
-            blank=True
-            )
+        _('Latitude'),
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True
+        )
     long = models.DecimalField(
-            _('Longitutde'),
-            max_digits=9,
-            decimal_places=6,
-            null=True,
-            blank=True
-            )
+        _('Longitutde'),
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True
+        )
     header_img = models.FileField(
-            blank=True,
-            upload_to=upload_header_to,
-            )
+        blank=True,
+        upload_to=upload_header_to,
+        )
 
     def get_latlong(self):
         return (self.lat, self.long)
@@ -106,3 +108,57 @@ class Praca(IdPubIdentifier):
         ordering = ['uf', 'municipio']
         verbose_name = 'praca'
         verbose_name_plural = 'pracas'
+
+
+class Parceiro(IdPubIdentifier):
+    nome = models.CharField(
+        _('Nome Institucional do Parceiro'),
+        max_length=300,
+        )
+    endereco = models.TextField(
+        _('Endereço')
+        )
+    contato = models.CharField(
+        _('Nome do Contato'),
+        max_length=200,
+        blank=True,
+        null=True,
+        )
+    telefone = models.IntegerField(
+        _('Telefone de Contato'),
+        blank=True,
+        null=True,
+        )
+    email = models.EmailField(
+        _('Email de Contato'),
+        blank=True,
+        null=True,
+        )
+    ramo_atividade = models.IntegerField(
+        _('Ramo de Atividade'),
+        choices=PARCEIRO_RAMO_ATIVIDADE,
+        )
+    acoes = models.TextField(
+        _('Açoes realizadas em parceria'),
+        blank=True,
+        null=True,
+        )
+    tempo_parceria = models.IntegerField(
+        _('Tempo previsto para a parceria'),
+        blank=True,
+        null=True
+        )
+    lat = models.DecimalField(
+        _('Latitude'),
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True
+        )
+    long = models.DecimalField(
+        _('Longitutde'),
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True
+        )

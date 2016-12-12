@@ -6,6 +6,8 @@ from atividades.serializers import AgendaSerializer
 
 from .models import Praca
 
+from .models import Parceiro
+
 
 class HeaderUploadSerializer(serializers.Serializer):
     header_url = serializers.SerializerMethodField()
@@ -76,3 +78,19 @@ class PracaSerializer(PracaBaseSerializer):
                 'lat',
                 'long',
                 )
+
+
+class ParceiroSerialier(serializers.ModelSerializer):
+
+    class Meta:
+        model = Parceiro
+        fields = (
+            'nome',
+            'endereco',
+            'contato',
+            'telefone',
+            'email',
+            'ramo_atividade',
+            'acoes',
+            'tempo_parceria'
+        )

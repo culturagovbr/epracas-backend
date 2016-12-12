@@ -7,10 +7,13 @@ from .views import PracaVinculoUpload
 from .views import PracaViewSet
 from .views import DistanceView
 
+from .views import ParceiroViewSet
+
 
 router = routers.SimpleRouter()
 
 router.register(r'pracas', PracaViewSet)
+router.register(r'parceiros', ParceiroViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
