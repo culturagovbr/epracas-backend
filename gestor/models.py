@@ -11,6 +11,7 @@ from core.choices import REGIOES_CHOICES
 
 from localflavor.br.br_states import STATE_CHOICES
 
+
 class Gestor(IdPubIdentifier):
     nome = models.CharField(_('Nome'), max_length=250, blank=False, null=False)
     endereco = models.TextField(_('Endereço'), blank=True)

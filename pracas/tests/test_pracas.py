@@ -23,6 +23,7 @@ def test_get_URL_OK_from_Pracas(client):
 
     assert response.status_code == status.HTTP_200_OK
 
+
 def test_return_a_list_of_Pracas(client):
     """
     Testa o retorno de uma lista de Praças
@@ -35,6 +36,7 @@ def test_return_a_list_of_Pracas(client):
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 5
     assert isinstance(response.data, list)
+
 
 def test_if_an_instance_of_list_result_has_some_properties(client):
     """
@@ -54,7 +56,7 @@ def test_if_an_instance_of_list_result_has_some_properties(client):
             'situacao_descricao',
             ]
 
-    pracas = mommy.make_many(Praca, quantity=5)
+    mommy.make_many(Praca, quantity=5)
 
     response = client.get(list_url, format='json')
 
@@ -62,6 +64,7 @@ def test_if_an_instance_of_list_result_has_some_properties(client):
     assert len(response.data) == 5
     for field in fields:
         assert field in response.data[0]
+
 
 def test_returning_a_praca(client):
     """
@@ -71,17 +74,18 @@ def test_returning_a_praca(client):
     praca = mommy.make(Praca)
 
     response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk' : praca.pk}), 
+        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}),
         format='json'
     )
     assert response.status_code == status.HTTP_200_OK
     assert str(praca.pk) in response.data['id_pub']
 
+
 def test_return_a_praca_with_some_properties(client):
     """
     Testa o retorno de uma praça especifica com as seguintes propriedades:
-    url, id_pub, nome, slug, municipio, uf, modelo, modelo_descricao, situacao e
-    situacao_descricao.
+    url, id_pub, nome, slug, municipio, uf, modelo, modelo_descricao, situacao
+    e situacao_descricao.
 
     """
 
@@ -110,6 +114,7 @@ def test_return_a_praca_with_some_properties(client):
     for field in fields:
         assert field in response.data
 
+
 def test_not_returning_a_praca_giving_wrong_args(client):
 
     mommy.make(Praca)
@@ -119,6 +124,7 @@ def test_not_returning_a_praca_giving_wrong_args(client):
             format='json'
     )
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
 
 def test_create_a_new_praca(client):
 
@@ -141,16 +147,16 @@ def test_create_a_new_praca(client):
     assert '36338510' in bytes.decode(response.content)
     assert Praca.objects.count() == 1
 
+
 def test_retorna_as_5_pracas_mais_proximas(client):
 
     data = {
             'lat': -15.7833,
-            'long':  -47.9167
+            'long': -47.9167
     }
 
     for i in range(10):
-        praca = mommy.make(Praca, _fill_optional=['lat', 'long'])
-
+        mommy.make(Praca, _fill_optional=['lat', 'long'])
 
     response = client.post(
             reverse('pracas:distancia'),
@@ -161,6 +167,7 @@ def test_retorna_as_5_pracas_mais_proximas(client):
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 5
     assert sorted(response.data, key=lambda praca: praca['distancia']) == response.data
+
 
 def test_defining_a_name_if_user_leave_it_blank(client):
     """
@@ -178,6 +185,7 @@ def test_defining_a_name_if_user_leave_it_blank(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['nome'] == "Praça CEU de Brasilia - DF"
+
 
 def test_defining_a_slug_from_the_name(client):
     """
@@ -198,6 +206,7 @@ def test_defining_a_slug_from_the_name(client):
     assert response.status_code == status.HTTP_200_OK
     assert response.data['slug'] == slug
 
+
 def test_defining_a_name_and_a_slug(client):
     """
     Testa a definição automatica de um nome de Praça e uma slug, a partir
@@ -217,6 +226,7 @@ def test_defining_a_name_and_a_slug(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['slug'] == slug
+
 
 def test_upload_an_image_as_public_page_header(client):
     """
