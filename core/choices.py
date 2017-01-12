@@ -1,3 +1,5 @@
+#coding: utf-8
+
 REGIOES_CHOICES = (
     ('N', 'Norte'),
     ('NE', 'Nordeste'),

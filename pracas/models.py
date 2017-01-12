@@ -1,3 +1,5 @@
+#coding: utf-8
+
 from django.db import models
 from django.utils.translation import ugettext as _
 from rest_localflavor.br.br_states import STATE_CHOICES
@@ -19,24 +21,24 @@ def upload_header_to(instance, filename):
 
 class Praca(IdPubIdentifier):
     nome = models.CharField(
-            _('Nome da Praça'),
+            _(u'Nome da Praça'),
             max_length=250,
             blank=True,
             )
     slug = models.SlugField(
-            _('Nome Publico'),
+            _(u'Nome Publico'),
             max_length=250,
             blank=True,
             )
-    contrato = models.IntegerField('Nº de Contrato', max_length=10)
+    contrato = models.IntegerField('Nº de Contrato')
     logradouro = models.CharField(
-            _('Logradouro'),
+            _(u'Logradouro'),
             max_length=200,
             blank=True, null=True
     )
-    cep = models.IntegerField(_('CEP'), blank=True, null=True)
+    cep = models.IntegerField(_(u'CEP'), blank=True, null=True)
     bairro = models.CharField(
-            _('Bairro'),
+            _(u'Bairro'),
             max_length=100,
             blank=True,
             null=True
@@ -59,19 +61,19 @@ class Praca(IdPubIdentifier):
             choices=SITUACAO_CHOICES
             )
     data_inauguracao = models.DateField(
-        _('Data de Inauguração'),
+        _(u'Data de Inauguração'),
         blank=True,
         null=True
         )
     lat = models.DecimalField(
-        _('Latitude'),
+        _(u'Latitude'),
         max_digits=9,
         decimal_places=6,
         null=True,
         blank=True
         )
     long = models.DecimalField(
-        _('Longitutde'),
+        _(u'Longitutde'),
         max_digits=9,
         decimal_places=6,
         null=True,
@@ -112,51 +114,51 @@ class Praca(IdPubIdentifier):
 
 class Parceiro(IdPubIdentifier):
     nome = models.CharField(
-        _('Nome Institucional do Parceiro'),
+        _(u'Nome Institucional do Parceiro'),
         max_length=300,
         )
     endereco = models.TextField(
-        _('Endereço')
+        _(u'Endereço')
         )
     contato = models.CharField(
-        _('Nome do Contato'),
+        _(u'Nome do Contato'),
         max_length=200,
         blank=True,
         null=True,
         )
     telefone = models.IntegerField(
-        _('Telefone de Contato'),
+        _(u'Telefone de Contato'),
         blank=True,
         null=True,
         )
     email = models.EmailField(
-        _('Email de Contato'),
+        _(u'Email de Contato'),
         blank=True,
         null=True,
         )
     ramo_atividade = models.IntegerField(
-        _('Ramo de Atividade'),
+        _(u'Ramo de Atividade'),
         choices=PARCEIRO_RAMO_ATIVIDADE,
         )
     acoes = models.TextField(
-        _('Açoes realizadas em parceria'),
+        _(u'Açoes realizadas em parceria'),
         blank=True,
         null=True,
         )
     tempo_parceria = models.IntegerField(
-        _('Tempo previsto para a parceria'),
+        _(u'Tempo previsto para a parceria'),
         blank=True,
         null=True
         )
     lat = models.DecimalField(
-        _('Latitude'),
+        _(u'Latitude'),
         max_digits=9,
         decimal_places=6,
         null=True,
         blank=True
         )
     long = models.DecimalField(
-        _('Longitutde'),
+        _(u'Longitutde'),
         max_digits=9,
         decimal_places=6,
         null=True,

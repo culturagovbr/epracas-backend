@@ -1,3 +1,5 @@
+#coding: utf-8
+
 PARCEIRO_RAMO_ATIVIDADE = (
     (1, "agricultura, pecuária, produção florestal, pesca e aqüicultura"),
     (2, "indústrias extrativas"),

@@ -1,3 +1,4 @@
+#coding: utf-8
 import uuid
 
 from django.conf import settings
@@ -14,7 +15,7 @@ from .choices import REGIOES_CHOICES
 
 class IdPubIdentifier(models.Model):
     id_pub = models.UUIDField(
-            _('ID Público'),
+            _(u'ID Público'),
             primary_key=True,
             default=uuid.uuid4,
             editable=False

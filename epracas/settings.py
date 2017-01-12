@@ -58,6 +58,8 @@ THIRD_PARTY_APPS = (
     'rest_framework_docs',
     'corsheaders',
     'raven.contrib.django.raven_compat',
+    'rest_framework',
+    'rest_localflavor'
 )
 
 # Apps specific for this project go here.
