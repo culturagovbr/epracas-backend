@@ -15,17 +15,17 @@ from rest_localflavor.br.br_states import STATE_CHOICES
 
 
 class Gestor(IdPubIdentifier):
-    nome = models.CharField(_('Nome'), max_length=250, blank=False, null=False)
-    endereco = models.TextField(_('Endereço'), blank=True)
-    cidade = models.CharField(_('Cidade'), max_length=140, blank=True)
+    nome = models.CharField(_(u'Nome'), max_length=250, blank=False, null=False)
+    endereco = models.TextField(_(u'Endereço'), blank=True)
+    cidade = models.CharField(_(u'Cidade'), max_length=140, blank=True)
     uf = models.CharField(
-            _('UF(Estado)'),
+            _(u'UF(Estado)'),
             max_length=2,
             choices=STATE_CHOICES,
             blank=True
     )
     regiao = models.CharField(
-            _('Região'),
+            _(u'Região'),
             max_length=2,
             choices=REGIOES_CHOICES,
             blank=True
@@ -36,22 +36,22 @@ class ProcessoVinculacao(IdPubIdentifier):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     praca = models.ForeignKey(Praca)
     data_abertura = models.DateTimeField(
-        _('Data de Abertura do Processo'),
+        _(u'Data de Abertura do Processo'),
         auto_now_add=True,
         editable=False,
         blank=False
         )
     data_finalizacao = models.DateTimeField(
-        _('Data de Conclusão do Processo de Vinculação'),
+        _(u'Data de Conclusão do Processo de Vinculação'),
         null=True,
         blank=True
         )
     aprovado = models.BooleanField(
-        _('Processo aprovado'),
+        _(u'Processo aprovado'),
         default=False,
         )
     valido = models.BooleanField(
-        _('Processo Válido'),
+        _(u'Processo Válido'),
         default=True,
         )
 
@@ -59,21 +59,21 @@ class ProcessoVinculacao(IdPubIdentifier):
 class ArquivosProcessoVinculacao(IdPubIdentifier):
     processo = models.ForeignKey(ProcessoVinculacao, related_name='files')
     data_envio = models.DateTimeField(
-        _('Data de Envio do Arquivo'),
+        _(u'Data de Envio do Arquivo'),
         auto_now_add=True,
         blank=False
         )
     tipo = models.CharField(
-        _('Tipo de Arquivo'),
+        _(u'Tipo de Arquivo'),
         max_length=8
         )
     arquivo = models.FileField(upload_to=upload_doc_to)
     verificado = models.BooleanField(
-        _('Arquivo verificado pelo gestor do Ministério'),
+        _(u'Arquivo verificado pelo gestor do Ministério'),
         default=False,
         )
     comentarios = models.TextField(
-        _('Comentários sobre o arquivo'),
+        _(u'Comentários sobre o arquivo'),
         null=True,
         blank=True
         )
