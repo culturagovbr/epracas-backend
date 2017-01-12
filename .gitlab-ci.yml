@@ -9,7 +9,7 @@ variables:
 
 before_script:
         - apt-get update
-        - apt-get install -y python-pip
+        - echo "y" | apt-get install python-pip python-dev
         - pip install -r requirements.txt
         - python manage.py migrate
 
