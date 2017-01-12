@@ -8,6 +8,9 @@ variables:
         DATABASE_URL: "postgres://epracas:epracas123@postgres/epracas_db"
 
 before_script:
+        - apt-get install software-properties-common
+        - apt-add-repository universe
+        - apt-get update
         - apt-get install python python-pip libpq-dev
         - pip install -r requirements.txt
         - python manage.py migrate
