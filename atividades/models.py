@@ -9,7 +9,7 @@ from pracas.models import Praca
 
 class Area(IdPubIdentifier):
     nome = models.CharField(
-        _('Área de Atividade'),
+        _(u'Área de Atividade'),
         max_length=200
         )
     parent = models.ForeignKey(
@@ -19,7 +19,7 @@ class Area(IdPubIdentifier):
         on_delete=models.CASCADE,
         )
     slug = models.SlugField(
-        _('Slug'),
+        _(u'Slug'),
         max_length=400,
         blank=True
         )
@@ -38,67 +38,67 @@ class Area(IdPubIdentifier):
 class Agenda(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='agenda')
     titulo = models.CharField(
-            _('Titulo do Evento'),
+            _(u'Titulo do Evento'),
             max_length=140,
             blank=False,
             )
     # area = models.ForeignKey(Area)
     justificativa = models.TextField(
-            _('Justificativa da Atividade'),
+            _(u'Justificativa da Atividade'),
             blank=True,
             null=True
             )
     # faixa_etaria = models.CharField(
-    #     _('Faixa Etaria do Publico Alvo'),
+    #     _(u'Faixa Etaria do Publico Alvo'),
     #     choices=FAIXA_ETARIA_CHOICES,
     #     max_length=1
     #     )
     espaco = models.CharField(
-        _('Espaço de Realização do Atividade'),
+        _(u'Espaço de Realização do Atividade'),
         blank=True,
         null=True,
         max_length=200,
         )
     tipo = models.CharField(
-        _('Categoria da Atividade'),
+        _(u'Categoria da Atividade'),
         max_length=200,
         )
     publico = models.CharField(
-        _('Publico alvo da atividade'),
+        _(u'Publico alvo da atividade'),
         max_length=200,
         )
     carga_horaria = models.IntegerField(
-        _('Carga Horaria da Atividade')
+        _(u'Carga Horaria da Atividade')
         )
     publico_esperado = models.IntegerField(
-        _('Publico Esperado para a Atividade')
+        _(u'Publico Esperado para a Atividade')
         )
     data_inicio = models.DateTimeField(
-            _('Data de Inicio da atividade'),
+            _(u'Data de Inicio da atividade'),
             )
     data_encerramento = models.DateTimeField(
-            _('Data de Encerramento da atividade'),
+            _(u'Data de Encerramento da atividade'),
             blank=True,
             null=True,
             )
     hora_inicio = models.TimeField(
-            _('Horario de Inicio da atividade'),
+            _(u'Horario de Inicio da atividade'),
             blank=False,
             null=True
             )
     hora_encerramento = models.TimeField(
-            _('Horario de encerramento da atividade'),
+            _(u'Horario de encerramento da atividade'),
             blank=False,
             null=True
             )
     local = models.CharField(
-            _('Esta atividade será realizada em que parte da Praça?'),
+            _(u'Esta atividade será realizada em que parte da Praça?'),
             max_length=100,
             blank=True,
             null=True
             )
     descricao = models.TextField(
-            _('Descrição da Atividade'),
+            _(u'Descrição da Atividade'),
             blank=True,
             null=True
             )
@@ -110,18 +110,18 @@ class Agenda(IdPubIdentifier):
 class Relatorio(IdPubIdentifier):
     agenda = models.OneToOneField(Agenda, related_name='relatorio')
     realizado = models.BooleanField(
-        _('Evento Realizado com Sucesso')
+        _(u'Evento Realizado com Sucesso')
         )
     publico_presente = models.IntegerField(
-        _('Publico presente a atividade')
+        _(u'Publico presente a atividade')
         )
     pontos_positivos = models.TextField(
-        _('Pontos Positivos da Atividade'),
+        _(u'Pontos Positivos da Atividade'),
         blank=True,
         null=True,
         )
     pontos_negativos = models.TextField(
-        _('Pontos Negativos da Atividade'),
+        _(u'Pontos Negativos da Atividade'),
         blank=True,
         null=True,
         )
