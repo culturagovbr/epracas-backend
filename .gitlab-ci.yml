@@ -9,7 +9,7 @@ variables:
 
 before_script:
         - apt-get update
-        - apt-get install python-pip libpq-dev
+        - apt-get install python-pip
         - pip install -r requirements.txt
         - python manage.py migrate
 
