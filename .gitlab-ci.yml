@@ -11,6 +11,7 @@ before_script:
         - apt-get update
         - echo "y" | apt-get install python-pip python-dev
         - pip install -r requirements.txt
+        - pip install --upgrade six
         - python manage.py migrate
 
 test:
