@@ -39,9 +39,9 @@ class AgendaSerializer(serializers.ModelSerializer):
                 'descricao',
                 'justificativa',
                 'tipo',
-                'area',
+                #'area', TODO: fix models.py
                 'espaco',
-                'faixa_etaria',
+                #'faixa_etaria', TODO: fix models.py
                 'publico',
                 'carga_horaria',
                 'publico_esperado',
