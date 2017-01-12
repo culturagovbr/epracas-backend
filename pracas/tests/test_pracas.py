@@ -1,3 +1,5 @@
+#coding: utf-8
+
 import pytest
 
 from django.core.urlresolvers import reverse

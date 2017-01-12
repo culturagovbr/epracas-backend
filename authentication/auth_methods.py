@@ -1,3 +1,5 @@
+#coding: utf-8
+
 from django.contrib.auth import get_user_model
 
 from oidc_auth.authentication import JSONWebTokenAuthentication
