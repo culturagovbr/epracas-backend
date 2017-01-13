@@ -23,56 +23,56 @@ class MyManager(BaseUserManager):
 
 class User(AbstractBaseUser, IdPubIdentifier):
     email_verified = models.BooleanField(
-        _(u'Email verificado'),
+        _('Email verificado'),
         default=False,
         )
     email = models.EmailField(
-        _(u'Email'),
+        _('Email'),
         blank=True,
         null=True
         )
     family_name = models.CharField(
-        _(u'Sobrenome'),
+        _('Sobrenome'),
         max_length=80,
         blank=True,
         null=True,
         )
     first_name = models.CharField(
-        _(u'Nome'),
+        _('Nome'),
         max_length=80,
         blank=True,
         null=True,
         )
     full_name = models.CharField(
-        _(u'Nome Completo'),
+        _('Nome Completo'),
         max_length=200,
         blank=True,
         null=True,
         )
     given_name = models.CharField(
-        _(u'Nome preferido'),
+        _('Nome preferido'),
         max_length=80,
         blank=True,
         null=True,
         )
     name = models.CharField(
-        _(u'Nome'),
+        _('Nome'),
         max_length=80,
         blank=True,
         null=True,
         )
     picture = models.URLField(
-        _(u'Avatar'),
+        _('Avatar'),
         blank=True,
         null=True,
         )
     profile_picture_url = models.URLField(
-        _(u'URL do Avatar'),
+        _('URL do Avatar'),
         blank=True,
         null=True,
         )
     surname = models.CharField(
-        _(u'Sobrenome'),
+        _('Sobrenome'),
         max_length=80,
         blank=True,
         null=True,

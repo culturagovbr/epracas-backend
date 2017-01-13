@@ -21,24 +21,24 @@ def upload_header_to(instance, filename):
 
 class Praca(IdPubIdentifier):
     nome = models.CharField(
-            _(u'Nome da Praça'),
+            _('Nome da Praça'),
             max_length=250,
             blank=True,
             )
     slug = models.SlugField(
-            _(u'Nome Publico'),
+            _('Nome Publico'),
             max_length=250,
             blank=True,
             )
     contrato = models.IntegerField('Nº de Contrato')
     logradouro = models.CharField(
-            _(u'Logradouro'),
+            _('Logradouro'),
             max_length=200,
             blank=True, null=True
     )
-    cep = models.IntegerField(_(u'CEP'), blank=True, null=True)
+    cep = models.IntegerField(_('CEP'), blank=True, null=True)
     bairro = models.CharField(
-            _(u'Bairro'),
+            _('Bairro'),
             max_length=100,
             blank=True,
             null=True
@@ -61,19 +61,19 @@ class Praca(IdPubIdentifier):
             choices=SITUACAO_CHOICES
             )
     data_inauguracao = models.DateField(
-        _(u'Data de Inauguração'),
+        _('Data de Inauguração'),
         blank=True,
         null=True
         )
     lat = models.DecimalField(
-        _(u'Latitude'),
+        _('Latitude'),
         max_digits=9,
         decimal_places=6,
         null=True,
         blank=True
         )
     long = models.DecimalField(
-        _(u'Longitutde'),
+        _('Longitutde'),
         max_digits=9,
         decimal_places=6,
         null=True,
@@ -114,51 +114,51 @@ class Praca(IdPubIdentifier):
 
 class Parceiro(IdPubIdentifier):
     nome = models.CharField(
-        _(u'Nome Institucional do Parceiro'),
+        _('Nome Institucional do Parceiro'),
         max_length=300,
         )
     endereco = models.TextField(
-        _(u'Endereço')
+        _('Endereço')
         )
     contato = models.CharField(
-        _(u'Nome do Contato'),
+        _('Nome do Contato'),
         max_length=200,
         blank=True,
         null=True,
         )
     telefone = models.IntegerField(
-        _(u'Telefone de Contato'),
+        _('Telefone de Contato'),
         blank=True,
         null=True,
         )
     email = models.EmailField(
-        _(u'Email de Contato'),
+        _('Email de Contato'),
         blank=True,
         null=True,
         )
     ramo_atividade = models.IntegerField(
-        _(u'Ramo de Atividade'),
+        _('Ramo de Atividade'),
         choices=PARCEIRO_RAMO_ATIVIDADE,
         )
     acoes = models.TextField(
-        _(u'Açoes realizadas em parceria'),
+        _('Açoes realizadas em parceria'),
         blank=True,
         null=True,
         )
     tempo_parceria = models.IntegerField(
-        _(u'Tempo previsto para a parceria'),
+        _('Tempo previsto para a parceria'),
         blank=True,
         null=True
         )
     lat = models.DecimalField(
-        _(u'Latitude'),
+        _('Latitude'),
         max_digits=9,
         decimal_places=6,
         null=True,
         blank=True
         )
     long = models.DecimalField(
-        _(u'Longitutde'),
+        _('Longitutde'),
         max_digits=9,
         decimal_places=6,
         null=True,
