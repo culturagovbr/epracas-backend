@@ -59,7 +59,8 @@ THIRD_PARTY_APPS = (
     'corsheaders',
     'raven.contrib.django.raven_compat',
     'rest_framework',
-    'rest_localflavor'
+    'rest_localflavor',
+    'schedule'
 )
 
 # Apps specific for this project go here.
@@ -71,7 +72,7 @@ LOCAL_APPS = (
     'atividades',
 )
 
-INSTALLED_APPS = INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

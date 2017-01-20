@@ -65,3 +65,5 @@ epracas/db.sqlite3
 epracas/initial_data_unminified.json
 epracas/initial_data.json
 media/
+
+.DS_Store

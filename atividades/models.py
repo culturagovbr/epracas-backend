@@ -5,6 +5,9 @@ from django.utils.translation import ugettext as _
 
 from core.models import IdPubIdentifier
 from core.choices import FAIXA_ETARIA_CHOICES
+import datetime
+
+from schedule.models import Event
 
 from pracas.models import Praca
 
@@ -107,6 +110,41 @@ class Agenda(IdPubIdentifier):
 
     class Meta:
         ordering = ['data_inicio', 'hora_inicio', 'data_encerramento']
+
+
+    def save(self, force_insert=False, force_update=False):
+        nova_agenda = False
+        if not self.id:
+            nova_agenda = True
+        super(Agenda, self).save(force_insert, force_update)
+
+        start = datetime.combine(self.data_inicio, self.hora_inicio)
+        end = datetime.combine(self.data_encerramento, self.hora_encerramento)
+
+        if nova_agenda:
+            event = Event(  start = start,
+                            end   = end,
+                            title = self.titulo,
+                            description = self.descricao)
+            event.save()
+
+            rel = EventRelation.objects.create_relation(event, self)
+            rel.save()
+
+            cal = null
+            try:
+                cal = Calendar.objects.get(pk=1)
+            except Calendar.DoesNotExist:
+                cal = Calendar(name = "epracas")
+                cal.save()
+            cal.events.add(event)
+        else:
+            event = Event.objects.get_for_object(self)[0]
+            event.start = start
+            event.end = end
+            event.title = title
+            event.description = self.description
+            event.save()
 
 
 class Relatorio(IdPubIdentifier):

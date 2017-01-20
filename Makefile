@@ -12,3 +12,6 @@ test-watch:
 
 test-coverage:
 	DEBUG=True TEST_ENV=True py.test --ds=epracas.settings -s --reuse-db --cov-report term-missing
+
+testw:
+	DEBUG=True TEST_ENV=True py.test --ds=epracas.settings -s --create-db --ignore=env
