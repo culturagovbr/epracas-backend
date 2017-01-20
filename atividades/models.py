@@ -5,7 +5,7 @@ from django.utils.translation import ugettext as _
 
 from core.models import IdPubIdentifier
 from core.choices import FAIXA_ETARIA_CHOICES
-import datetime
+from datetime import datetime, time
 
 from schedule.models import Event
 
@@ -108,18 +108,28 @@ class Agenda(IdPubIdentifier):
             null=True
             )
 
+    @property
+    def id(self):
+        return self.id_pub
+
     class Meta:
         ordering = ['data_inicio', 'hora_inicio', 'data_encerramento']
 
 
     def save(self, force_insert=False, force_update=False):
         nova_agenda = False
-        if not self.id:
+        if not self.id_pub:
             nova_agenda = True
         super(Agenda, self).save(force_insert, force_update)
 
-        start = datetime.combine(self.data_inicio, self.hora_inicio)
-        end = datetime.combine(self.data_encerramento, self.hora_encerramento)
+        start_date = self.data_inicio if self.data_inicio else datetime.today()
+        start_time = time(self.hora_inicio if self.hora_inicio else 0)
+        start = datetime.combine(start_date, start_time)
+
+        data_enc = self.data_encerramento
+        end_date = data_enc if data_enc else datetime.today()
+        end_time = time(self.hora_encerramento if self.hora_encerramento else 0)
+        end = datetime.combine(end_date, end_time)
 
         if nova_agenda:
             event = Event(  start = start,
@@ -139,11 +149,12 @@ class Agenda(IdPubIdentifier):
                 cal.save()
             cal.events.add(event)
         else:
-            event = Event.objects.get_for_object(self)[0]
+            events = Event.objects.get_for_object(self) if len(events)>0 else [Event()]
+            event = events[0]
             event.start = start
             event.end = end
-            event.title = title
-            event.description = self.description
+            event.title = self.titulo
+            event.description = self.descricao
             event.save()
 
 
