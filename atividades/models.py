@@ -149,7 +149,9 @@ class Agenda(IdPubIdentifier):
                 cal.save()
             cal.events.add(event)
         else:
-            events = Event.objects.get_for_object(self) if len(events)>0 else [Event()]
+            events = Event.objects.get_for_object(self)
+            if len(events) == 0:
+                events = [Event()]
             event = events[0]
             event.start = start
             event.end = end
