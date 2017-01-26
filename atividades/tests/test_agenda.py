@@ -2,6 +2,7 @@
 
 import json
 import pytest
+from datetime import datetime
 
 from rest_framework import status
 from rest_framework.reverse import reverse
@@ -90,7 +91,42 @@ def test_return_events_related_with_a_Praca(client):
     assert response.status_code == status.HTTP_200_OK
     assert 'agenda' in response.data
 
+@pytest.mark.skip(reason="POST ainda não está implementado")
+def test_submit_report_links_to_event(client):
 
+    event = mommy.make('Agenda')
+
+    request_body = {
+        "data_de_ocorrencia": "04/12/1993",
+        "realizado": "true",
+        "publico_presente": "100",
+        "pontos_positivos": "Foi massa",
+        "pontos_negativos": "Tinha um cara meio bêbado, saiu quebrando tudo"
+    }
+
+    response = client.post(
+        reverse('atividades:agenda-detail', kwargs={'pk': event.id_pub}),
+        data = request_body
+    )
+
+    assert json.dumps(request_body) in str(response.data)
+
+def test_get_all_ocurrances_from_a_month(client):
+
+    event = mommy.make('Agenda')
+    occurrence = mommy.make('Occurrence',
+        event = event,
+        start = datetime(2010,2,12),
+        end   = datetime(2016,2,12),
+        repeat= 'RRULE:FREQ=DAILY;INTERVAL=10;'
+    )
+
+    response = client.get(reverse('atividades:agenda-list') + '?mes=3&ano=2012')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+
+@pytest.mark.skip
 def test_closing_an_event_occurrence(authentication):
 
     client = APIClient()

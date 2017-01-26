@@ -26,7 +26,7 @@ class AgendaSerializer(serializers.ModelSerializer):
             read_only=True
         )
     praca = serializers.PrimaryKeyRelatedField(queryset=Praca.objects.all())
-    relatorio = RelatorioSerializer(allow_null=True, read_only=True)
+    #relatorio = RelatorioSerializer(allow_null=True, read_only=True)
 
     class Meta:
         model = Agenda
@@ -49,8 +49,7 @@ class AgendaSerializer(serializers.ModelSerializer):
                 'data_encerramento',
                 'hora_inicio',
                 'hora_encerramento',
-                'local',
-                'relatorio',
+                'local'
         )
         depth = 1
 

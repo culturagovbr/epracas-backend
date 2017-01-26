@@ -1,16 +1,16 @@
 #coding: utf-8
 
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from core.models import IdPubIdentifier
 from core.choices import FAIXA_ETARIA_CHOICES
 from datetime import datetime, time
 
-from schedule.models import Event
+from eventtools.models import BaseEvent, BaseOccurrence
 
 from pracas.models import Praca
-
 
 class Area(IdPubIdentifier):
     nome = models.CharField(
@@ -40,7 +40,7 @@ class Area(IdPubIdentifier):
                 super(Area, self).save(*args, **kwargs)
 
 
-class Agenda(IdPubIdentifier):
+class Agenda(IdPubIdentifier, BaseEvent):
     praca = models.ForeignKey(Praca, related_name='agenda')
     titulo = models.CharField(
             _('Titulo do Evento'),
@@ -115,53 +115,11 @@ class Agenda(IdPubIdentifier):
     class Meta:
         ordering = ['data_inicio', 'hora_inicio', 'data_encerramento']
 
-
-    def save(self, force_insert=False, force_update=False):
-        nova_agenda = False
-        if not self.id_pub:
-            nova_agenda = True
-        super(Agenda, self).save(force_insert, force_update)
-
-        start_date = self.data_inicio if self.data_inicio else datetime.today()
-        start_time = time(self.hora_inicio if self.hora_inicio else 0)
-        start = datetime.combine(start_date, start_time)
-
-        data_enc = self.data_encerramento
-        end_date = data_enc if data_enc else datetime.today()
-        end_time = time(self.hora_encerramento if self.hora_encerramento else 0)
-        end = datetime.combine(end_date, end_time)
-
-        if nova_agenda:
-            event = Event(  start = start,
-                            end   = end,
-                            title = self.titulo,
-                            description = self.descricao)
-            event.save()
-
-            rel = EventRelation.objects.create_relation(event, self)
-            rel.save()
-
-            cal = null
-            try:
-                cal = Calendar.objects.get(pk=1)
-            except Calendar.DoesNotExist:
-                cal = Calendar(name = "epracas")
-                cal.save()
-            cal.events.add(event)
-        else:
-            events = Event.objects.get_for_object(self)
-            if len(events) == 0:
-                events = [Event()]
-            event = events[0]
-            event.start = start
-            event.end = end
-            event.title = self.titulo
-            event.description = self.descricao
-            event.save()
-
+class Occurrence(BaseOccurrence):
+    event = models.ForeignKey(Agenda)
 
 class Relatorio(IdPubIdentifier):
-    agenda = models.OneToOneField(Agenda, related_name='relatorio')
+    agenda = models.ForeignKey(Agenda, related_name='relatorios')
     realizado = models.BooleanField(
         _('Evento Realizado com Sucesso')
         )
@@ -178,7 +136,7 @@ class Relatorio(IdPubIdentifier):
         blank=True,
         null=True,
         )
-
+    data_de_ocorrencia = models.DateField(default=timezone.now())
 
 # class Atividade(models.Model):
 #     nome = models.CharField(max_length=255)
