@@ -31,7 +31,7 @@ def test_return_a_list_of_Pracas(client):
     Testa o retorno de uma lista de Praças
     """
 
-    mommy.make_many(Praca, quantity=5)
+    mommy.make(Praca, _quantity=5)
 
     response = client.get(list_url, format='json')
 
@@ -58,7 +58,7 @@ def test_if_an_instance_of_list_result_has_some_properties(client):
             'situacao_descricao',
             ]
 
-    mommy.make_many(Praca, quantity=5)
+    mommy.make(Praca, _quantity=5)
 
     response = client.get(list_url, format='json')
 

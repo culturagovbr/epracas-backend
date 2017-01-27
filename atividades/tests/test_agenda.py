@@ -26,7 +26,7 @@ def test_return_200_OK_on_main_endpoint_url(client):
 
 def test_return_a_list_with_5_events(client):
 
-    mommy.make_many('Agenda', quantity=5)
+    mommy.make('Agenda', _quantity=5)
 
     response = client.get(agenda_list_url)
 
