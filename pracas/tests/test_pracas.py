@@ -132,7 +132,7 @@ def test_create_a_new_praca(client):
             'nome': 'Praça Fulano Cicrano',
             'contrato': '36338510',
             'regiao': 'N',
-            'uf': 'AM',
+            'uf': 'am',
             'municipio': 'Manaus',
             'modelo': 'g',
             'situacao': 'i'
@@ -176,7 +176,7 @@ def test_defining_a_name_if_user_leave_it_blank(client):
 
     """
 
-    praca = mommy.make(Praca, nome="", municipio="Brasilia", uf="DF")
+    praca = mommy.make(Praca, nome="", municipio="Brasilia", uf="df")
 
     response = client.get(
             reverse('pracas:praca-detail', kwargs={'pk': praca.id_pub}),

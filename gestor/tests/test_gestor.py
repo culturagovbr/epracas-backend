@@ -101,7 +101,7 @@ def test_persist_a_gestors_address(client):
             'nome': 'Fulano Cicrano',
             'endereco': 'Conj 10, Casa 19',
             'cidade': 'Altamira',
-            'uf': 'PA',
+            'uf': 'pa',
             'regiao': 'N'
     }
 
@@ -130,7 +130,7 @@ def test_update_a_gestors_address(client):
             'nome': 'Fulano Cicrano',
             'endereco': 'Conj 10, Casa 19',
             'cidade': 'Altamira',
-            'uf': 'PA',
+            'uf': 'pa',
             'regiao': 'N'
     }
 

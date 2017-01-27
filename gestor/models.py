@@ -9,7 +9,7 @@ from pracas.models import Praca
 
 from core.choices import REGIOES_CHOICES
 
-from localflavor.br.br_states import STATE_CHOICES
+from rest_localflavor.br.br_states import STATE_CHOICES
 
 
 class Gestor(IdPubIdentifier):

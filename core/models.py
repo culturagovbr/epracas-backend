@@ -5,7 +5,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 from rest_framework.reverse import reverse
-from localflavor.br.br_states import STATE_CHOICES
+from rest_localflavor.br.br_states import STATE_CHOICES
 
 from .choices import REGIOES_CHOICES
 

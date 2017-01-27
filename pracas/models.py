@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
-from localflavor.br.br_states import STATE_CHOICES
+from rest_localflavor.br.br_states import STATE_CHOICES
 
 from core.choices import MODELO_CHOICES
 from core.choices import REGIOES_CHOICES
