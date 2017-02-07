@@ -1,7 +1,8 @@
-#coding: utf-8
+# coding: utf-8
 
 import pytest
 
+from django.core.files import File
 from django.core.urlresolvers import reverse
 
 from rest_framework import status
@@ -14,6 +15,11 @@ from pracas.models import Praca
 pytestmark = pytest.mark.django_db
 
 list_url = reverse('pracas:praca-list')
+
+
+@pytest.fixture
+def _create_temporary_file(mocker):
+    return mocker.Mock(spec=File, name='FileMock')
 
 
 def test_get_URL_OK_from_Pracas(client):
@@ -229,8 +235,8 @@ def test_defining_a_name_and_a_slug(client):
     assert response.status_code == status.HTTP_200_OK
     assert response.data['slug'] == slug
 
-@pytest.mark.skip(reason="O arquivo de teste não está disponível.")
-def test_upload_an_image_as_public_page_header(client):
+
+def test_upload_an_image_as_public_page_header(_create_temporary_file, client):
     """
     Testa o envio de uma imagem para ser utilizada no cabeçalho da pagina
     publica de uma Praça.
@@ -239,13 +245,12 @@ def test_upload_an_image_as_public_page_header(client):
 
     praca = mommy.make(Praca)
 
-    # uma sugestão é salvar a imagem dentro de pracas/tests/assets/ ou algo
-    #   do tipo
-    file_test = open('/home/decko/test.jpg', 'rb')
+    test_file = _create_temporary_file
+    test_file.name = 'header.jpg'
 
     response = client.post(
         reverse('pracas:praca-header_upload', kwargs={'pk': praca.id_pub}),
-        {'header_img': file_test},
+        {'header_img': test_file},
         format='multipart',
         )
 
