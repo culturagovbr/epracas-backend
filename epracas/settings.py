@@ -213,6 +213,8 @@ OIDC_AUTH = {
             '12_5d1bf045zqo8o408g8cs8ogwco0kko4wwwk08sk8gwkosk08o0'
             ),
         'OIDC_RESOLVE_USER_FUNCTION': 'oidc_auth.authentication.get_user_by_id',
+        'OIDC_LEEWAY': 6000,
+        'OIDC_JWKS_EXPIRATION_TIME': 24*60*60,
         'JWT_AUTH_HEADER_PREFIX': 'JWT',
         'BEARER_AUTH_HEADER_PREFIX': 'Bearer',
 }
