@@ -2,59 +2,73 @@ from rest_framework import serializers
 
 from pracas.models import Praca
 
+from .choices import ESPACOS_CHOICES
+from .choices import TIPO_ATIVIDADE_CHOICES
+from .choices import TERRITORIO_CHOICES
+
 from .models import Agenda
+from .models import Ocorrencia
 from .models import Relatorio
 
 
 class RelatorioSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Relatorio
-        fields = (
-            'realizado',
-            'publico_presente',
-            'pontos_positivos',
-            'pontos_negativos',
-        )
+        fields = ('realizado', 'publico_presente', 'pontos_positivos',
+                  'pontos_negativos', )
 
 
-class AgendaSerializer(serializers.ModelSerializer):
-    id_pub = serializers.UUIDField(read_only=True)
-    url = serializers.URLField(source='get_absolute_url', read_only=True)
-    praca_url = serializers.URLField(
-            source='praca.get_absolute_url',
-            read_only=True
-        )
-    praca = serializers.PrimaryKeyRelatedField(queryset=Praca.objects.all())
-    #relatorio = RelatorioSerializer(allow_null=True, read_only=True)
+class OcorrenciaSerializer(serializers.Serializer):
 
     class Meta:
-        model = Agenda
+        model = Ocorrencia
         fields = (
-                'url',
-                'id_pub',
-                'praca_url',
-                'praca',
-                'titulo',
-                'descricao',
-                'justificativa',
-                'tipo',
-                #'area', TODO: fix models.py
-                'espaco',
-                #'faixa_etaria', TODO: fix models.py
-                'publico',
-                'carga_horaria',
-                'publico_esperado',
-                'data_inicio',
-                'data_encerramento',
-                'hora_inicio',
-                'hora_encerramento',
-                'local'
+            'event',
+            'start',
+            'end',
+            'repeat',
         )
-        depth = 1
 
-    def partial_update(self, instance, validated_data):
-        relatorio = validated_data.pop('relatorio')
-        Relatorio.objects.create(agenda=instance, **relatorio)
 
-        return relatorio
+class AgendaDetailSerializer(serializers.Serializer):
+    url = serializers.SerializerMethodField()
+    id_pub = serializers.UUIDField(read_only=True)
+    praca = serializers.PrimaryKeyRelatedField(queryset=Praca.objects.all())
+    titulo = serializers.CharField()
+    justificativa = serializers.CharField()
+    espaco = serializers.ChoiceField(choices=ESPACOS_CHOICES)
+    tipo = serializers.ChoiceField(choices=TIPO_ATIVIDADE_CHOICES)
+    publico = serializers.CharField()
+    carga_horaria = serializers.IntegerField()
+    publico_esperado = serializers.IntegerField()
+    territorio = serializers.ChoiceField(choices=TERRITORIO_CHOICES)
+    descricao = serializers.CharField()
+    # data_inicio = serializers.DateField()
+    # data_encerramento = serializers.DateField()
+    # repeat = serializers.CharField()
+
+    def get_url(self, obj):
+        return obj.get_absolute_url()
+
+    def create(self, validated_data):
+        praca = Praca.objects.get(id_pub=validated_data['praca'])
+        agenda = Agenda(
+            praca=praca,
+            titulo=validated_data['titulo'],
+            justificativa=validated_data['justificativa'],
+            espaco=validated_data['espaco'],
+            tipo=validated_data['tipo'],
+            publico=validated_data['publico'],
+            carga_horaria=validated_data['carga_horaria'],
+            publico_esperado=validated_data['publico_esperado'],
+            territorio=validated_data['territorio'],
+            descricao=validated_data['descricao'])
+        agenda.save()
+
+        ocorrencia = Ocorrencia(
+            event=agenda,
+            start=validated_data['data_inicio'],
+            end=validated_data['data_encerramento'])
+        ocorrencia.save()
+
+        return agenda
