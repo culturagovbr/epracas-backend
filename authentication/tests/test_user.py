@@ -96,8 +96,6 @@ def test_posting_user_information_with_a_valid_id_token(authentication, client):
         format='json'
         )
 
-    # import ipdb
-    # ipdb.set_trace()
     # user_updated = User.objects.get(sub=102030)
     assert response.status_code == status.HTTP_201_CREATED
     # assert user_updated.email == user_data['email']
