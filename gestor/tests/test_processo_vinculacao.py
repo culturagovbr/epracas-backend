@@ -11,8 +11,12 @@ from pracas.models import Praca
 from gestor.models import Gestor
 from gestor.models import ProcessoVinculacao
 
+from authentication.tests.test_user import authentication
 
-@pytest.mark.django_db
+
+pytestmark = pytest.mark.django_db
+
+
 def test_return_200_OK_to_Processo_list_URL(client):
     """TODO: Docstring for test_return_200_OK_to_Processo_list_URL(client.
     :returns: TODO
@@ -27,8 +31,7 @@ def test_return_200_OK_to_Processo_list_URL(client):
 
 
 @pytest.mark.skip
-@pytest.mark.django_db
-def test_persist_a_process_using_POST(client):
+def test_persist_a_process_using_POST(authentication, client):
     """TODO: Docstring for test_list_all_process(client.
     :returns: TODO
 
@@ -38,17 +41,19 @@ def test_persist_a_process_using_POST(client):
     praca = mommy.make(Praca)
 
     data = {
-            'gestor': gestor.id_pub,
-            'praca': praca.id_pub,
+            'gestor': str(gestor.id_pub),
+            'praca': str(praca.id_pub),
     }
 
     post = client.post(
-            reverse('processo:processovinculacao-list'),
+            reverse('gestor:processovinculacao-list'),
             data,
             format='json'
     )
 
     post_content = bytes.decode(post.content)
+    # import ipdb
+    # ipdb.set_trace()
     id_pub_gestor = json.loads(post_content).pop('gestor')
 
     assert post.status_code == status.HTTP_201_CREATED
@@ -56,7 +61,6 @@ def test_persist_a_process_using_POST(client):
 
 
 @pytest.mark.skip
-@pytest.mark.django_db
 def test_return_today_date_when_create_a_new_process(client):
     """TODO: Docstring for test_return_today_date_when_create_a_new_process.
     :returns: TODO
@@ -77,7 +81,6 @@ def test_return_today_date_when_create_a_new_process(client):
 
 
 @pytest.mark.skip
-@pytest.mark.django_db
 def test_return_data_abertura_in_get_response(client):
     """TODO: Docstring for test_return_data_abertura_in_get_response.
     :returns: TODO
@@ -102,7 +105,6 @@ def test_return_data_abertura_in_get_response(client):
 
 
 @pytest.mark.skip
-@pytest.mark.django_db
 def test_return_process_status_from_an_ente(client):
     """TODO: Docstring for test_return_process_status_from_an_ente.
     :returns: TODO
