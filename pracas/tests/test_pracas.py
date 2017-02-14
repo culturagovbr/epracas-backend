@@ -14,8 +14,6 @@ from pracas.models import Praca
 
 pytestmark = pytest.mark.django_db
 
-list_url = reverse('pracas:praca-list')
-
 
 @pytest.fixture
 def _create_temporary_file(mocker):
@@ -27,7 +25,7 @@ def test_get_URL_OK_from_Pracas(client):
     Retorna 200 OK para a URL do endpoint que lista as Praças.
     """
 
-    response = client.get(list_url, format='json')
+    response = client.get(reverse('pracas:praca-list'), format='json')
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -39,7 +37,7 @@ def test_return_a_list_of_Pracas(client):
 
     mommy.make(Praca, _quantity=5)
 
-    response = client.get(list_url, format='json')
+    response = client.get(reverse('pracas:praca-list'), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 5
@@ -66,7 +64,7 @@ def test_if_an_instance_of_list_result_has_some_properties(client):
 
     mommy.make(Praca, _quantity=5)
 
-    response = client.get(list_url, format='json')
+    response = client.get(reverse('pracas:praca-list'), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 5
@@ -104,7 +102,7 @@ def test_return_a_praca_with_some_properties(client):
             'slug',
             'municipio',
             'uf',
-            'agenda',
+            # 'agenda',
             'modelo',
             'modelo_descricao',
             'situacao',

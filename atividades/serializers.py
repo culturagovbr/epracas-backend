@@ -19,15 +19,16 @@ class RelatorioSerializer(serializers.ModelSerializer):
 
 
 class OcorrenciaSerializer(serializers.Serializer):
+    start = serializers.DateTimeField()
+    repeat_until = serializers.DateField()
+    calendar = serializers.SerializerMethodField(read_only=True)
 
-    class Meta:
-        model = Ocorrencia
-        fields = (
-            'event',
-            'start',
-            'end',
-            'repeat',
-        )
+    def get_calendar(self, obj):
+        if obj.repeat_until:
+            generator = obj.all_occurrences()
+            return [date for (date, end_date, occ) in generator]
+        else:
+            return None
 
 
 class AgendaDetailSerializer(serializers.Serializer):
@@ -43,32 +44,7 @@ class AgendaDetailSerializer(serializers.Serializer):
     publico_esperado = serializers.IntegerField()
     territorio = serializers.ChoiceField(choices=TERRITORIO_CHOICES)
     descricao = serializers.CharField()
-    # data_inicio = serializers.DateField()
-    # data_encerramento = serializers.DateField()
-    # repeat = serializers.CharField()
+    ocorrencia = OcorrenciaSerializer(read_only=True, many=True)
 
     def get_url(self, obj):
         return obj.get_absolute_url()
-
-    def create(self, validated_data):
-        praca = Praca.objects.get(id_pub=validated_data['praca'])
-        agenda = Agenda(
-            praca=praca,
-            titulo=validated_data['titulo'],
-            justificativa=validated_data['justificativa'],
-            espaco=validated_data['espaco'],
-            tipo=validated_data['tipo'],
-            publico=validated_data['publico'],
-            carga_horaria=validated_data['carga_horaria'],
-            publico_esperado=validated_data['publico_esperado'],
-            territorio=validated_data['territorio'],
-            descricao=validated_data['descricao'])
-        agenda.save()
-
-        ocorrencia = Ocorrencia(
-            event=agenda,
-            start=validated_data['data_inicio'],
-            end=validated_data['data_encerramento'])
-        ocorrencia.save()
-
-        return agenda

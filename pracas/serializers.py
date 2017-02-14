@@ -2,7 +2,7 @@ from django.conf import settings
 
 from rest_framework import serializers
 
-from atividades.serializers import AgendaSerializer
+# from atividades.serializers import AgendaSerializer
 
 from .models import Praca
 
@@ -53,7 +53,7 @@ class PracaListSerializer(PracaBaseSerializer):
 
 
 class PracaSerializer(PracaBaseSerializer):
-    agenda = AgendaSerializer(many=True, read_only=True)
+    # agenda = AgendaSerializer(many=True, read_only=True)
 
     class Meta:
         model = Praca
@@ -69,7 +69,7 @@ class PracaSerializer(PracaBaseSerializer):
                 'regiao',
                 'uf',
                 'municipio',
-                'agenda',
+                # 'agenda',
                 'modelo',
                 'modelo_descricao',
                 'situacao',

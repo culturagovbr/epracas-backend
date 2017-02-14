@@ -74,7 +74,8 @@ class Agenda(IdPubIdentifier, BaseEvent):
 
 
 class Ocorrencia(BaseOccurrence):
-    event = models.ForeignKey(Agenda)
+
+    event = models.ForeignKey(Agenda, related_name='ocorrencia')
 
 
 class Relatorio(IdPubIdentifier):

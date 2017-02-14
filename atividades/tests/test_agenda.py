@@ -2,6 +2,7 @@
 
 import json
 import pytest
+
 from datetime import datetime
 
 from rest_framework import status
@@ -153,15 +154,18 @@ def test_return_JSON_list_with_occurencies_from_an_event(client):
         'Ocorrencia',
         event=event,
         start=datetime(2017, 2, 1),
-        end=datetime(2016, 2, 14),
-        repeat='RRULE:FREQ=DAILY;BYDAY=TU,TH;')
+        repeat_until=date(2017, 2, 15),
+        repeat='RRULE:FREQ=DAILY;BYDAY=TU,TH')
 
     response = client.get(
-        reverse('atividades:agenda-detail', kwargs={'pk': event.id_pub}))
+        reverse('atividades:agenda-detail', kwargs={'pk': event.id_pub}),
+        format='json'
+        )
 
     import ipdb
     ipdb.set_trace()
-    assert response.status_code == status.HTTP_200_OK
+    calendar = response.data.pop('ocorrencia')
+    assert len(calendar[0]['calendar']) == 4
 
 
 @pytest.mark.skip

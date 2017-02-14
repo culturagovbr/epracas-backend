@@ -225,3 +225,5 @@ RAVEN_CONFIG = {
         # release based on the git info.
         'release': raven.fetch_git_sha(BASE_DIR),
 }
+
+EVENTTOOLS_REPEAT_CHOICES = None
