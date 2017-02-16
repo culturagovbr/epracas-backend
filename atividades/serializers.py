@@ -18,10 +18,8 @@ class RelatorioSerializer(serializers.ModelSerializer):
                   'pontos_negativos', )
 
 
-class OcorrenciaSerializer(serializers.Serializer):
-    start = serializers.DateTimeField()
-    repeat_until = serializers.DateField()
-    calendar = serializers.SerializerMethodField(read_only=True)
+class OcorrenciaSerializer(serializers.ModelSerializer):
+    calendar = serializers.SerializerMethodField()
 
     def get_calendar(self, obj):
         if obj.repeat_until:
@@ -30,21 +28,26 @@ class OcorrenciaSerializer(serializers.Serializer):
         else:
             return None
 
+    class Meta:
+        model = Ocorrencia
+        fields = '__all__'
+        read_only_fields = ('event',)
 
-class AgendaDetailSerializer(serializers.Serializer):
-    url = serializers.SerializerMethodField()
-    id_pub = serializers.UUIDField(read_only=True)
-    praca = serializers.PrimaryKeyRelatedField(queryset=Praca.objects.all())
-    titulo = serializers.CharField()
-    justificativa = serializers.CharField()
-    espaco = serializers.ChoiceField(choices=ESPACOS_CHOICES)
-    tipo = serializers.ChoiceField(choices=TIPO_ATIVIDADE_CHOICES)
-    publico = serializers.CharField()
-    carga_horaria = serializers.IntegerField()
-    publico_esperado = serializers.IntegerField()
-    territorio = serializers.ChoiceField(choices=TERRITORIO_CHOICES)
-    descricao = serializers.CharField()
-    ocorrencia = OcorrenciaSerializer(read_only=True, many=True)
+
+class AgendaDetailSerializer(serializers.ModelSerializer):
+    url = serializers.SerializerMethodField(read_only=True)
+    ocorrencia = OcorrenciaSerializer()
 
     def get_url(self, obj):
         return obj.get_absolute_url()
+
+    def create(self, validated_data):
+        ocorrencia = validated_data.pop('ocorrencia')
+        agenda = Agenda.objects.create(**validated_data)
+        Ocorrencia.objects.create(event=agenda, **ocorrencia)
+
+        return agenda
+
+    class Meta:
+        model = Agenda
+        fields = '__all__'

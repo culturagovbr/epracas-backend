@@ -3,6 +3,7 @@
 import json
 import pytest
 
+from datetime import date
 from datetime import datetime
 
 from rest_framework import status
@@ -67,9 +68,6 @@ def test_return_event_properties(client):
         # 'faixa_etaria',
         'publico',
         'territorio',
-        # 'data_inicio',
-        # 'data_encerramento',
-        # 'periodicidade',
         'carga_horaria',
         'publico_esperado',
     ]
@@ -100,26 +98,6 @@ def test_return_events_related_with_a_Praca(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data[0]['praca'] == praca1.id_pub
-
-
-@pytest.mark.skip(reason="POST ainda não está implementado")
-def test_submit_report_links_to_event(client):
-
-    event = mommy.make('Agenda')
-
-    request_body = {
-        "data_de_ocorrencia": "04/12/1993",
-        "realizado": "true",
-        "publico_presente": "100",
-        "pontos_positivos": "Evento ocorreu com tranquilidade",
-        "pontos_negativos": "Nenhum ponto negativo"
-    }
-
-    response = client.post(
-        reverse('atividades:agenda-detail', kwargs={'pk': event.id_pub}),
-        data=request_body)
-
-    assert json.dumps(request_body) in str(response.data)
 
 
 def test_get_all_ocurrances_from_a_month(client):
@@ -159,13 +137,43 @@ def test_return_JSON_list_with_occurencies_from_an_event(client):
 
     response = client.get(
         reverse('atividades:agenda-detail', kwargs={'pk': event.id_pub}),
-        format='json'
-        )
+        format='json')
 
-    import ipdb
-    ipdb.set_trace()
     calendar = response.data.pop('ocorrencia')
-    assert len(calendar[0]['calendar']) == 4
+    assert len(calendar['calendar']) == 4
+
+
+def test_create_an_event_with_occurences_using_POST(client):
+    """
+    Testa a cricao de um evento e o retorno da resposta utilizando POST
+    """
+
+    praca = mommy.make('Praca')
+    data = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'Festival Teste',
+        'justificativa': 'Justo',
+        'espaco': 1,
+        'tipo': 1,
+        'publico': 'Publico',
+        'carga_horaria': 10,
+        'publico_esperado': 100,
+        'territorio': 1,
+        'descricao': 'Evento para testes',
+        'ocorrencia':
+        {
+            'start': '2017-01-01T00:00',
+            'repeat_until': '2017-01-23',
+        },
+    })
+
+    response = client.post(
+        reverse('atividades:agenda-list'), data=data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    data = json.loads(data)
+    assert data['praca'] in str(response.data['praca'])
 
 
 @pytest.mark.skip
@@ -205,3 +213,23 @@ def test_closing_an_event_occurrence(authentication):
     print(response.content)
 
     assert json.dumps(request_data) in str(response.content)
+
+
+@pytest.mark.skip(reason="POST ainda não está implementado")
+def test_submit_report_links_to_event(client):
+
+    event = mommy.make('Agenda')
+
+    request_body = {
+        "data_de_ocorrencia": "04/12/1993",
+        "realizado": "true",
+        "publico_presente": "100",
+        "pontos_positivos": "Evento ocorreu com tranquilidade",
+        "pontos_negativos": "Nenhum ponto negativo"
+    }
+
+    response = client.post(
+        reverse('atividades:agenda-detail', kwargs={'pk': event.id_pub}),
+        data=request_body)
+
+    assert json.dumps(request_body) in str(response.data)
