@@ -12,10 +12,16 @@ from .models import Relatorio
 
 
 class RelatorioSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Relatorio
-        fields = ('realizado', 'publico_presente', 'pontos_positivos',
-                  'pontos_negativos', )
+        fields = (
+            'realizado',
+            'publico_presente',
+            'pontos_positivos',
+            'pontos_negativos',
+            'data_de_ocorrencia',
+        )
 
 
 class OcorrenciaSerializer(serializers.ModelSerializer):
