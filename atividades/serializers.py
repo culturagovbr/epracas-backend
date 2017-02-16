@@ -22,7 +22,7 @@ class OcorrenciaSerializer(serializers.ModelSerializer):
     calendar = serializers.SerializerMethodField()
 
     def get_calendar(self, obj):
-        if obj.repeat_until:
+        if obj.frequency_type == "daily":
             generator = obj.all_occurrences()
             return [date for (date, end_date, occ) in generator]
         else:

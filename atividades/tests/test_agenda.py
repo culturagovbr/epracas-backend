@@ -133,7 +133,9 @@ def test_return_JSON_list_with_occurencies_from_an_event(client):
         event=event,
         start=datetime(2017, 2, 1),
         repeat_until=date(2017, 2, 15),
-        repeat='RRULE:FREQ=DAILY;BYDAY=TU,TH')
+        frequency_type='daily',
+        weekday='tu,th',
+        )
 
     response = client.get(
         reverse('atividades:agenda-detail', kwargs={'pk': event.id_pub}),
@@ -164,6 +166,7 @@ def test_create_an_event_with_occurences_using_POST(client):
         {
             'start': '2017-01-01T00:00',
             'repeat_until': '2017-01-23',
+            'frequency_type': 'weekly'
         },
     })
 
@@ -174,6 +177,41 @@ def test_create_an_event_with_occurences_using_POST(client):
     assert response.status_code == status.HTTP_201_CREATED
     data = json.loads(data)
     assert data['praca'] in str(response.data['praca'])
+
+
+def test_create_and_returning_a_list_of_dates(client):
+    """
+    Testa a criação de uma agenda via POST e o retorno de um calendario
+    com as ocorrencias do evento
+    """
+
+    praca = mommy.make('Praca')
+    data = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'Festival Teste',
+        'justificativa': 'Justo',
+        'espaco': 1,
+        'tipo': 1,
+        'publico': 1,
+        'carga_horaria': 10,
+        'publico_esperado': 100,
+        'territorio': 1,
+        'descricao': 'Evento para testes',
+        'ocorrencia': {
+            'start': '2017-01-01T00:00',
+            'repeat_until': '2017-01-07',
+            'weekday': 'mo,fr',
+            'frequency_type': 'daily',
+        }
+    })
+
+    response = client.post(
+        reverse('atividades:agenda-list'), data=data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert 'weekday' in response.data['ocorrencia']
+    assert len(response.data['ocorrencia']['calendar']) == 2
 
 
 @pytest.mark.skip

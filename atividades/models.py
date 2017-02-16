@@ -75,7 +75,33 @@ class Agenda(IdPubIdentifier, BaseEvent):
 
 class Ocorrencia(BaseOccurrence):
 
+    REPEAT_CHOICES = (("once", 'Apenas uma vez'), ("daily", 'Diariamente'),
+                      ("weekly", 'Semanalmente'), ("monthly", 'Mensalmente'),
+                      ("yearly", 'Anualmente'), )
+
     event = models.OneToOneField(Agenda, related_name='ocorrencia')
+    frequency_type = models.CharField(choices=REPEAT_CHOICES, max_length=19)
+    weekday = models.CharField(max_length=20, blank=True, null=True)
+
+    def get_count_value(self):
+        weeks = ((self.repeat_until - self.start.date()) // 7).days
+        if weeks > 1:
+            count = weeks * len(self.weekday.split(','))
+        else:
+            count = len(self.weekday.split(','))
+
+        return count
+
+    def save(self, *args, **kwargs):
+        if self.frequency_type == "daily":
+            self.count = self.get_count_value()
+            self.repeat = "RRULE:FREQ={freq};BYDAY={weekday};COUNT={count}".format(
+                freq=self.frequency_type.upper(),
+                weekday=self.weekday.upper(),
+                count=self.count)
+            super(Ocorrencia, self).save(*args, **kwargs)
+        else:
+            super(Ocorrencia, self).save(*args, **kwargs)
 
 
 class Relatorio(IdPubIdentifier):
