@@ -214,6 +214,22 @@ def test_create_and_returning_a_list_of_dates(client):
     assert len(response.data['ocorrencia']['calendar']) == 2
 
 
+def test_returning_a_list_with_all_reports_from_an_event(client):
+    """
+    Testa a recuperação de todos os relatórios de um determinado evento.
+    """
+
+    agenda = mommy.make('Agenda')
+    relatorio = mommy.make('Relatorio', agenda=agenda, _quantity=3)
+
+    response = client.get(
+        reverse('atividades:relatorio-list', kwargs={'agenda_pk': agenda.id_pub}),
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 3
+
+
 @pytest.mark.skip
 def test_closing_an_event_occurrence(authentication):
 
