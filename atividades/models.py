@@ -117,33 +117,3 @@ class Relatorio(IdPubIdentifier):
         blank=True,
         null=True, )
     data_de_ocorrencia = models.DateField(default=timezone.now())
-
-
-# class Atividade(models.Model):
-#     nome = models.CharField(max_length=255)
-#     descricao = models.TextField()
-#     parceiros = models.CharField(max_length=255)
-#     data_inicio = models.DateTimeField()
-#     data_termino = models.DateTimeField()
-#     # hora_inicio = models.TimeField()
-#     # hora_termino = models.TimeField()
-#     publico_esperado = models.IntegerField()
-#     tipo = models.ForeignKey(Tipo)
-#     area = models.ForeignKey(Area)
-#     subarea = ChainedForeignKey(
-#         Subarea,
-#         chained_field='area',
-#         chained_model_field='area',
-#         show_all=False,
-#         auto_choose=True,
-#         blank=True,
-#     )
-#     espacos = models.ManyToManyField(Espaco)
-#     faixas_etarias = models.ManyToManyField(FaixasEtaria)
-#     publico = models.ManyToManyField(Publico)
-#     abrangencia = models.ForeignKey(Abrangencia)
-#     periodicidade = models.ForeignKey(Periodicidade)
-#     ceu = models.ForeignKey(Ceu)
-
-#     def __str__(self):
-#         return self.nome
