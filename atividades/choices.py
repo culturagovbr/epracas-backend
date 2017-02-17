@@ -51,7 +51,7 @@ TIPO_ATIVIDADE_CHOICES = (
 )
 
 BAIRRO = 'Bairro da Praça CEU'
-BAIRRO_ENTORNO = 'Bairros do entordo da Praça'
+BAIRRO_ENTORNO = 'Bairros do Entorno da Praça'
 MUNICIPIO = 'Munícipio'
 MUNICIPIO_ENTORNO = 'Municipios do Entorno'
 ESTADO = 'Estado'
