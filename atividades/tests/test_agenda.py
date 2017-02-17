@@ -14,7 +14,11 @@ from model_mommy import mommy
 
 from authentication.tests.test_user import authentication
 
+from pracas.tests.test_pracas import _create_temporary_file
+
+
 pytestmark = pytest.mark.django_db
+
 
 agenda_list_url = reverse('atividades:agenda-list')
 
@@ -221,6 +225,7 @@ def test_returning_a_list_with_all_reports_from_an_event(client):
 
     agenda = mommy.make('Agenda')
     relatorio = mommy.make('Relatorio', agenda=agenda, _quantity=3)
+    mommy.make('Relatorio')
 
     response = client.get(
         reverse('atividades:relatorio-list', kwargs={'agenda_pk': agenda.id_pub}),
@@ -228,6 +233,91 @@ def test_returning_a_list_with_all_reports_from_an_event(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 3
+
+
+@pytest.mark.skip(reason="""Não há como obter todos os relatórios de uma Praça
+                  através de uma unica chamada""")
+def test_returning_all_reports_from_a_Praca(client):
+    """
+    Testa a recuperaçao de todos os relatórios de todos os eventos de uma
+    determinada praça.
+    """
+
+    praca = mommy.make('Praca')
+
+    relatorios = mommy.make('Relatorio', agenda__praca=praca, _quantity=3)
+    mommy.make('Relatorio', _quantity=10)
+
+    from atividades.models import Relatorio
+    todos_relatorios = Relatorio.objects.count()
+
+    assert todos_relatorios == 13
+
+    response = client.get(reverse('atividades:relatorio-list', kwargs={'agenda_pk': relatorios.agenda.id_pub}) + '?praca={}'.format(praca.id_pub))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 3
+
+
+def test_posting_information_about_an_occurrence(client):
+    """
+    Testa a persistencia de informações sobre as ocorrencias de uma Agenda.
+    """
+
+    ocorrencia = mommy.make('Ocorrencia')
+
+    data = json.dumps(
+        {
+            'realizado': True,
+            'publico_presente': 100,
+            'pontos_positivos': "Tudo conforme o planejado",
+            'pontos_negativos': "Infraestrutura",
+            'data_prevista': ocorrencia.start.isoformat(),
+            'data_de_ocorrencia': "2017-01-01"
+        }
+    )
+
+    # import ipdb
+    # ipdb.set_trace()
+    response = client.post(
+        reverse(
+            'atividades:relatorio-list',
+            kwargs={'agenda_pk': ocorrencia.event.id_pub}
+        ),
+        data=data,
+        content_type="application/json"
+    )
+
+    assert response.status_code == status.HTTP_201_CREATED
+
+
+def test_persisting_an_image_on_report_about_occurence(_create_temporary_file, client):
+    """
+    Testa o envio e persistencia de uma imagem de relatório de ocorrencia
+    de uma Agenda.
+    """
+
+    agenda = mommy.make('Agenda')
+    relatorio = mommy.make('Relatorio', agenda=agenda)
+
+    test_file = _create_temporary_file
+    test_file.name = 'foto_evento.jpg'
+
+    test_file2 = _create_temporary_file
+    test_file2.name = 'foto2_evento.jpg'
+
+    response = client.post(
+        reverse(
+            'atividades:relatorio_imagem-list',
+            kwargs={'agenda_pk': agenda.pk, 'relatorio_pk': relatorio.pk}
+            ),
+        {'arquivo': [test_file, test_file2]},
+        format='multipart'
+        )
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert len(response.data) == 2
+
 
 
 @pytest.mark.skip

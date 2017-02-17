@@ -1,5 +1,6 @@
 # coding: utf-8
 from datetime import datetime, time
+from uuid import uuid4
 
 from django.db import models
 from django.utils import timezone
@@ -15,6 +16,13 @@ from pracas.models import Praca
 from .choices import ESPACOS_CHOICES
 from .choices import TIPO_ATIVIDADE_CHOICES
 from .choices import TERRITORIO_CHOICES
+
+
+def upload_image_to(instance, filename):
+    ext = filename.split('.')[-1]
+    id_pub = instance.id_pub
+    uuid_filename = uuid4()
+    return '{}/images/atividades/{}.{}'.format(id_pub, uuid_filename, ext)
 
 
 class Area(IdPubIdentifier):
@@ -117,3 +125,11 @@ class Relatorio(IdPubIdentifier):
         blank=True,
         null=True, )
     data_de_ocorrencia = models.DateField(default=timezone.now())
+    data_prevista = models.DateTimeField()
+
+
+class RelatorioImagem(IdPubIdentifier):
+    relatorio = models.ForeignKey(Relatorio, related_name='imagens', null=True)
+    agenda = models.ForeignKey(Agenda, related_name='imagens', null=True)
+    arquivo = models.FileField(upload_to=upload_image_to)
+    anotacoes = models.TextField(null=True, blank=True)

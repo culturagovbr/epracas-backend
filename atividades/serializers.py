@@ -9,6 +9,14 @@ from .choices import TERRITORIO_CHOICES
 from .models import Agenda
 from .models import Ocorrencia
 from .models import Relatorio
+from .models import RelatorioImagem
+
+
+class RelatorioImagemSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RelatorioImagem
+        fields = '__all__'
 
 
 class RelatorioSerializer(serializers.ModelSerializer):
@@ -20,6 +28,7 @@ class RelatorioSerializer(serializers.ModelSerializer):
             'publico_presente',
             'pontos_positivos',
             'pontos_negativos',
+            'data_prevista',
             'data_de_ocorrencia',
         )
 
