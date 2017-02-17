@@ -64,3 +64,60 @@ TERRITORIO_CHOICES = (
     (5, ESTADO),
 )
 
+EGRESSOS_SISTEMA_PRISIONAL = "Egressos do Sistema Prisional"
+FAMILIAS_PRESOS = "Famílias de presos do Sistema Carcerário"
+JOVENS_SOCIOEDUCATIVAS = "Jovens em medidas socioeducativas"
+VITIMAS_DE_VIOLENCIA = "Pessoas ou grupos vítimas de violência"
+PESSOAS_SOFRIMENTO_PSIQUICO = "Pessoas em sofrimento psíquico"
+POPULACAO_SITUACAO_RUA = "População em situação de rua"
+CATADORES_RECICLAVEIS = "Catadores de material reciclável"
+ATINGIDOS_INFRAESTRUTURA = "Atingidos por empreendimento de Infraestrutura"
+IMIGRANTES = "Imigrantes"
+FAMILIAS_ACAMPADAS = "Familias acampadas"
+AGRICULTURES_FAMILIARES = "Agricultures Familiares"
+ASSENTADOS_REFORMA_AGRARIA = "Assentados da Reforma Agrária"
+POVOS_MATRIZ_AFRICANA = "Povos e Comunidades Tradicionais de Matriz Africana"
+QUILOMBOLAS = "Quilombolas"
+INDIGENAS = "Indígenas"
+EXTRATIVISTAS = "Extrativistas"
+PESCADORES = "Pescadores artesanais"
+RIBEIRINHOS = "Ribeirinhos"
+SERTANEJOS = "Sertanejos"
+CIGANOS = "Ciganos"
+LGBT = "População de Lésbicas, Gays, Bissexuais, Travestis, Transexuais e Transgêneros - LGBT"
+MULHERES = "Mulheres"
+PESSOAS_DEFICIENCIA = "Pessoas com Deficiência"
+POPULACAO_NEGRA = "População negra"
+ESTUDANTES = "Estudantes"
+GRUPOS_ARTISTAS = "Grupos Artísticos e Culturais Independentes"
+MESTRES_CULTURA_POPULAR = "Mestres, praticantes, brincantes e grupos das culturas populares, urbanas e rurais."
+
+PUBLICO_CHOICES = (
+    (1, EGRESSOS_SISTEMA_PRISIONAL),
+    (2, FAMILIAS_PRESOS),
+    (3, JOVENS_SOCIOEDUCATIVAS),
+    (4, VITIMAS_DE_VIOLENCIA),
+    (5, PESSOAS_SOFRIMENTO_PSIQUICO),
+    (6, POPULACAO_SITUACAO_RUA),
+    (7, CATADORES_RECICLAVEIS),
+    (8, ATINGIDOS_INFRAESTRUTURA),
+    (9, IMIGRANTES),
+    (10, FAMILIAS_ACAMPADAS),
+    (11, AGRICULTURES_FAMILIARES),
+    (12, ASSENTADOS_REFORMA_AGRARIA),
+    (13, POVOS_MATRIZ_AFRICANA),
+    (14, QUILOMBOLAS),
+    (15, INDIGENAS),
+    (16, EXTRATIVISTAS),
+    (17, PESCADORES),
+    (18, RIBEIRINHOS),
+    (19, SERTANEJOS),
+    (20, CIGANOS),
+    (21, LGBT),
+    (22, MULHERES),
+    (23, PESSOAS_DEFICIENCIA),
+    (24, POPULACAO_NEGRA),
+    (25, ESTUDANTES),
+    (26, GRUPOS_ARTISTAS),
+    (27, MESTRES_CULTURA_POPULAR),
+)

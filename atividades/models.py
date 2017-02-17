@@ -16,6 +16,7 @@ from pracas.models import Praca
 from .choices import ESPACOS_CHOICES
 from .choices import TIPO_ATIVIDADE_CHOICES
 from .choices import TERRITORIO_CHOICES
+from .choices import PUBLICO_CHOICES
 
 
 def upload_image_to(instance, filename):
@@ -68,7 +69,8 @@ class Agenda(IdPubIdentifier, BaseEvent):
         _('Categoria da Atividade'), choices=TIPO_ATIVIDADE_CHOICES)
     publico = models.CharField(
         _('Publico alvo da atividade'),
-        max_length=200, )
+        choices=PUBLICO_CHOICES,
+        max_length=2)
     carga_horaria = models.IntegerField(_('Carga Horaria da Atividade'))
     publico_esperado = models.IntegerField(
         _('Publico Esperado para a Atividade'))
@@ -88,7 +90,8 @@ class Ocorrencia(BaseOccurrence):
                       ("yearly", 'Anualmente'), )
 
     event = models.OneToOneField(Agenda, related_name='ocorrencia')
-    frequency_type = models.CharField(choices=REPEAT_CHOICES, max_length=19)
+    frequency_type = models.CharField(choices=REPEAT_CHOICES, max_length=19,
+                                      default='once')
     weekday = models.CharField(max_length=20, blank=True, null=True)
 
     def get_count_value(self):
@@ -114,8 +117,9 @@ class Ocorrencia(BaseOccurrence):
 
 class Relatorio(IdPubIdentifier):
     agenda = models.ForeignKey(Agenda, related_name='relatorios')
-    realizado = models.BooleanField(_('Evento Realizado com Sucesso'))
-    publico_presente = models.IntegerField(_('Publico presente a atividade'))
+    realizado = models.BooleanField(_('Evento Realizado com Sucesso'), default=False)
+    publico_presente = models.IntegerField(_('Publico presente a atividade'),
+                                           null=True, blank=True)
     pontos_positivos = models.TextField(
         _('Pontos Positivos da Atividade'),
         blank=True,
@@ -125,7 +129,7 @@ class Relatorio(IdPubIdentifier):
         blank=True,
         null=True, )
     data_de_ocorrencia = models.DateField(default=timezone.now())
-    data_prevista = models.DateTimeField()
+    data_prevista = models.DateTimeField(blank=True, null=True)
 
 
 class RelatorioImagem(IdPubIdentifier):
