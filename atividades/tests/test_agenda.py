@@ -161,7 +161,7 @@ def test_create_an_event_with_occurences_using_POST(client):
         'justificativa': 'Justo',
         'espaco': 1,
         'tipo': 1,
-        'publico': 'Publico',
+        'publico': 1,
         'carga_horaria': 10,
         'publico_esperado': 100,
         'territorio': 1,
@@ -317,63 +317,3 @@ def test_persisting_an_image_on_report_about_occurence(_create_temporary_file, c
 
     assert response.status_code == status.HTTP_201_CREATED
     assert len(response.data) == 2
-
-
-
-@pytest.mark.skip
-def test_closing_an_event_occurrence(authentication):
-
-    client = APIClient()
-
-    praca = mommy.make('Praca')
-    ocorrencia = mommy.make('Agenda', praca=praca)
-
-    request_data = {
-        "relatorio": {
-            "realizado": "true",
-            "publico_presente": "100",
-            "pontos_positivos": "Pontos Positivos",
-            "pontos_negativos": "Pontos negativos",
-        },
-    }
-
-    response = client.patch(
-        reverse('atividades:agenda-detail', kwargs={'pk': ocorrencia.id_pub}),
-        request_data,
-        # content_type='application/json',
-        format='json')
-
-    assert response.status_code == status.HTTP_200_OK
-
-    response = client.get(
-        reverse('atividades:agenda-detail', kwargs={'pk': ocorrencia.id_pub}),
-        format='json', )
-
-    # import ipdb
-    # ipdb.set_trace()
-    assert response.status_code == status.HTTP_200_OK
-
-    print(request_data)
-    print(response.content)
-
-    assert json.dumps(request_data) in str(response.content)
-
-
-@pytest.mark.skip(reason="POST ainda não está implementado")
-def test_submit_report_links_to_event(client):
-
-    event = mommy.make('Agenda')
-
-    request_body = {
-        "data_de_ocorrencia": "04/12/1993",
-        "realizado": "true",
-        "publico_presente": "100",
-        "pontos_positivos": "Evento ocorreu com tranquilidade",
-        "pontos_negativos": "Nenhum ponto negativo"
-    }
-
-    response = client.post(
-        reverse('atividades:agenda-detail', kwargs={'pk': event.id_pub}),
-        data=request_body)
-
-    assert json.dumps(request_body) in str(response.data)
