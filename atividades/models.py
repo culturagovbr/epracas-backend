@@ -95,20 +95,29 @@ class Ocorrencia(BaseOccurrence):
     weekday = models.CharField(max_length=20, blank=True, null=True)
 
     def get_count_value(self):
-        weeks = ((self.repeat_until - self.start.date()) // 7).days
-        if weeks > 1:
-            count = weeks * len(self.weekday.split(','))
-        else:
-            count = len(self.weekday.split(','))
+        if self.frequency_type == 'daily':
+            weeks = ((self.repeat_until - self.start.date()) // 7).days + 1
+            if weeks > 1 and self.weekday:
+                count = weeks * len(self.weekday.split(','))
+            elif self.weekday:
+                count = len(self.weekday.split(','))
+            else:
+                count = (self.repeat_until - self.start.date()).days + 1
 
-        return count
+            return count
 
     def save(self, *args, **kwargs):
-        if self.frequency_type == "daily":
+        if self.frequency_type == "daily" and self.weekday:
             self.count = self.get_count_value()
             self.repeat = "RRULE:FREQ={freq};BYDAY={weekday};COUNT={count}".format(
                 freq=self.frequency_type.upper(),
                 weekday=self.weekday.upper(),
+                count=self.count)
+            super(Ocorrencia, self).save(*args, **kwargs)
+        elif self.frequency_type == "daily" and not self.weekday:
+            self.count = self.get_count_value()
+            self.repeat = "RRULE:FREQ={freq};COUNT={count}".format(
+                freq=self.frequency_type.upper(),
                 count=self.count)
             super(Ocorrencia, self).save(*args, **kwargs)
         else:

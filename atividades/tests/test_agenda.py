@@ -317,3 +317,36 @@ def test_persisting_an_image_on_report_about_occurence(_create_temporary_file, c
 
     assert response.status_code == status.HTTP_201_CREATED
     assert len(response.data) == 2
+
+def test_persisting_an_occurrence_with_just_one_weekday(client):
+    """
+    Testa a persistencia de um evento utilizando somente um dia da semana.
+    """
+
+    praca = mommy.make('Praca')
+    data = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'Festival Teste',
+        'justificativa': 'Justo',
+        'espaco': 1,
+        'tipo': 1,
+        'publico': 1,
+        'carga_horaria': 10,
+        'publico_esperado': 100,
+        'territorio': 1,
+        'descricao': 'Evento para testes',
+        'ocorrencia':
+        {
+            'start': '2017-01-01T00:00',
+            'repeat_until': '2017-01-23',
+            'frequency_type': 'daily',
+            'weekday': 'mo',
+        },
+    })
+
+    response = client.post(
+        reverse('atividades:agenda-list'), data=data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert len(response.data['ocorrencia']['calendar']) == 4
