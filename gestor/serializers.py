@@ -37,7 +37,6 @@ class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
 
 
 class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
     praca = PracaListSerializer()
     files = ArquivosProcessoVinculacaoSerializer(many=True)
 
@@ -45,7 +44,6 @@ class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
         model = ProcessoVinculacao
         fields = (
                 'id_pub',
-                'user',
                 'praca',
                 'data_abertura',
                 'aprovado',
