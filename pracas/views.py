@@ -22,6 +22,7 @@ from .models import Parceiro
 from .serializers import PracaSerializer
 from .serializers import PracaListSerializer
 from .serializers import HeaderUploadSerializer
+from .serializers import DistanciaSerializer
 
 from .serializers import ParceiroSerialier
 
@@ -92,22 +93,13 @@ class DistanceView(DefaultMixin, APIView):
                 ],
                 key=lambda distancia: distancia[1]
                 )
-        pracas = []
+        pracas = [praca for (praca, distancia) in distancias[:5]]
 
-        for i in distancias[:5]:
-            praca = {
-                    'id_pub': i[0].id_pub,
-                    'url': i[0].get_absolute_url(),
-                    'municipio': i[0].municipio,
-                    'uf': i[0].uf,
-                    'situacao_descricao': i[0].get_situacao_display(),
-                    'modelo_descricao': i[0].get_modelo_display(),
-                    'latlong': "{}, {}".format(i[0].lat, i[0].long),
-                    'distancia': round(i[1], -2)
-                    }
-            pracas.append(praca)
+        serializer = DistanciaSerializer(pracas, context={'origem': latlong,
+                                                          'request': request}, many=True)
 
-        return Response(pracas)
+
+        return Response(serializer.data)
 
 
 class ParceiroViewSet(DefaultMixin, ModelViewSet):

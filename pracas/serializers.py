@@ -5,7 +5,6 @@ from rest_framework import serializers
 # from atividades.serializers import AgendaSerializer
 
 from .models import Praca
-
 from .models import Parceiro
 
 
@@ -94,3 +93,30 @@ class ParceiroSerialier(serializers.ModelSerializer):
             'acoes',
             'tempo_parceria'
         )
+
+class DistanciaSerializer(PracaListSerializer):
+    latlong = serializers.SerializerMethodField()
+    distancia = serializers.SerializerMethodField()
+
+    def get_latlong(self, obj):
+        return "{}, {}".format(obj.lat, obj.long)
+
+    def get_distancia(self, obj):
+        return obj.get_distance(self.context['origem'])
+
+    class Meta:
+        model = Praca
+        fields = (
+                'url',
+                'id_pub',
+                'nome',
+                'municipio',
+                'uf',
+                'modelo',
+                'modelo_descricao',
+                'situacao',
+                'situacao_descricao',
+                'header_url',
+                'latlong',
+                'distancia',
+                )

@@ -107,6 +107,7 @@ def test_return_a_praca_with_some_properties(client):
             'modelo_descricao',
             'situacao',
             'situacao_descricao',
+            'header_url'
             ]
 
     praca = mommy.make(Praca)
@@ -154,8 +155,14 @@ def test_create_a_new_praca(client):
     assert Praca.objects.count() == 1
 
 
-def test_retorna_as_5_pracas_mais_proximas(client):
+def test_return_five_nearest_pracas(client):
+    """
+    Retorna as cinco pracas mais proximas dado uma coordenada
+    """
 
+    fields = ['url', 'id_pub', 'nome', 'municipio', 'uf', 'modelo',
+              'modelo_descricao', 'situacao', 'situacao_descricao',
+              'header_url']
     data = {
             'lat': -15.7833,
             'long': -47.9167
@@ -173,6 +180,9 @@ def test_retorna_as_5_pracas_mais_proximas(client):
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 5
     assert sorted(response.data, key=lambda praca: praca['distancia']) == response.data
+    for result in response.data:
+        for field in fields:
+            assert field in result
 
 
 def test_defining_a_name_if_user_leave_it_blank(client):

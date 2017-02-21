@@ -89,7 +89,7 @@ class Praca(IdPubIdentifier):
 
     def get_distance(self, origin):
         from geopy.distance import vincenty
-        return vincenty(origin, self.get_latlong()).meters
+        return round(vincenty(origin, self.get_latlong()).meters, -2)
 
     def save(self, *args, **kwargs):
         if not self.nome:
