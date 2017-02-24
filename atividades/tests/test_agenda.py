@@ -12,7 +12,7 @@ from rest_framework.test import APIClient
 
 from model_mommy import mommy
 
-from authentication.tests.test_user import authentication
+from authentication.tests.test_user import _common_user as authentication
 
 from pracas.tests.test_pracas import _create_temporary_file
 

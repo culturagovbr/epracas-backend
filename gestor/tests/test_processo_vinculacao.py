@@ -11,7 +11,7 @@ from pracas.models import Praca
 from gestor.models import Gestor
 from gestor.models import ProcessoVinculacao
 
-from authentication.tests.test_user import authentication
+from authentication.tests.test_user import _common_user as authentication
 
 
 pytestmark = pytest.mark.django_db
