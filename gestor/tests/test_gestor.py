@@ -20,9 +20,9 @@ def test_return_200_ok_gestor_endpoint(client):
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_persist_a_gestor_name(client):
+def test_persist_a_gestor_name_without_credentials(client):
     """
-    Testa a persistencia de um Gestor
+    Testa a persistencia de um Gestor sem credenciais de identificação
     """
 
     gestor = {
@@ -35,8 +35,7 @@ def test_persist_a_gestor_name(client):
             format='json'
     )
 
-    assert response.status_code == status.HTTP_201_CREATED
-    assert gestor['nome'] in bytes.decode(response.content)
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_return_an_id_pub_for_a_created_gestor(client):
