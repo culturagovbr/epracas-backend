@@ -33,12 +33,19 @@ user_data = {
 def _common_user(mocker):
 
     user = mommy.make(User, email='fulano@cicrano.com.br', sub=12345678)
-    mock = mocker.patch(
+
+    mock1 = mocker.patch(
+        'oidc_auth.authentication.JSONWebTokenAuthentication.authenticate',
+        return_value=(user, "")
+        )
+
+    mock2 = mocker.patch(
         'authentication.auth_methods.JWTUserAPIAuth.authenticate',
         return_value=(user, "")
         )
 
-    mock.start()
+    mock1.start()
+    mock2.start()
 
     return user
 
@@ -49,11 +56,18 @@ def _admin_user(mocker):
     user = mommy.make(User, email='admin@cultura.gov.br', sub=876542321,
                       is_staff=True)
 
-    mock = mocker.patch(
+    mock1 = mocker.patch(
+        'oidc_auth.authentication.JSONWebTokenAuthentication.authenticate',
+        return_value=(user, "")
+        )
+
+    mock2 = mocker.patch(
         'authentication.auth_methods.JWTUserAPIAuth.authenticate',
         return_value=(user, "")
         )
-    mock.start()
+
+    mock1.start()
+    mock2.start()
 
     return user
 

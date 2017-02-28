@@ -23,7 +23,7 @@ class UserListView(DefaultMixin, ListAPIView):
 
     authentication_classes = (JWTUserAPIAuth,)
     permission_classes = (IsAdminUser,)
-    
+
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
