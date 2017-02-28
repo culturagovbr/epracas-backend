@@ -6,6 +6,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from oidc_auth.authentication import JSONWebTokenAuthentication
 
@@ -26,8 +27,13 @@ from .serializers import DistanciaSerializer
 
 from .serializers import ParceiroSerialier
 
+from .permissions import IsAdminOrManagerOrReadOnly
+
 
 class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
+
+    authentication_classes = (JSONWebTokenAuthentication, )
+    permission_classes = (IsAdminOrManagerOrReadOnly, )
 
     serializer_class = PracaSerializer
     queryset = Praca.objects.all()
