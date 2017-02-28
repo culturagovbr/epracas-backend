@@ -8,22 +8,21 @@ from model_mommy import mommy
 
 from gestor.models import Gestor
 
+pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db
+
 def test_return_200_ok_gestor_endpoint(client):
-    """TODO: Docstring for test_return_200_ok_gestor_endpoint.
-    :returns: TODO
-
+    """
+    Testa retorno 200 OK do endpoint dos Gestores
     """
 
     response = client.get(reverse('gestor:gestor-list'))
     assert response.status_code == status.HTTP_200_OK
 
-@pytest.mark.django_db
-def test_persist_a_gestor_name(client):
-    """TODO: Docstring for test_return_a_gestor_list(client.
-    :returns: TODO
 
+def test_persist_a_gestor_name(client):
+    """
+    Testa a persistencia de um Gestor
     """
 
     gestor = {
@@ -40,13 +39,9 @@ def test_persist_a_gestor_name(client):
     assert gestor['nome'] in bytes.decode(response.content)
 
 
-@pytest.mark.django_db
 def test_return_an_id_pub_for_a_created_gestor(client):
-    """TODO: Docstring for test_return_an_id_pub_for_a_created_gestor.
-
-    :arg1: TODO
-    :returns: TODO
-
+    """
+    Testa o retorno do identificador publico(id_pub) de um determinado gestor.
     """
 
     gestor = {
@@ -63,11 +58,9 @@ def test_return_an_id_pub_for_a_created_gestor(client):
     assert 'id_pub' in bytes.decode(response.content)
 
 
-@pytest.mark.django_db
 def test_return_a_created_gestor(client):
-    """TODO: Docstring for test_return_a_created_gestor(client.
-    :returns: TODO
-
+    """
+    Testa o retorno de um gestor recem criado.
     """
 
     gestor = {
@@ -91,12 +84,11 @@ def test_return_a_created_gestor(client):
     assert gestor['nome'] in bytes.decode(response.content)
 
 
-@pytest.mark.django_db
 def test_persist_a_gestors_address(client):
-    """TODO: Docstring for test_persist_a_gestors_address.
-    :returns: TODO
-
     """
+    Testa persistir o endereço de um gestor
+    """
+
     gestor = {
             'nome': 'Fulano Cicrano',
             'endereco': 'Conj 10, Casa 19',
@@ -118,12 +110,9 @@ def test_persist_a_gestors_address(client):
     assert gestor == response_content
 
 
-@pytest.mark.django_db
 def test_update_a_gestors_address(client):
-    """TODO: Docstring for test_update_a_gestors_address.
-
-    :returns: TODO
-
+    """
+    Testa atulizar o endereço de um gestor
     """
 
     gestor = {
@@ -158,11 +147,9 @@ def test_update_a_gestors_address(client):
     assert 'Conj 11, Casa 20' in update_content
 
 
-@pytest.mark.django_db
 def test_return_a_FQDN_URL_from_Gestor_method(client):
-    """TODO: Docstring for return_a_FQDN_URL_from_Gestor_method.
-    :returns: TODO
-
+    """
+    Testa retornar uma URL a partir de um metodo da classe Gestor.
     """
 
     gestor = mommy.make(Gestor, nome='Fulano Cicrano')
