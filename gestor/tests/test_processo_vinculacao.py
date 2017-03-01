@@ -2,6 +2,8 @@ import pytest
 import json
 import pendulum
 
+from django.contrib.auth import get_user_model
+
 from rest_framework import status
 from rest_framework.reverse import reverse
 
@@ -11,6 +13,7 @@ from pracas.models import Praca
 from gestor.models import Gestor
 from gestor.models import ProcessoVinculacao
 
+from authentication.tests.test_user import _admin_user
 from authentication.tests.test_user import _common_user
 
 pytestmark = pytest.mark.django_db
@@ -42,6 +45,111 @@ def test_persist_a_process_using_POST_without_credencials(client):
         content_type="application/json")
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_persist_a_process_using_POST_as_common_user(_common_user, client):
+    """
+    Testa a persistencia de um Processo de Vinculação, utilizando credenciais
+    de identificação
+    """
+
+    praca = mommy.make(Praca)
+
+    data = json.dumps({"praca": str(praca.id_pub)})
+
+    response = client.post(
+        reverse('gestor:processovinculacao-list'),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+
+
+def test_persist_a_process_using_POST_as_admin_user(_admin_user, client):
+    """
+    Testa a persistencia de um Processo de Vinculação, utilizando credenciais
+    de administrador
+    """
+
+    praca = mommy.make(Praca)
+
+    data = json.dumps({"praca": str(praca.id_pub)})
+
+    response = client.post(
+        reverse('gestor:processovinculacao-list'),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_update_a_process_using_PATCH_as_process_owner(_common_user, client):
+    """
+    Testa a atualização de informações de um Processo de Vinculação, utilizando
+    credenciais de identificação
+    """
+
+    praca1 = mommy.make('Praca')
+    praca2 = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', user=_common_user, praca=praca1)
+
+    data = json.dumps({'praca': str(praca2.id_pub)})
+
+    response = client.patch(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_update_a_process_using_PATCH_as_admin_user(_admin_user, client):
+    """
+    Testa a atualização de informações de um Processo de Vinculação, utilizando
+    credenciais de identificação
+    """
+
+    User = get_user_model()
+
+    user = mommy.make(User)
+    praca1 = mommy.make('Praca')
+    praca2 = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca1, user=user)
+
+    data = json.dumps({'praca': str(praca2.id_pub)})
+
+    response = client.patch(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_update_a_process_using_PATCH_as_diferent_user(_common_user, client):
+    """
+    Testa a atualização de informações de um Processo de Vinculação, utilizando
+    credenciais de identificação diferente das que iniciaram o processo.
+    """
+
+    User = get_user_model()
+
+    user = mommy.make(User)
+    praca1 = mommy.make('Praca')
+    praca2 = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca1, user=user)
+
+    data = json.dumps({'praca': str(praca2.id_pub)})
+
+    response = client.patch(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 @pytest.mark.skip

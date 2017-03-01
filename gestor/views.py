@@ -12,6 +12,8 @@ from .models import ProcessoVinculacao
 from .serializers import GestorSerializer
 from .serializers import ProcessoVinculacaoSerializer
 
+from .permissions import CommonUserOrReadOnly
+
 
 class GestorViewSet(ModelViewSet):
 
@@ -24,7 +26,7 @@ class GestorViewSet(ModelViewSet):
 
 class ProcessoViewSet(DefaultMixin, ModelViewSet):
     authentication_classes = (JSONWebTokenAuthentication, )
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (CommonUserOrReadOnly, )
 
     queryset = ProcessoVinculacao.objects.all()
     serializer_class = ProcessoVinculacaoSerializer
