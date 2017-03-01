@@ -12,40 +12,22 @@ from .models import ArquivosProcessoVinculacao
 class GestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gestor
-        fields = (
-                'id_pub',
-                'nome',
-                'endereco',
-                'cidade',
-                'uf',
-                'regiao'
-        )
+        fields = ('id_pub', 'nome', 'endereco', 'cidade', 'uf', 'regiao')
 
 
 class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = ArquivosProcessoVinculacao
-        fields = (
-            'id_pub',
-            'data_envio',
-            'tipo',
-            'verificado',
-            'comentarios',
-            'verificado_por',
-        )
+        fields = ('id_pub', 'data_envio', 'tipo', 'verificado', 'comentarios',
+                  'verificado_por', )
 
 
 class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
-    praca = PracaListSerializer()
-    files = ArquivosProcessoVinculacaoSerializer(many=True)
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
+    files = ArquivosProcessoVinculacaoSerializer(many=True, required=False)
 
     class Meta:
         model = ProcessoVinculacao
-        fields = (
-                'id_pub',
-                'praca',
-                'data_abertura',
-                'aprovado',
-                'files',
-        )
+        fields = ('id_pub', 'praca', 'user', 'data_abertura', 'aprovado', 'files', )
+        read_only_fields = ('data_abertura', )

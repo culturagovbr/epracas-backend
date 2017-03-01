@@ -1,4 +1,5 @@
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
 from oidc_auth.authentication import JSONWebTokenAuthentication
@@ -22,6 +23,9 @@ class GestorViewSet(ModelViewSet):
 
 
 class ProcessoViewSet(DefaultMixin, ModelViewSet):
+    authentication_classes = (JSONWebTokenAuthentication, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+
     queryset = ProcessoVinculacao.objects.all()
     serializer_class = ProcessoVinculacaoSerializer
     search_fields = ('gestor', 'praca')
