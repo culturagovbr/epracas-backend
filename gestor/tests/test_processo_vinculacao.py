@@ -264,15 +264,12 @@ def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker, client):
     assert len(response.data) == 4
 
 
-@pytest.mark.skip
 def test_return_today_date_when_create_a_new_process(client):
-    """TODO: Docstring for test_return_today_date_when_create_a_new_process.
-    :returns: TODO
-
+    """
+    Testa se um processo tem instanciada a data do dia atual.
     """
 
-    gestor = mommy.make(Gestor, nome="Fulano Cicrano")
-    processo = mommy.make(ProcessoVinculacao, gestor=gestor)
+    processo = mommy.make(ProcessoVinculacao)
 
     data = processo.data_abertura.replace(tzinfo=None)
 
