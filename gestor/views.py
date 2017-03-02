@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404
 
+from rest_framework.exceptions import PermissionDenied
+
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import MultiPartParser
 
@@ -48,7 +50,7 @@ class ProcessoViewSet(DefaultMixin, ModelViewSet):
 class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (CommonUserOrReadOnly, )
 
     parser_classes = (JSONParser, MultiPartParser)
 
@@ -62,6 +64,8 @@ class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
 
     def create(self, request, processo_pk=None):
         processo = get_object_or_404(ProcessoVinculacao, pk=processo_pk)
+        if request.user != processo.user:
+            raise PermissionDenied
 
         for tipo in request.FILES:
             arquivo = ArquivosProcessoVinculacao(

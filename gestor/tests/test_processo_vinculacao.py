@@ -185,6 +185,34 @@ def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
+def test_upload_files_to_a_process_using_diferent_credentials(
+        _common_user, _create_temporary_file, client):
+    """
+    Testa o envio de arquivos com uma credencial diferente da utilizada para
+    criar o Processo de Vinculação
+    """
+
+    User = get_user_model()
+
+    praca = mommy.make('Praca')
+    user = mommy.make(User)
+    processo = mommy.make('ProcessoVinculacao', user=user)
+
+    test_file = _create_temporary_file
+
+    data = {
+        'tipo': 'identificação',
+        'arquivo': test_file,
+    }
+
+    response = client.post(
+        reverse('gestor:documento-list', kwargs={'processo_pk': processo.pk}),
+        data,
+        format='multipart')
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
 def test_upload_files_to_a_process(_common_user, _create_temporary_file,
                                    client):
     """
@@ -218,7 +246,7 @@ def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker, client):
     file3 = mocker.Mock(spec=File, name='FileMock')
     file4 = mocker.Mock(spec=File, name='FileMock')
 
-    processo = mommy.make('ProcessoVinculacao')
+    processo = mommy.make('ProcessoVinculacao', user=_common_user)
 
     data = {
         'identificacao1': file1,
