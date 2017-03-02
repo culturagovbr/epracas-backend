@@ -186,6 +186,29 @@ def test_upload_files_to_a_process(_common_user, _create_temporary_file,
     assert response.status_code == status.HTTP_200_OK
 
 
+def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker,  client):
+
+    file1 = mocker.Mock(spec=File, name='FileMock')
+    file2 = mocker.Mock(spec=File, name='FileMock')
+    file3 = mocker.Mock(spec=File, name='FileMock')
+    file4 = mocker.Mock(spec=File, name='FileMock')
+
+    processo = mommy.make('ProcessoVinculacao')
+
+    data = { 'identificacao1': file1,
+             'identificação2': file2,
+             'identificacao3': file3,
+             'identificação4': file4,
+           }
+
+    response = client.post(reverse('gestor:documento-list',
+                                   kwargs={'processo_pk': processo.pk}), data,
+                          format='multipart')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 4
+
+
 @pytest.mark.skip
 def test_return_today_date_when_create_a_new_process(client):
     """TODO: Docstring for test_return_today_date_when_create_a_new_process.
