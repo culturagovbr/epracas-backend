@@ -280,12 +280,13 @@ def test_return_today_date_when_create_a_new_process(client):
 
 def test_return_data_abertura_in_get_response(_common_user, client):
     """
-    Testa o retorno da data_abertura na resposta do endpoint de Processos 
+    Testa o retorno da data_abertura na resposta do endpoint de Processos
     """
 
     processo = mommy.make(ProcessoVinculacao, user=_common_user)
 
-    url = reverse('gestor:processovinculacao-detail', kwargs={'pk': processo.pk})
+    url = reverse(
+        'gestor:processovinculacao-detail', kwargs={'pk': processo.pk})
 
     response = client.get(url)
 
@@ -295,22 +296,17 @@ def test_return_data_abertura_in_get_response(_common_user, client):
     assert 'data_abertura' in response.data
 
 
-@pytest.mark.skip
-def test_return_process_status_from_an_ente(client):
-    """TODO: Docstring for test_return_process_status_from_an_ente.
-    :returns: TODO
-
+def test_return_process_status_from_an_ente(_common_user, client):
+    """
+    Testa o retorno da situação do Processo de Vinculação
     """
 
-    gestor = mommy.make(Gestor, nome="Fulano Cicrano")
-    processo = mommy.make(ProcessoVinculacao, gestor=gestor)
+    processo = mommy.make(ProcessoVinculacao, user=_common_user)
 
-    url = reverse(
-        'gestor:processovinculacao-detail',
-        kwargs={'pk': processo.id_pub}, )
+    response = client.get(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.id_pub
+                                                        }))
 
-    response = client.get(url)
-    response_aprovado = response.data['aprovado']
-
-    assert isinstance(processo.aprovado, bool) == True
-    assert response_aprovado == processo.aprovado
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response.data['aprovado'], bool)
