@@ -65,7 +65,7 @@ class ArquivosProcessoVinculacao(IdPubIdentifier):
         )
     tipo = models.CharField(
         _('Tipo de Arquivo'),
-        max_length=8
+        max_length=15
         )
     arquivo = models.FileField(upload_to=upload_doc_to)
     verificado = models.BooleanField(

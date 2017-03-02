@@ -2,6 +2,7 @@ import pytest
 import json
 import pendulum
 
+from django.core.files import File
 from django.contrib.auth import get_user_model
 
 from rest_framework import status
@@ -17,6 +18,11 @@ from authentication.tests.test_user import _admin_user
 from authentication.tests.test_user import _common_user
 
 pytestmark = pytest.mark.django_db
+
+
+@pytest.fixture
+def _create_temporary_file(mocker):
+    return mocker.Mock(spec=File, name='FileMock')
 
 
 def test_return_200_OK_to_Processo_list_URL(client):
@@ -91,7 +97,8 @@ def test_update_a_process_using_PATCH_as_process_owner(_common_user, client):
 
     praca1 = mommy.make('Praca')
     praca2 = mommy.make('Praca')
-    processo = mommy.make('ProcessoVinculacao', user=_common_user, praca=praca1)
+    processo = mommy.make(
+        'ProcessoVinculacao', user=_common_user, praca=praca1)
 
     data = json.dumps({'praca': str(praca2.id_pub)})
 
@@ -150,6 +157,33 @@ def test_update_a_process_using_PATCH_as_diferent_user(_common_user, client):
         content_type="application/json")
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_upload_files_to_a_process(_common_user, _create_temporary_file,
+                                   client):
+    """
+    Testa o envio de arquivos que comprovem o vinculo entre o gestor e sua
+    Praça.
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', user=_common_user)
+
+    test_file = _create_temporary_file
+    test_file.name = 'rg-frente.jpg'
+
+    data = {
+        'tipo': 'identificação',
+        'arquivo': test_file,
+    }
+
+    response = client.post(
+        reverse(
+            'gestor:documento-list',
+            kwargs={'processo_pk': processo.pk}), data,
+        format='multipart')
+
+    assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.skip
