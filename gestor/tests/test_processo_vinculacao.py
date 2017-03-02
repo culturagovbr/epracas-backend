@@ -159,6 +159,32 @@ def test_update_a_process_using_PATCH_as_diferent_user(_common_user, client):
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
+def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
+                                                       client):
+    """
+    Testa o envio de arquivos que comprovem o vinculo entre o gestor e sua
+    Praça.
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao')
+
+    test_file = _create_temporary_file
+    test_file.name = 'rg-frente.jpg'
+
+    data = {
+        'tipo': 'identificação',
+        'arquivo': test_file,
+    }
+
+    response = client.post(
+        reverse('gestor:documento-list', kwargs={'processo_pk': processo.pk}),
+        data,
+        format='multipart')
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
 def test_upload_files_to_a_process(_common_user, _create_temporary_file,
                                    client):
     """
@@ -178,15 +204,14 @@ def test_upload_files_to_a_process(_common_user, _create_temporary_file,
     }
 
     response = client.post(
-        reverse(
-            'gestor:documento-list',
-            kwargs={'processo_pk': processo.pk}), data,
+        reverse('gestor:documento-list', kwargs={'processo_pk': processo.pk}),
+        data,
         format='multipart')
 
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker,  client):
+def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker, client):
 
     file1 = mocker.Mock(spec=File, name='FileMock')
     file2 = mocker.Mock(spec=File, name='FileMock')
@@ -195,15 +220,17 @@ def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker,  client):
 
     processo = mommy.make('ProcessoVinculacao')
 
-    data = { 'identificacao1': file1,
-             'identificação2': file2,
-             'identificacao3': file3,
-             'identificação4': file4,
-           }
+    data = {
+        'identificacao1': file1,
+        'identificação2': file2,
+        'identificacao3': file3,
+        'identificação4': file4,
+    }
 
-    response = client.post(reverse('gestor:documento-list',
-                                   kwargs={'processo_pk': processo.pk}), data,
-                          format='multipart')
+    response = client.post(
+        reverse('gestor:documento-list', kwargs={'processo_pk': processo.pk}),
+        data,
+        format='multipart')
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 4

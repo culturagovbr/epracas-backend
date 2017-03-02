@@ -47,9 +47,10 @@ class ProcessoViewSet(DefaultMixin, ModelViewSet):
 
 class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
 
-    parser_classes = (JSONParser, MultiPartParser)
+    authentication_classes = (JSONWebTokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
 
-    # authentication_classes = (JSONWebTokenAuthentication,)
+    parser_classes = (JSONParser, MultiPartParser)
 
     def list(self, request, processo_pk=None):
         processo = get_object_or_404(ProcessoVinculacao, pk=processo_pk)
@@ -64,9 +65,7 @@ class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
 
         for tipo in request.FILES:
             arquivo = ArquivosProcessoVinculacao(
-                processo=processo,
-                tipo=tipo,
-                arquivo=request.FILES[tipo])
+                processo=processo, tipo=tipo, arquivo=request.FILES[tipo])
             arquivo.clean_fields()
             arquivo.save()
 
@@ -83,27 +82,3 @@ class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
         serializer = ArquivosProcessoVinculacaoSerializer(arquivo)
         if serializer.is_valid():
             return Response(serializer.data)
-
-
-
-    # def post(self, request, pk):
-    #     user = request.user
-    #     praca = get_object_or_404(Praca, pk=pk)
-
-    #     processo, created = ProcessoVinculacao.objects.get_or_create(
-    #         praca=praca,
-    #         defaults={'user': user, 'praca': praca}
-    #         )
-
-    #     for tipo in request.FILES:
-    #         arq = ArquivosProcessoVinculacao(
-    #             processo=processo,
-    #             tipo=tipo,
-    #             arquivo=request.FILES[tipo])
-    #         arq.clean_fields()
-    #         arq.save()
-
-    #     serializer = ProcessoVinculacaoSerializer(
-    #         processo,
-    #         context={'request': request})
-    #     return Response(serializer.data)
