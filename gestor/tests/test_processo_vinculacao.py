@@ -278,27 +278,21 @@ def test_return_today_date_when_create_a_new_process(client):
     assert data_abertura.is_today() == True
 
 
-@pytest.mark.skip
-def test_return_data_abertura_in_get_response(client):
-    """TODO: Docstring for test_return_data_abertura_in_get_response.
-    :returns: TODO
-
+def test_return_data_abertura_in_get_response(_common_user, client):
     """
-    gestor = mommy.make(Gestor, nome="Fulano Cicrano")
-    processo = mommy.make(ProcessoVinculacao, gestor=gestor)
+    Testa o retorno da data_abertura na resposta do endpoint de Processos 
+    """
 
-    url = reverse('gestor:processovinculacao-list') + '?gestor={}'.format(
-        gestor.id_pub)
+    processo = mommy.make(ProcessoVinculacao, user=_common_user)
+
+    url = reverse('gestor:processovinculacao-detail', kwargs={'pk': processo.pk})
 
     response = client.get(url)
 
     date = pendulum.instance(
         processo.data_abertura.replace(tzinfo=None), tz='America/Sao_Paulo')
 
-    response_data = bytes.decode(response.content)
-    dict_data = json.loads(response_data)[0]
-
-    assert 'data_abertura' in dict_data
+    assert 'data_abertura' in response.data
 
 
 @pytest.mark.skip
