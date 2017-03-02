@@ -30,7 +30,7 @@ from .permissions import CommonUserOrReadOnly
 class GestorViewSet(ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication, )
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     queryset = Gestor.objects.all()
     serializer_class = GestorSerializer
@@ -43,12 +43,6 @@ class ProcessoViewSet(DefaultMixin, ModelViewSet):
     queryset = ProcessoVinculacao.objects.all()
     serializer_class = ProcessoVinculacaoSerializer
     search_fields = ('gestor', 'praca')
-
-
-# class ArquivoProcessoViewSet(DefaultMixin, ModelViewSet):
-
-#     queryset = ArquivosProcessoVinculacao.objects.all()
-#     serializer_class = ArquivosProcessoVinculacaoSerializer
 
 
 class ArquivoProcessoViewSet(DefaultMixin, ViewSet):

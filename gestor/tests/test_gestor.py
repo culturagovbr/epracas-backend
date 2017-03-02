@@ -11,7 +11,6 @@ from gestor.models import Gestor
 pytestmark = pytest.mark.django_db
 
 
-@pytest.mark.skip
 def test_return_200_ok_gestor_endpoint(client):
     """
     Testa retorno 200 OK do endpoint dos Gestores
