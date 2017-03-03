@@ -240,6 +240,9 @@ def test_upload_files_to_a_process(_common_user, _create_temporary_file,
 
 
 def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker, client):
+    """
+    Testa o envio de varios arquivos para um Processo de Vinculação
+    """
 
     file1 = mocker.Mock(spec=File, name='FileMock')
     file2 = mocker.Mock(spec=File, name='FileMock')
@@ -262,6 +265,47 @@ def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker, client):
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 4
+
+
+def test_common_user_can_approve_process(_common_user, client):
+    """
+    Testa a permissão para alterar determinados campos somente com credencial
+    de administrador.
+    """
+
+    processo = mommy.make('ProcessoVinculacao', user=_common_user)
+
+    data = json.dumps({'aprovado': True})
+
+    response = client.patch(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_admin_can_approve_process(_admin_user, client):
+    """
+    Testa a permissão para alterar determinados campos somente com credencial
+    de administrador.
+    """
+
+    processo = mommy.make('ProcessoVinculacao', user=_admin_user)
+
+    data = json.dumps({'aprovado': True})
+
+    response = client.patch(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+# def test_only_admin_can_approve_process_documentation(_common_user, client):
 
 
 def test_return_today_date_when_create_a_new_process(client):
