@@ -1,7 +1,10 @@
 #coding: utf-8
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.utils.translation import ugettext as _
 
 from core.models import IdPubIdentifier
@@ -55,6 +58,10 @@ class ProcessoVinculacao(IdPubIdentifier):
         default=True,
         )
 
+    def get_documentation_status(self):
+        arquivos = ArquivosProcessoVinculacao.objects.filter(processo=self)
+        return [(arquivo.id_pub, arquivo.verificado) for arquivo in arquivos]
+
 
 class ArquivosProcessoVinculacao(IdPubIdentifier):
     processo = models.ForeignKey(ProcessoVinculacao, related_name='files')
@@ -82,3 +89,12 @@ class ArquivosProcessoVinculacao(IdPubIdentifier):
         null=True,
         blank=True,
         )
+
+
+@receiver(pre_save, sender=ProcessoVinculacao)
+def validate_process(sender, instance, **kwargs):
+    if instance.aprovado:
+        if not False in [True in instance.get_documentation_status()]:
+            instance.full_clean()
+        else:
+            raise ValidationError(_("Existem documentos não verificados impedindo a aprovação"))
