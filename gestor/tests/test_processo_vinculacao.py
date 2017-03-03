@@ -305,7 +305,48 @@ def test_admin_can_approve_process(_admin_user, client):
     assert response.status_code == status.HTTP_200_OK
 
 
-# def test_only_admin_can_approve_process_documentation(_common_user, client):
+def test_common_user_can_approve_process_documentation(_common_user, client):
+    """
+    Testa a permissão para alterar a situação da documentação de um Processo de
+    Vinculação com credenciais de usuário comum.
+    """
+
+    processo = mommy.make('ProcessoVinculacao', user=_common_user)
+    arquivo = mommy.make('ArquivosProcessoVinculacao', processo=processo)
+
+    data = json.dumps({'verificado': True})
+
+    response = client.patch(
+        reverse(
+            'gestor:documento-detail',
+            kwargs={'processo_pk': processo.pk,
+                    'pk': arquivo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_admin_user_can_approve_process_documentation(_admin_user, client):
+    """
+    Testa a permissão para alterar a situação da documentação de um Processo de
+    Vinculação com credenciais de administrador.
+    """
+
+    processo = mommy.make('ProcessoVinculacao', user=_admin_user)
+    arquivo = mommy.make('ArquivosProcessoVinculacao', processo=processo)
+
+    data = json.dumps({'verificado': True})
+
+    response = client.patch(
+        reverse(
+            'gestor:documento-detail',
+            kwargs={'processo_pk': processo.pk,
+                    'pk': arquivo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
 
 
 def test_return_today_date_when_create_a_new_process(client):

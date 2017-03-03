@@ -86,3 +86,16 @@ class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
         serializer = ArquivosProcessoVinculacaoSerializer(arquivo)
         if serializer.is_valid():
             return Response(serializer.data)
+
+    def partial_update(self, request, pk=None, processo_pk=None):
+        arquivo = get_object_or_404(ArquivosProcessoVinculacao, pk=pk)
+
+        self.check_object_permissions(request, arquivo)
+        serializer = ArquivosProcessoVinculacaoSerializer(arquivo,
+                                                          data=request.data,
+                                                          partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            raise PermissionDenied

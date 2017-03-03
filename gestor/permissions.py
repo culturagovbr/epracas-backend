@@ -6,7 +6,7 @@ from rest_framework.compat import is_authenticated
 ADMIN_SAFE_METHODS = SAFE_METHODS + ('PUT', 'PATCH', 'DELETE')
 MANAGER_SAFE_METHODS = ADMIN_SAFE_METHODS + ('POST', )
 
-ADMIN_FIELDS = ('aprovado', 'valido')
+ADMIN_FIELDS = ('aprovado', 'valido', 'verificado')
 
 class CommonUserOrReadOnly(BasePermission):
     """
