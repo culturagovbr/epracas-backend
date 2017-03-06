@@ -1,11 +1,11 @@
-#coding: utf-8
-
 from django.conf import settings
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext as _
+
+from rest_framework import status
+from rest_framework.serializers import ValidationError
 
 from core.models import IdPubIdentifier
 from core.models import upload_doc_to
@@ -93,6 +93,10 @@ class ArquivosProcessoVinculacao(IdPubIdentifier):
 
 @receiver(pre_save, sender=ProcessoVinculacao)
 def validate_process(sender, instance, **kwargs):
+    """
+    Verifica se existem documentos(ArquivosProcessoVinculacao) que ainda não
+    foram verificados por um administrador.
+    """
     if instance.aprovado:
         if not False in [True in instance.get_documentation_status()]:
             instance.full_clean()

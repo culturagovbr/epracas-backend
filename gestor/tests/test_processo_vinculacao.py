@@ -385,7 +385,7 @@ def test_only_approve_an_process_if_all_documentation_is_verified(_admin_user, c
         data,
         content_type="application/json")
 
-    assert response.status_code == status.HTTP_412_PRECONDITION_FAILED
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.skip

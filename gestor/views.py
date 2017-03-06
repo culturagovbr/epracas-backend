@@ -39,6 +39,7 @@ class GestorViewSet(ModelViewSet):
 
 
 class ProcessoViewSet(DefaultMixin, ModelViewSet):
+
     authentication_classes = (JSONWebTokenAuthentication, )
     permission_classes = (CommonUserOrReadOnly, )
 
