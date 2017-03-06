@@ -25,7 +25,6 @@ def _create_temporary_file(mocker):
     return mocker.Mock(spec=File, name='FileMock')
 
 
-@pytest.mark.skip
 def test_return_200_OK_to_Processo_list_URL(client):
     """
     Testa retorno de status 200_OK para o endpoint de Processos de Vinculação
@@ -36,7 +35,6 @@ def test_return_200_OK_to_Processo_list_URL(client):
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.skip
 def test_persist_a_process_using_POST_without_credencials(client):
     """
     Testa a persistencia de um Processo de Vinculação, sem credenciais de
@@ -55,7 +53,6 @@ def test_persist_a_process_using_POST_without_credencials(client):
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-@pytest.mark.skip
 def test_persist_a_process_using_POST_as_common_user(_common_user, client):
     """
     Testa a persistencia de um Processo de Vinculação, utilizando credenciais
@@ -74,7 +71,6 @@ def test_persist_a_process_using_POST_as_common_user(_common_user, client):
     assert response.status_code == status.HTTP_201_CREATED
 
 
-@pytest.mark.skip
 def test_persist_a_process_using_POST_as_admin_user(_admin_user, client):
     """
     Testa a persistencia de um Processo de Vinculação, utilizando credenciais
@@ -93,7 +89,6 @@ def test_persist_a_process_using_POST_as_admin_user(_admin_user, client):
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-@pytest.mark.skip
 def test_update_a_process_using_PATCH_as_process_owner(_common_user, client):
     """
     Testa a atualização de informações de um Processo de Vinculação, utilizando
@@ -116,7 +111,6 @@ def test_update_a_process_using_PATCH_as_process_owner(_common_user, client):
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.skip
 def test_update_a_process_using_PATCH_as_admin_user(_admin_user, client):
     """
     Testa a atualização de informações de um Processo de Vinculação, utilizando
@@ -141,7 +135,6 @@ def test_update_a_process_using_PATCH_as_admin_user(_admin_user, client):
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.skip
 def test_update_a_process_using_PATCH_as_diferent_user(_common_user, client):
     """
     Testa a atualização de informações de um Processo de Vinculação, utilizando
@@ -166,7 +159,6 @@ def test_update_a_process_using_PATCH_as_diferent_user(_common_user, client):
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-@pytest.mark.skip
 def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
                                                        client):
     """
@@ -193,7 +185,6 @@ def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-@pytest.mark.skip
 def test_upload_files_to_a_process_using_diferent_credentials(
         _common_user, _create_temporary_file, client):
     """
@@ -222,7 +213,6 @@ def test_upload_files_to_a_process_using_diferent_credentials(
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-@pytest.mark.skip
 def test_upload_files_to_a_process(_common_user, _create_temporary_file,
                                    client):
     """
@@ -249,7 +239,6 @@ def test_upload_files_to_a_process(_common_user, _create_temporary_file,
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.skip
 def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker, client):
     """
     Testa o envio de varios arquivos para um Processo de Vinculação
@@ -278,7 +267,6 @@ def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker, client):
     assert len(response.data) == 4
 
 
-@pytest.mark.skip
 def test_common_user_can_approve_process(_common_user, client):
     """
     Testa a permissão para alterar determinados campos somente com credencial
@@ -298,7 +286,6 @@ def test_common_user_can_approve_process(_common_user, client):
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-@pytest.mark.skip
 def test_admin_can_approve_process(_admin_user, client):
     """
     Testa a permissão para alterar determinados campos somente com credencial
@@ -306,6 +293,8 @@ def test_admin_can_approve_process(_admin_user, client):
     """
 
     processo = mommy.make('ProcessoVinculacao', user=_admin_user)
+    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
+                          verificado=True)
 
     data = json.dumps({'aprovado': True})
 
@@ -318,7 +307,6 @@ def test_admin_can_approve_process(_admin_user, client):
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.skip
 def test_common_user_can_approve_process_documentation(_common_user, client):
     """
     Testa a permissão para alterar a situação da documentação de um Processo de
@@ -341,7 +329,6 @@ def test_common_user_can_approve_process_documentation(_common_user, client):
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-@pytest.mark.skip
 def test_admin_user_can_approve_process_documentation(_admin_user, client):
     """
     Testa a permissão para alterar a situação da documentação de um Processo de
@@ -364,9 +351,9 @@ def test_admin_user_can_approve_process_documentation(_admin_user, client):
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_only_approve_an_process_if_all_documentation_is_verified(_admin_user, client):
+def test_only_approve_a_process_if_all_documentation_is_verified(_admin_user, client):
     """
-    Testa uma situação aonde um Processo de Vinculação só é aprovado se toda
+    Testa uma situação onde um Processo de Vinculação só é aprovado se toda
     documentação estiver verificada
     """
 
@@ -375,7 +362,7 @@ def test_only_approve_an_process_if_all_documentation_is_verified(_admin_user, c
 
     processo = mommy.make('ProcessoVinculacao', user=user)
     arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
-                          _quantity=5) 
+                          _quantity=5)
 
     data = json.dumps({'aprovado': True})
 
@@ -388,7 +375,30 @@ def test_only_approve_an_process_if_all_documentation_is_verified(_admin_user, c
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-@pytest.mark.skip
+def test_approve_a_process_with_all_documentation_verified(_admin_user, client):
+    """
+    Testa a situação onde um Processo de Vinculação é aprovado com todos os
+    documentos verificados por um administrador
+    """
+
+    User = get_user_model()
+    user = mommy.make(User)
+
+    processo = mommy.make('ProcessoVinculacao', user=user)
+    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
+                          verificado=True, _quantity=5)
+
+    data = json.dumps({'aprovado': True})
+
+    response = client.patch(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+
+
 def test_return_today_date_when_create_a_new_process(client):
     """
     Testa se um processo tem instanciada a data do dia atual.
@@ -403,7 +413,6 @@ def test_return_today_date_when_create_a_new_process(client):
     assert data_abertura.is_today() == True
 
 
-@pytest.mark.skip
 def test_return_data_abertura_in_get_response(_common_user, client):
     """
     Testa o retorno da data_abertura na resposta do endpoint de Processos
@@ -422,7 +431,6 @@ def test_return_data_abertura_in_get_response(_common_user, client):
     assert 'data_abertura' in response.data
 
 
-@pytest.mark.skip
 def test_return_process_status_from_an_ente(_common_user, client):
     """
     Testa o retorno da situação do Processo de Vinculação
