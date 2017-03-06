@@ -1,0 +1,17 @@
+version: '2'
+services:
+  epracas-backend:
+    build: .
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    environment:
+      DEBUG: 'True'
+      DATABASE_URL: 'postgres://epracas:epracas123@db/epracas_db'
+  db:
+    image: "postgres:9.6"
+    environment:
+      POSTGRES_DB: epracas_db
+      POSTGRES_USER: epracas
+      POSTGRES_PASSWORD: epracas123
