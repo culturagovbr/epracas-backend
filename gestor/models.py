@@ -98,7 +98,7 @@ def validate_process(sender, instance, **kwargs):
     foram verificados por um administrador.
     """
     if instance.aprovado:
-        if not False in [True in instance.get_documentation_status()]:
+        if True in [verificado for (id_pub, verificado) in instance.get_documentation_status()]:
             instance.full_clean()
         else:
             raise ValidationError(_("Existem documentos não verificados impedindo a aprovação"))
