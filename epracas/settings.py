@@ -180,8 +180,7 @@ MEDIA_URL = '/media/'
 
 USE_DJANGO_JQUERY = False
 
-CORS_ORIGIN_WHITELIST = ALLOWED_HOSTS
-
+CORS_ORIGIN_ALLOW_ALL = True
 
 if os.getenv('TEST_ENV'):
     # Desabilita as migracoes quando usarmos a configuracao de settings
@@ -196,7 +195,6 @@ if os.getenv('TEST_ENV'):
     # Usamos o backend em memoria para facilitar os testes
     EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 
-    CORS_ORIGIN_ALLOW_ALL = os.getenv('DEBUG', False)
 
     # Define CORS to allow client in development mode
     CORS_ORIGIN_WHITELIST = (
