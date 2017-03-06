@@ -399,6 +399,34 @@ def test_approve_a_process_with_all_documentation_verified(_admin_user, client):
     assert response.status_code == status.HTTP_200_OK
 
 
+def test_create_a_Gestor_object_when_a_process_is_approved(_admin_user, client):
+    """
+    Testa se um novo gestor é criado quando um Processo de Vinculação é
+    aprovado
+    """
+
+    User = get_user_model()
+    user = mommy.make(User)
+
+    processo = mommy.make('ProcessoVinculacao', user=user)
+    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo, verificado=True)
+
+    data = json.dumps({'aprovado': True})
+
+    response = client.patch(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+
+    from gestor.models import Gestor
+    gestores = Gestor.objects.all()
+
+    assert len(gestores) == 1
+
+
 def test_return_today_date_when_create_a_new_process(client):
     """
     Testa se um processo tem instanciada a data do dia atual.
