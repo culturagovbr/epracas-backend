@@ -178,6 +178,9 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+DOCUMENTS_ROOT = os.path.join(BASE_DIR, 'documents')
+MEDIA_URL = '/documents/'
+
 USE_DJANGO_JQUERY = False
 
 CORS_ORIGIN_ALLOW_ALL = True
