@@ -6,8 +6,6 @@ from rest_framework.reverse import reverse
 
 from model_mommy import mommy
 
-from gestor.models import Gestor
-
 pytestmark = pytest.mark.django_db
 
 
@@ -20,24 +18,30 @@ def test_return_200_ok_gestor_endpoint(client):
     assert response.status_code == status.HTTP_200_OK
 
 
-@pytest.mark.skip
-def test_persist_a_gestor_name_without_credentials(client):
+def test_return_manager_data_from_endpoint(client):
     """
-    Testa a persistencia de um Gestor sem credenciais de identificação
+    Testa o retorno de informações sobre um gestor de uma Praça
     """
 
-    gestor = {
-            'nome': 'Fulano Cicrano'
-    }
+    gestor = mommy.make('Gestor')
 
-    response = client.post(
-            reverse('gestor:gestor-list'),
-            gestor,
-            format='json'
-    )
+    response = client.get(reverse('gestor:gestor-detail', kwargs={'pk': gestor.pk}))
 
-    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response.status_code == status.HTTP_200_OK
 
+
+def test_return_a_praca_with_manager_information(client):
+    """
+    Testa o retorno de uma Praça com a informação do seu atual gestor
+    """
+
+    gestor = mommy.make('Gestor')
+
+    response = client.get(reverse('pracas:praca-detail', kwargs={'pk':
+                                                                 gestor.praca.pk}))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert 'gestor' in response.data
 
 @pytest.mark.skip
 def test_return_an_id_pub_for_a_created_gestor(client):
