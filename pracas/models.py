@@ -85,11 +85,26 @@ class Praca(IdPubIdentifier):
         )
 
     def get_latlong(self):
+        """
+        Retorna latitude e longitude no formato (lat, long)
+        """
         return (self.lat, self.long)
 
     def get_distance(self, origin):
+        """
+        Dado um determinado ponto, calcula a distancia até a Praça
+        """
         from geopy.distance import vincenty
         return round(vincenty(origin, self.get_latlong()).meters, -2)
+
+    def get_manager(self):
+        """
+        Retorna o atual gestor da Praça
+        """
+        try:
+            return self.gestor.get(atual=True)
+        except:
+            return None
 
     def save(self, *args, **kwargs):
         if not self.nome:
