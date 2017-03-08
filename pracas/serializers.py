@@ -2,7 +2,7 @@ from django.conf import settings
 
 from rest_framework import serializers
 
-# from atividades.serializers import AgendaSerializer
+from gestor.serializers import GestorSerializer
 
 from .models import Praca
 from .models import Parceiro
@@ -31,6 +31,7 @@ class PracaBaseSerializer(serializers.ModelSerializer, HeaderUploadSerializer):
     situacao_descricao = serializers.CharField(
             source='get_situacao_display',
             read_only=True)
+    gestor = GestorSerializer(read_only=True)
 
 
 class PracaListSerializer(PracaBaseSerializer):

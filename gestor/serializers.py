@@ -1,19 +1,18 @@
 from rest_framework import serializers
 
-from authentication.serializers import UserSerializer
-
-from pracas.serializers import PracaListSerializer
-
 from .models import Gestor
 from .models import ProcessoVinculacao
 from .models import ArquivosProcessoVinculacao
 
 
 class GestorSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    nome = serializers.CharField(source='user.full_name')
+    email = serializers.EmailField(source='user.email')
+
     class Meta:
         model = Gestor
-        fields = '__all__'
-        depth = 1
+        fields = ('url', 'nome', 'email')
 
 
 class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
@@ -30,5 +29,6 @@ class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProcessoVinculacao
-        fields = ('id_pub', 'praca', 'user', 'data_abertura', 'aprovado', 'files', )
+        fields = ('id_pub', 'praca', 'user', 'data_abertura', 'aprovado',
+                  'files', )
         read_only_fields = ('data_abertura', )
