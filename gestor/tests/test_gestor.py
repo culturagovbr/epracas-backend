@@ -28,6 +28,9 @@ def test_return_manager_data_from_endpoint(client):
     response = client.get(reverse('gestor:gestor-detail', kwargs={'pk': gestor.pk}))
 
     assert response.status_code == status.HTTP_200_OK
+    assert 'url' in response.data
+    assert 'nome' in response.data
+    assert 'email' in response.data
 
 
 def test_return_a_praca_with_manager_information(client):
@@ -42,25 +45,7 @@ def test_return_a_praca_with_manager_information(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert 'gestor' in response.data
-
-@pytest.mark.skip
-def test_return_an_id_pub_for_a_created_gestor(client):
-    """
-    Testa o retorno do identificador publico(id_pub) de um determinado gestor.
-    """
-
-    gestor = {
-            'nome': 'Fulano Cicrano'
-    }
-
-    response = client.post(
-            reverse('gestor:gestor-list'),
-            gestor,
-            format='json'
-    )
-
-    assert response.status_code == status.HTTP_201_CREATED
-    assert 'id_pub' in bytes.decode(response.content)
+    assert 'nome' in response.data['gestor']
 
 
 @pytest.mark.skip
