@@ -19,7 +19,7 @@ from rest_localflavor.br.br_states import STATE_CHOICES
 
 class Gestor(IdPubIdentifier):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    praca = models.ForeignKey(Praca)
+    praca = models.ForeignKey(Praca, related_name='gestor')
 
 
 class ProcessoVinculacao(IdPubIdentifier):

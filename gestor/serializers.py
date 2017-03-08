@@ -12,7 +12,8 @@ from .models import ArquivosProcessoVinculacao
 class GestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gestor
-        fields = ('id_pub', 'nome', 'endereco', 'cidade', 'uf', 'regiao')
+        fields = '__all__'
+        depth = 1
 
 
 class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):

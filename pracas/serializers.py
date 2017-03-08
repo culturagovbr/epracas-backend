@@ -47,12 +47,13 @@ class PracaListSerializer(PracaBaseSerializer):
                 'modelo_descricao',
                 'situacao',
                 'situacao_descricao',
-                'header_url'
+                'header_url',
+                'gestor',
                 )
+        read_only_fields = ('gestor',)
 
 
 class PracaSerializer(PracaBaseSerializer):
-    # agenda = AgendaSerializer(many=True, read_only=True)
 
     class Meta:
         model = Praca
@@ -68,7 +69,6 @@ class PracaSerializer(PracaBaseSerializer):
                 'regiao',
                 'uf',
                 'municipio',
-                # 'agenda',
                 'modelo',
                 'modelo_descricao',
                 'situacao',
@@ -76,7 +76,9 @@ class PracaSerializer(PracaBaseSerializer):
                 'header_url',
                 'lat',
                 'long',
+                'gestor',
                 )
+        read_only_fields = ('gestor',)
 
 
 class ParceiroSerialier(serializers.ModelSerializer):
