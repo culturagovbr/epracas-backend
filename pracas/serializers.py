@@ -31,7 +31,11 @@ class PracaBaseSerializer(serializers.ModelSerializer, HeaderUploadSerializer):
     situacao_descricao = serializers.CharField(
             source='get_situacao_display',
             read_only=True)
-    gestor = GestorSerializer(read_only=True)
+    gestor = serializers.SerializerMethodField()
+
+    def get_gestor(self, obj):
+        serializer = GestorSerializer(obj.get_manager())
+        return serializer.data
 
 
 class PracaListSerializer(PracaBaseSerializer):
@@ -96,6 +100,7 @@ class ParceiroSerialier(serializers.ModelSerializer):
             'acoes',
             'tempo_parceria'
         )
+
 
 class DistanciaSerializer(PracaListSerializer):
     latlong = serializers.SerializerMethodField()

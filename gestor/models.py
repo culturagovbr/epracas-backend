@@ -18,8 +18,9 @@ from rest_localflavor.br.br_states import STATE_CHOICES
 
 
 class Gestor(IdPubIdentifier):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL)
-    praca = models.OneToOneField(Praca, related_name='gestor')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+    praca = models.ForeignKey(Praca, related_name='gestor', null=True)
+    atual = models.BooleanField(_('Gestor Atual'), default=False)
 
 
 class ProcessoVinculacao(IdPubIdentifier):
