@@ -69,31 +69,26 @@ def test_return_only_the_current_praca_manager(client):
     assert 'nome' in response.data['gestor']
 
 
-@pytest.mark.skip
-def test_return_a_created_gestor(client):
+def test_return_all_managers_from_a_praca(client):
     """
-    Testa o retorno de um gestor recem criado.
+    Testa o retorno de todos os gestores de uma determinada Praça
     """
 
-    gestor = {
-            'nome': 'Fulano Cicrano'
-    }
+    pracas = mommy.make('Praca', _quantity=2)
+    gestores_praca_0 = mommy.make('Gestor', praca=pracas[0], _quantity=4)
+    gestores_praca_1 = mommy.make('Gestor', praca=pracas[1], _quantity=2)
 
-    post = client.post(
-            reverse('gestor:gestor-list'),
-            gestor,
-            format='json'
-    )
-    assert post.status_code == status.HTTP_201_CREATED
+    response = client.get(reverse('gestor:gestor-list') +
+                          '?praca={}'.format(pracas[0].pk))
 
-    id_pub = json.loads(bytes.decode(post.content))['id_pub']
-
-    response = client.get(
-            reverse('gestor:gestor-detail', kwargs={'pk': id_pub}),
-            format='json'
-            )
     assert response.status_code == status.HTTP_200_OK
-    assert gestor['nome'] in bytes.decode(response.content)
+    assert len(response.data) == 4
+
+    response = client.get(reverse('gestor:gestor-list') +
+                          '?praca={}'.format(pracas[1].pk))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 2
 
 
 @pytest.mark.skip
