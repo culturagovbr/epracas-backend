@@ -341,8 +341,7 @@ def test_upload_an_image_as_public_page_header(_create_temporary_file, client):
 
 def test_retorna_informacoes_sobre_GG(client):
     """
-    Testa o retorno do numero de membros que compõem o Grupo Gestor de uma
-    Praça
+    Testa o retorno de informações sobre o Grupo Gestor de uma Praça
     """
 
     praca = mommy.make(Praca)
@@ -352,3 +351,17 @@ def test_retorna_informacoes_sobre_GG(client):
         reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
 
     assert response.data['grupo_gestor']
+
+def test_retorna_qtde_membros_GG(client):
+    """
+    Testa o retorno contendo a quantidade de membros prevista para o Grupo
+    Gestor de uma Praça
+    """
+
+    praca = mommy.make(Praca)
+    gg = mommy.make('GrupoGestor', praca=praca)
+
+    response = client.get(
+        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
+
+    assert response.data['grupo_gestor']['previsao_espacos'] == 5
