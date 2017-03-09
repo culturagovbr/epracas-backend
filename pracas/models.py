@@ -182,3 +182,5 @@ class Parceiro(IdPubIdentifier):
 
 class GrupoGestor(IdPubIdentifier):
     praca = models.OneToOneField(Praca, related_name='grupo_gestor')
+    previsao_espacos = models.IntegerField(
+        _('Qtde de membros previstos no Grupo Gestor'), max_length=2)

@@ -352,6 +352,7 @@ def test_retorna_informacoes_sobre_GG(client):
 
     assert response.data['grupo_gestor']
 
+
 def test_retorna_qtde_membros_GG(client):
     """
     Testa o retorno contendo a quantidade de membros prevista para o Grupo
@@ -359,7 +360,7 @@ def test_retorna_qtde_membros_GG(client):
     """
 
     praca = mommy.make(Praca)
-    gg = mommy.make('GrupoGestor', praca=praca)
+    gg = mommy.make('GrupoGestor', praca=praca, previsao_espacos=5)
 
     response = client.get(
         reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
