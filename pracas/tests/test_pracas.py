@@ -337,3 +337,18 @@ def test_upload_an_image_as_public_page_header(_create_temporary_file, client):
 
     download_header = client.get(response.data['header_url'])
     assert download_header.status_code == status.HTTP_200_OK
+
+
+def test_retorna_informacoes_sobre_GG(client):
+    """
+    Testa o retorno do numero de membros que compõem o Grupo Gestor de uma
+    Praça
+    """
+
+    praca = mommy.make(Praca)
+    gg = mommy.make('GrupoGestor', praca=praca)
+
+    response = client.get(
+        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
+
+    assert response.data['grupo_gestor']
