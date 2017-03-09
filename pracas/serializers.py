@@ -4,8 +4,16 @@ from rest_framework import serializers
 
 from gestor.serializers import GestorSerializer
 
+from .models import GrupoGestor
 from .models import Praca
 from .models import Parceiro
+
+
+class GrupoGestorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = GrupoGestor
+        fields = '__all__'
 
 
 class HeaderUploadSerializer(serializers.Serializer):
@@ -32,6 +40,7 @@ class PracaBaseSerializer(serializers.ModelSerializer, HeaderUploadSerializer):
             source='get_situacao_display',
             read_only=True)
     gestor = serializers.SerializerMethodField()
+    grupo_gestor = GrupoGestorSerializer(read_only=True)
 
     def get_gestor(self, obj):
         serializer = GestorSerializer(obj.get_manager())
@@ -82,8 +91,9 @@ class PracaSerializer(PracaBaseSerializer):
                 'lat',
                 'long',
                 'gestor',
+                'grupo_gestor',
                 )
-        read_only_fields = ('gestor',)
+        read_only_fields = ('gestor', 'grupo_gestor')
 
 
 class ParceiroSerialier(serializers.ModelSerializer):
@@ -127,4 +137,4 @@ class DistanciaSerializer(PracaListSerializer):
                 'header_url',
                 'latlong',
                 'distancia',
-                )
+        )

@@ -1,7 +1,6 @@
-#coding: utf-8
-
 from django.db import models
 from django.utils.translation import ugettext as _
+
 from rest_localflavor.br.br_states import STATE_CHOICES
 
 from core.choices import MODELO_CHOICES
@@ -179,3 +178,7 @@ class Parceiro(IdPubIdentifier):
         null=True,
         blank=True
         )
+
+
+class GrupoGestor(IdPubIdentifier):
+    praca = models.OneToOneField(Praca, related_name='grupo_gestor')
