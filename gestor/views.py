@@ -29,13 +29,15 @@ from .serializers import ArquivosProcessoVinculacaoSerializer
 from .permissions import CommonUserOrReadOnly
 
 
-class GestorViewSet(ModelViewSet):
+class GestorViewSet(DefaultMixin, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication, )
     permission_classes = (IsAuthenticatedOrReadOnly, )
 
     queryset = Gestor.objects.all()
     serializer_class = GestorSerializer
+
+    filter_fields = ('praca',)
 
 
 class ProcessoViewSet(DefaultMixin, ModelViewSet):
