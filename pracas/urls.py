@@ -6,6 +6,7 @@ from .views import PracaUploadHeader
 from .views import PracaVinculoUpload
 from .views import PracaViewSet
 from .views import DistanceView
+from .views import GrupoGestorViewSet
 
 from .views import ParceiroViewSet
 
@@ -14,6 +15,7 @@ router = routers.SimpleRouter()
 
 router.register(r'pracas', PracaViewSet)
 router.register(r'parceiros', ParceiroViewSet)
+router.register(r'grupogestor', GrupoGestorViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),

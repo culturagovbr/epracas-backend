@@ -19,11 +19,13 @@ from gestor.serializers import ProcessoVinculacaoSerializer
 
 from .models import Praca
 from .models import Parceiro
+from .models import GrupoGestor
 
 from .serializers import PracaSerializer
 from .serializers import PracaListSerializer
 from .serializers import HeaderUploadSerializer
 from .serializers import DistanciaSerializer
+from .serializers import GrupoGestorSerializer
 
 from .serializers import ParceiroSerialier
 
@@ -117,3 +119,9 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
     # serializers = {
     #         'list': PracaListSerializer,
     #         }
+
+
+class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
+
+    serializer_class = GrupoGestorSerializer
+    queryset = GrupoGestor.objects.all()
