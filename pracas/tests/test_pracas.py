@@ -5,6 +5,8 @@ from django.contrib.auth import get_user_model
 from django.core.files import File
 from django.core.urlresolvers import reverse
 
+from django.core.urlresolvers import resolve
+
 from rest_framework import status
 
 from model_mommy import mommy
@@ -337,6 +339,21 @@ def test_upload_an_image_as_public_page_header(_create_temporary_file, client):
 
     download_header = client.get(response.data['header_url'])
     assert download_header.status_code == status.HTTP_200_OK
+
+
+def test_retorna_200_ok_enpoint_GG(client):
+    """
+    Testa o acesso ao endpoint de Grupo Gestor
+    """
+
+    url = "/api/v1/grupogestor/"
+
+    response = client.get(url)
+    namespace = resolve(url)
+
+    assert response.status_code == status.HTTP_200_OK
+
+    assert "{}:{}".format(namespace.namespace, namespace.url_name) == 'pracas:grupogestor-list'
 
 
 def test_retorna_informacoes_sobre_GG(client):
