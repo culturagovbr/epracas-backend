@@ -159,6 +159,22 @@ def test_update_a_process_using_PATCH_as_diferent_user(_common_user, client):
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
+def test_return_a_list_of_process(client):
+    """
+    Testa o retorno de uma lista com informações basicas sobre os Processos de
+    Vinculação
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca)
+
+    response = client.get(
+        reverse('gestor:processovinculacao-list'), format='json')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response.data, list)
+
+
 def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
                                                        client):
     """
@@ -421,7 +437,6 @@ def test_create_a_Gestor_object_when_a_process_is_approved(_admin_user, client):
 
     assert response.status_code == status.HTTP_200_OK
 
-    from gestor.models import Gestor
     gestores = Gestor.objects.all()
 
     assert len(gestores) == 1
@@ -438,7 +453,7 @@ def test_return_today_date_when_create_a_new_process(client):
 
     data_abertura = pendulum.instance(data, tz='America/Sao_Paulo')
 
-    assert data_abertura.is_today() == True
+    assert data_abertura.is_today()
 
 
 def test_return_data_abertura_in_get_response(_common_user, client):
