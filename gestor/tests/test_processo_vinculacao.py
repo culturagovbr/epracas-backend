@@ -175,6 +175,26 @@ def test_return_a_list_of_process(client):
     assert isinstance(response.data, list)
 
 
+def test_which_fields_returns_on_a_list_of_process(client):
+    """
+    Testa o retorno de determinados campos na lista de Processos de Vinculação
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca)
+
+    fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura', 'concluido')
+
+    response = client.get(
+        reverse('gestor:processovinculacao-list'), format='json')
+
+    for field in fields:
+        assert field in response.data[0]
+        response.data[0].pop(field)
+
+    assert len(response.data[0]) == 0
+
+
 def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
                                                        client):
     """
