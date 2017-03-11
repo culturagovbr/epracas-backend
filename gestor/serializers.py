@@ -1,5 +1,9 @@
 from rest_framework import serializers
 
+from authentication.serializers import UserSerializer
+
+from pracas.models import Praca
+
 from .models import Gestor
 from .models import ProcessoVinculacao
 from .models import ArquivosProcessoVinculacao
@@ -22,13 +26,34 @@ class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
                   'verificado_por', )
 
 
-class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        read_only=True, default=serializers.CurrentUserDefault())
-    files = ArquivosProcessoVinculacaoSerializer(many=True, required=False)
+class ProcessoVinculacaoListSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    concluido = serializers.BooleanField(source='aprovado', read_only=True)
+    praca = serializers.SerializerMethodField(read_only=True)
+
+    def get_praca(self, obj):
+        from pracas.serializers import PracaListSerializer
+        serializer = PracaListSerializer(obj.praca)
+        return serializer.data
 
     class Meta:
         model = ProcessoVinculacao
-        fields = ('id_pub', 'praca', 'user', 'data_abertura', 'aprovado',
+        fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura', 'concluido', )
+
+class ProcessoVinculacaoSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    user = UserSerializer(read_only=True,
+                          default=serializers.CurrentUserDefault())
+    files = ArquivosProcessoVinculacaoSerializer(many=True, required=False)
+    praca_info = serializers.SerializerMethodField(read_only=True)
+
+    def get_praca_info(self, obj):
+        from pracas.serializers import PracaListSerializer
+        serializer = PracaListSerializer(obj.praca)
+        return serializer.data
+
+    class Meta:
+        model = ProcessoVinculacao
+        fields = ('url', 'id_pub', 'praca', 'praca_info', 'user', 'data_abertura', 'aprovado',
                   'files', )
         read_only_fields = ('data_abertura', )

@@ -17,6 +17,7 @@ from rest_framework.viewsets import ModelViewSet
 from oidc_auth.authentication import JSONWebTokenAuthentication
 
 from core.views import DefaultMixin
+from core.views import MultiSerializerViewSet
 
 from .models import Gestor
 from .models import ProcessoVinculacao
@@ -24,6 +25,7 @@ from .models import ArquivosProcessoVinculacao
 
 from .serializers import GestorSerializer
 from .serializers import ProcessoVinculacaoSerializer
+from .serializers import ProcessoVinculacaoListSerializer
 from .serializers import ArquivosProcessoVinculacaoSerializer
 
 from .permissions import CommonUserOrReadOnly
@@ -40,13 +42,15 @@ class GestorViewSet(DefaultMixin, ModelViewSet):
     filter_fields = ('praca',)
 
 
-class ProcessoViewSet(DefaultMixin, ModelViewSet):
+class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication, )
     permission_classes = (CommonUserOrReadOnly, )
 
     queryset = ProcessoVinculacao.objects.all()
     serializer_class = ProcessoVinculacaoSerializer
+    serializers = {'list': ProcessoVinculacaoListSerializer}
+
     search_fields = ('gestor', 'praca')
 
 
