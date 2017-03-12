@@ -212,6 +212,95 @@ def test_returning_information_about_a_praca_on_a_process(client):
         assert field in response.data[0]['praca']
 
 
+def test_returning_fields_on_a_detailed_process_without_credentials(client):
+    """
+    Testa o retorno de informações detalhadas sobre um Processo de Vinculação,
+    não utilizando credencial de identificação.
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca)
+
+    response = client.get(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        format='json')
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_returning_fields_on_a_detailed_process_not_as_owner(_common_user,
+                                                             client):
+    """
+    Testa o retorno de informações detalhadas sobre um Processo de Vinculação,
+    utilizando credenciais de identificação e não sendo dono do processo.
+    """
+
+    User = get_user_model()
+    user = mommy.make(User)
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca, user=user)
+
+    response = client.get(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        format='json')
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_returning_fields_on_a_detailed_process_as_owner(_common_user, client):
+    """
+    Testa o retorno de informações detalhadas sobre um Processo de Vinculação,
+    pertencentes a um usuário.
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca, user=_common_user)
+
+    fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura', 'aprovado',
+              'files', )
+    response = client.get(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        format='json')
+
+    assert response.status_code == status.HTTP_200_OK
+
+    for field in fields:
+        assert field in response.data
+        response.data.pop(field)
+
+    assert len(response.data) == 0
+
+
+def test_returning_information_about_a_Praca_on_a_detailed_process(
+        _common_user, client):
+    """
+    Testa o retorno de informações sobre a Praça de um Processo de Vinculação
+    detalhado, pertencente a um usuário.
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca, user=_common_user)
+
+    fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'modelo',
+              'modelo_descricao', 'situacao', 'situacao_descricao',
+              'header_url', 'gestor')
+
+    response = client.get(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        format='json')
+
+    for field in fields:
+        assert field in response.data['praca']
+        response.data['praca'].pop(field)
+
+    assert len(response.data['praca']) == 0
+
+
 def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
                                                        client):
     """
@@ -346,8 +435,8 @@ def test_admin_can_approve_process(_admin_user, client):
     """
 
     processo = mommy.make('ProcessoVinculacao', user=_admin_user)
-    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
-                          verificado=True)
+    arquivos = mommy.make(
+        'ArquivosProcessoVinculacao', processo=processo, verificado=True)
 
     data = json.dumps({'aprovado': True})
 
@@ -404,7 +493,8 @@ def test_admin_user_can_approve_process_documentation(_admin_user, client):
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_only_approve_a_process_if_all_documentation_is_verified(_admin_user, client):
+def test_only_approve_a_process_if_all_documentation_is_verified(_admin_user,
+                                                                 client):
     """
     Testa uma situação onde um Processo de Vinculação só é aprovado se toda
     documentação estiver verificada
@@ -414,8 +504,8 @@ def test_only_approve_a_process_if_all_documentation_is_verified(_admin_user, cl
     user = mommy.make(User)
 
     processo = mommy.make('ProcessoVinculacao', user=user)
-    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
-                          _quantity=5)
+    arquivos = mommy.make(
+        'ArquivosProcessoVinculacao', processo=processo, _quantity=5)
 
     data = json.dumps({'aprovado': True})
 
@@ -428,7 +518,8 @@ def test_only_approve_a_process_if_all_documentation_is_verified(_admin_user, cl
     assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
-def test_approve_a_process_with_all_documentation_verified(_admin_user, client):
+def test_approve_a_process_with_all_documentation_verified(_admin_user,
+                                                           client):
     """
     Testa a situação onde um Processo de Vinculação é aprovado com todos os
     documentos verificados por um administrador
@@ -438,8 +529,11 @@ def test_approve_a_process_with_all_documentation_verified(_admin_user, client):
     user = mommy.make(User)
 
     processo = mommy.make('ProcessoVinculacao', user=user)
-    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
-                          verificado=True, _quantity=5)
+    arquivos = mommy.make(
+        'ArquivosProcessoVinculacao',
+        processo=processo,
+        verificado=True,
+        _quantity=5)
 
     data = json.dumps({'aprovado': True})
 
@@ -452,7 +546,8 @@ def test_approve_a_process_with_all_documentation_verified(_admin_user, client):
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_create_a_Gestor_object_when_a_process_is_approved(_admin_user, client):
+def test_create_a_Gestor_object_when_a_process_is_approved(_admin_user,
+                                                           client):
     """
     Testa se um novo gestor é criado quando um Processo de Vinculação é
     aprovado
@@ -462,7 +557,8 @@ def test_create_a_Gestor_object_when_a_process_is_approved(_admin_user, client):
     user = mommy.make(User)
 
     processo = mommy.make('ProcessoVinculacao', user=user)
-    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo, verificado=True)
+    arquivos = mommy.make(
+        'ArquivosProcessoVinculacao', processo=processo, verificado=True)
 
     data = json.dumps({'aprovado': True})
 
