@@ -195,6 +195,23 @@ def test_which_fields_returns_on_a_list_of_process(client):
     assert len(response.data[0]) == 0
 
 
+def test_returning_information_about_a_praca_on_a_process(client):
+    """
+    Testa o retorno de informações sobre a Praça em um Processo de Vinculação
+    """
+
+    praca = mommy.make('Praca')
+
+    mommy.make('ProcessoVinculacao', praca=praca)
+
+    fields = ('url', 'id_pub', 'nome', 'municipio', 'uf')
+    response = client.get(
+        reverse('gestor:processovinculacao-list'), format='json')
+
+    for field in fields:
+        assert field in response.data[0]['praca']
+
+
 def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
                                                        client):
     """
