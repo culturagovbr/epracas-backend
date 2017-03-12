@@ -26,6 +26,7 @@ from .models import ArquivosProcessoVinculacao
 from .serializers import GestorSerializer
 from .serializers import ProcessoVinculacaoSerializer
 from .serializers import ProcessoVinculacaoListSerializer
+from .serializers import ProcessoVinculacaoDetailSerializer
 from .serializers import ArquivosProcessoVinculacaoSerializer
 
 from .permissions import CommonUserOrReadOnly
@@ -39,7 +40,7 @@ class GestorViewSet(DefaultMixin, ModelViewSet):
     queryset = Gestor.objects.all()
     serializer_class = GestorSerializer
 
-    filter_fields = ('praca',)
+    filter_fields = ('praca', )
 
 
 class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
@@ -49,7 +50,10 @@ class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
 
     queryset = ProcessoVinculacao.objects.all()
     serializer_class = ProcessoVinculacaoSerializer
-    serializers = {'list': ProcessoVinculacaoListSerializer}
+    serializers = {
+        'list': ProcessoVinculacaoListSerializer,
+        'retrieve': ProcessoVinculacaoDetailSerializer,
+    }
 
     search_fields = ('gestor', 'praca')
 
@@ -98,9 +102,8 @@ class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
         arquivo = get_object_or_404(ArquivosProcessoVinculacao, pk=pk)
 
         self.check_object_permissions(request, arquivo)
-        serializer = ArquivosProcessoVinculacaoSerializer(arquivo,
-                                                          data=request.data,
-                                                          partial=True)
+        serializer = ArquivosProcessoVinculacaoSerializer(
+            arquivo, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
