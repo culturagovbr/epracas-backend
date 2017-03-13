@@ -179,7 +179,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 DOCUMENTS_ROOT = os.path.join(BASE_DIR, 'documents')
-MEDIA_URL = '/documents/'
+DOCUMENTS_URL = '/documents/'
 
 USE_DJANGO_JQUERY = False
 
