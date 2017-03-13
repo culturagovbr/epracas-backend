@@ -2,8 +2,6 @@ from django.conf import settings
 
 from rest_framework import serializers
 
-from gestor.serializers import GestorSerializer
-
 from .models import GrupoGestor
 from .models import Praca
 from .models import Parceiro
@@ -43,8 +41,12 @@ class PracaBaseSerializer(serializers.ModelSerializer, HeaderUploadSerializer):
     grupo_gestor = GrupoGestorSerializer(read_only=True)
 
     def get_gestor(self, obj):
-        serializer = GestorSerializer(obj.get_manager())
-        return serializer.data
+        if obj.get_manager():
+            from gestor.serializers import GestorSerializer
+            serializer = GestorSerializer(obj.get_manager())
+            return serializer.data
+        else:
+            return None
 
 
 class PracaListSerializer(PracaBaseSerializer):

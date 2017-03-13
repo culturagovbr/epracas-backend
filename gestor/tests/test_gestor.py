@@ -8,6 +8,8 @@ from rest_framework.reverse import reverse
 
 from model_mommy import mommy
 
+from authentication.tests.test_user import _common_user
+
 User = get_user_model()
 pytestmark = pytest.mark.django_db
 
@@ -43,7 +45,7 @@ def test_return_a_praca_with_manager_information(client):
 
     praca = mommy.make('Praca')
     user = mommy.make(User, full_name="Fulano")
-    gestor = mommy.make('Gestor', praca=praca, user=user)
+    gestor = mommy.make('Gestor', atual=True, praca=praca, user=user)
 
     response = client.get(reverse('pracas:praca-detail', kwargs={'pk':
                                                                  praca.pk}))
