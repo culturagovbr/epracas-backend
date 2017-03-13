@@ -212,6 +212,47 @@ def test_returning_information_about_a_praca_on_a_process(client):
         assert field in response.data[0]['praca']
 
 
+def test_returning_information_about_an_user_of_a_process(client):
+    """
+    Testa o retorno de informações publicas sobre o usuário que requisitou um
+    Processo de Vinculação com uma Praça.
+    """
+
+    praca = mommy.make('Praca')
+
+    mommy.make('ProcessoVinculacao', praca=praca)
+
+    fields = ('full_name', 'profile_picture_url')
+    response = client.get(
+        reverse('gestor:processovinculacao-list'), format='json')
+
+    for field in fields:
+        assert field in response.data[0]['user']
+        response.data[0]['user'].pop(field)
+
+    # assert len(response.data[0]['praca']) == 0
+
+
+def test_returning_information_about_an_user_of_a_process_detailed(_common_user, client):
+    """
+    Testa o retorno de informações sobre o usuário que requisitou um Processo
+    de Vinculação com uma Praça.
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca, user=_common_user)
+
+    fields = ('full_name',)
+    response = client.get(
+        reverse('gestor:processovinculacao-detail',
+                kwargs={'pk': processo.pk}),
+        format='json'
+    )
+
+    for field in fields:
+        assert field in response.data['user']
+
+
 def test_returning_fields_on_a_detailed_process_without_credentials(client):
     """
     Testa o retorno de informações detalhadas sobre um Processo de Vinculação,
