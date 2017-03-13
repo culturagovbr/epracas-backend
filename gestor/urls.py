@@ -16,7 +16,7 @@ processo_router = routers.NestedSimpleRouter(
 processo_router.register(
     r'documento',
     ArquivoProcessoViewSet,
-    base_name='documento')
+    )
 
 urlpatterns = [
     url(r'^', include(router.urls)),

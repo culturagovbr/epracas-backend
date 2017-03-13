@@ -64,6 +64,7 @@ class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
     permission_classes = (CommonUserOrReadOnly, )
 
     parser_classes = (JSONParser, MultiPartParser)
+    queryset = ArquivosProcessoVinculacao.objects.all()
 
     def list(self, request, processo_pk=None):
         processo = get_object_or_404(ProcessoVinculacao, pk=processo_pk)

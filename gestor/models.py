@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext as _
 
+from rest_framework.reverse import reverse
 from rest_framework.serializers import ValidationError
 
 from core.models import IdPubIdentifier
@@ -63,6 +64,12 @@ class ArquivosProcessoVinculacao(IdPubIdentifier):
         null=True,
         blank=True, )
 
+    def get_absolute_url(self):
+        app_name = self._meta.app_label
+        basename = self._meta.object_name.lower()
+        url = app_name + ':' + basename + '-detail'
+
+        return reverse(url, kwargs={'processo_pk': self.processo.pk, 'pk': self.pk})
 
 @receiver(pre_save, sender=ProcessoVinculacao)
 def validate_process(sender, instance, **kwargs):
