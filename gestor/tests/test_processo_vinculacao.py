@@ -387,7 +387,7 @@ def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
     }
 
     response = client.post(
-        reverse('gestor:documento-list', kwargs={'processo_pk': processo.pk}),
+        reverse('gestor:arquivosprocessovinculacao-list', kwargs={'processo_pk': processo.pk}),
         data,
         format='multipart')
 
@@ -415,7 +415,7 @@ def test_upload_files_to_a_process_using_diferent_credentials(
     }
 
     response = client.post(
-        reverse('gestor:documento-list', kwargs={'processo_pk': processo.pk}),
+        reverse('gestor:arquivosprocessovinculacao-list', kwargs={'processo_pk': processo.pk}),
         data,
         format='multipart')
 
@@ -441,7 +441,7 @@ def test_upload_files_to_a_process(_common_user, _create_temporary_file,
     }
 
     response = client.post(
-        reverse('gestor:documento-list', kwargs={'processo_pk': processo.pk}),
+        reverse('gestor:arquivosprocessovinculacao-list', kwargs={'processo_pk': processo.pk}),
         data,
         format='multipart')
 
@@ -468,7 +468,7 @@ def test_upload_a_bunch_of_files_to_a_process(_common_user, mocker, client):
     }
 
     response = client.post(
-        reverse('gestor:documento-list', kwargs={'processo_pk': processo.pk}),
+        reverse('gestor:arquivosprocessovinculacao-list', kwargs={'processo_pk': processo.pk}),
         data,
         format='multipart')
 
@@ -529,7 +529,7 @@ def test_common_user_can_approve_process_documentation(_common_user, client):
 
     response = client.patch(
         reverse(
-            'gestor:documento-detail',
+            'gestor:arquivosprocessovinculacao-detail',
             kwargs={'processo_pk': processo.pk,
                     'pk': arquivo.pk}),
         data,
@@ -551,7 +551,7 @@ def test_admin_user_can_approve_process_documentation(_admin_user, client):
 
     response = client.patch(
         reverse(
-            'gestor:documento-detail',
+            'gestor:arquivosprocessovinculacao-detail',
             kwargs={'processo_pk': processo.pk,
                     'pk': arquivo.pk}),
         data,
