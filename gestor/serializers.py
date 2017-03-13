@@ -28,6 +28,7 @@ class ProcessoVinculacaoListSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     concluido = serializers.BooleanField(source='aprovado', read_only=True)
     praca = serializers.SerializerMethodField(read_only=True)
+    user = UserSerializer(read_only=True)
 
     def get_praca(self, obj):
         from pracas.serializers import PracaListSerializer
@@ -43,6 +44,7 @@ class ProcessoVinculacaoListSerializer(serializers.ModelSerializer):
 class ProcessoVinculacaoDetailSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     praca = serializers.SerializerMethodField(read_only=True)
+    user = UserSerializer(read_only=True)
 
     def get_praca(self, obj):
         from pracas.serializers import PracaListSerializer
