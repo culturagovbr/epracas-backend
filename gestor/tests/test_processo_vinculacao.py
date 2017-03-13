@@ -342,6 +342,32 @@ def test_returning_information_about_a_Praca_on_a_detailed_process(
     assert len(response.data['praca']) == 0
 
 
+def test_returning_information_about_the_files_of_a_process_detailed(_common_user, client):
+    """
+    Testa o retorno de informações sobre os arquivos de um Processo de
+    Vinculação
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca, user=_common_user)
+    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
+                          _quantity=5)
+
+    response = client.get(
+        reverse(
+            'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+        format='json')
+
+    fields = ('url', 'id_pub', 'data_envio', 'tipo', 'verificado', 'comentarios',
+              'verificado_por', 'arquivo')
+
+    for field in fields:
+        assert field in response.data['files'][0]
+        response.data['files'][0].pop(field)
+
+    assert len(response.data['files'][0]) == 0
+
+
 def test_upload_files_to_a_process_without_credentials(_create_temporary_file,
                                                        client):
     """
