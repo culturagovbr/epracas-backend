@@ -229,11 +229,24 @@ def test_update_praca_information_as_admin_user(_admin_user, client):
     praca_data = json.dumps({'nome': 'Praça das Artes e Cultura'})
 
     response = client.patch(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}),
+        _detail(kwargs={'pk': praca.pk}),
         praca_data,
         content_type="application/json")
 
     assert response.status_code == status.HTTP_200_OK
+
+
+def test_excluir_praca_como_usuario_anonimo(client):
+    """
+    Testa a exclusão de uma Praça por um usuário sem credenciais de
+    identificação
+    """
+
+    praca = mommy.make(Praca)
+
+    response = client.delete(_detail(kwargs={'pk': praca.pk}))
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
 def test_return_five_nearest_pracas(client):
