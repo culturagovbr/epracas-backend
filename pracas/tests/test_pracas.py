@@ -249,6 +249,18 @@ def test_excluir_praca_como_usuario_anonimo(client):
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
+def test_excluir_praca_como_usuario_identificado(_common_user, client):
+    """
+    Testa a exclusão de uma Praça por um usuário comum identificado.
+    """
+
+    praca = mommy.make(Praca)
+
+    response = client.delete(_detail(kwargs={'pk': praca.pk}))
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
 def test_return_five_nearest_pracas(client):
     """
     Retorna as cinco pracas mais proximas dado uma coordenada
@@ -364,6 +376,35 @@ def test_retorna_200_ok_enpoint_GG(client):
     assert "{}:{}".format(namespace.namespace, namespace.url_name) == 'pracas:grupogestor-list'
 
 
+def test_retornar_informacoes_sobre_GG(client):
+    """
+    Testa o retorno de informações sobre o Grupo Gestor de uma Praça
+    """
+
+    gg = mommy.make('GrupoGestor')
+
+    response = client.get(reverse('pracas:grupogestor-detail', kwargs={'pk':
+                                                                       gg.pk}))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['praca']
+
+
+def test_cria_um_novo_grupo_gestor_sem_credenciais(client):
+    """
+    Testa a criação de um novo Grupo Gestor de uma Praça
+    """
+
+    praca = mommy.make('Praca')
+    data = json.dumps({'praca': str(praca.pk), 'previsao_espacos': 5})
+
+    response = client.post(reverse('pracas:grupogestor-list'), data,
+                           content_type="application/json")
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response.data['previsao_espacos'] == 5
+
+
 def test_retorna_informacoes_sobre_GG(client):
     """
     Testa o retorno de informações sobre o Grupo Gestor de uma Praça
@@ -386,7 +427,15 @@ def test_retorna_qtde_membros_GG(client):
     praca = mommy.make(Praca)
     gg = mommy.make('GrupoGestor', praca=praca, previsao_espacos=5)
 
-    response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
+    response = client.get(_detail(kwargs={'pk': praca.pk}))
 
     assert response.data['grupo_gestor']['previsao_espacos'] == 5
+
+
+def test_cadastra_um_novo_membro_no_GG(client):
+    """
+    Testa a persistencia de um novo membro no Grupo Gestor de uma Praça
+    """
+
+    praca = mommy.make(Praca)
+    gg = mommy.make('GrupoGestor', praca=praca)
