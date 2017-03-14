@@ -28,14 +28,16 @@ def test_return_manager_data_from_endpoint(client):
     Testa o retorno de informações sobre um gestor de uma Praça
     """
 
-    gestor = mommy.make('Gestor')
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca)
 
     response = client.get(reverse('gestor:gestor-detail', kwargs={'pk': gestor.pk}))
 
+    fields = ('url', 'nome', 'email', 'praca')
+
     assert response.status_code == status.HTTP_200_OK
-    assert 'url' in response.data
-    assert 'nome' in response.data
-    assert 'email' in response.data
+    for field in fields:
+        assert field in response.data
 
 
 def test_return_a_praca_with_manager_information(client):
@@ -91,6 +93,25 @@ def test_return_all_managers_from_a_praca(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 2
+
+
+@pytest.mark.skip
+def test_delete_a_manager_from_a_praca_with_credentials(_common_user, client):
+    """
+    Testa finalizar a gestão de um Gestor em uma Praça
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user)
+
+    response = client.delete(reverse('gestor:gestor-detail',
+                                     kwargs={'pk': gestor.pk}))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    response = client.get(reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
+
+    assert not response.data['gestor']
 
 
 @pytest.mark.skip
