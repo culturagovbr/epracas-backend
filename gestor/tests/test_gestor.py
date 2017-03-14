@@ -6,6 +6,8 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.reverse import reverse
 
+from core.helper_functions import _
+
 from model_mommy import mommy
 
 from authentication.tests.test_user import _common_user
@@ -13,13 +15,24 @@ from authentication.tests.test_user import _common_user
 User = get_user_model()
 pytestmark = pytest.mark.django_db
 
+_detail = _('gestor:gestor-detail')
+"""
+Metodo _detail() que retorna a URL gestor:gestor-detail.
+Aceita parametros como kwargs.
+"""
+
+_list = _('gestor:gestor-list')
+"""
+Metodo _list() retorna a URL gestor:gestor-list
+"""
+
 
 def test_return_200_ok_gestor_endpoint(client):
     """
     Testa retorno 200 OK do endpoint dos Gestores
     """
 
-    response = client.get(reverse('gestor:gestor-list'))
+    response = client.get(_list())
     assert response.status_code == status.HTTP_200_OK
 
 
@@ -31,13 +44,30 @@ def test_return_manager_data_from_endpoint(client):
     praca = mommy.make('Praca')
     gestor = mommy.make('Gestor', praca=praca)
 
-    response = client.get(reverse('gestor:gestor-detail', kwargs={'pk': gestor.pk}))
+    response = client.get(_detail(kwargs={'pk': gestor.pk}))
 
     fields = ('url', 'nome', 'email', 'praca')
 
     assert response.status_code == status.HTTP_200_OK
     for field in fields:
         assert field in response.data
+
+
+def test_return_praca_information_on_a_gestor_view(client):
+    """
+    Testa o retorno de determinadas informações sobre uma Praça no registro do
+    seu atual Gestor.
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca)
+
+    fields = ('nome', 'url', 'municipio', 'uf', 'regiao')
+
+    response = client.get(_detail(kwargs={'pk': gestor.pk}))
+
+    for field in fields:
+        assert field in response.data['praca']
 
 
 def test_return_a_praca_with_manager_information(client):
@@ -82,14 +112,12 @@ def test_return_all_managers_from_a_praca(client):
     gestores_praca_0 = mommy.make('Gestor', praca=pracas[0], _quantity=4)
     gestores_praca_1 = mommy.make('Gestor', praca=pracas[1], _quantity=2)
 
-    response = client.get(reverse('gestor:gestor-list') +
-                          '?praca={}'.format(pracas[0].pk))
+    response = client.get(_list() + '?praca={}'.format(pracas[0].pk))
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 4
 
-    response = client.get(reverse('gestor:gestor-list') +
-                          '?praca={}'.format(pracas[1].pk))
+    response = client.get(_list() + '?praca={}'.format(pracas[1].pk))
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 2
@@ -104,8 +132,7 @@ def test_delete_a_manager_from_a_praca_with_credentials(_common_user, client):
     praca = mommy.make('Praca')
     gestor = mommy.make('Gestor', praca=praca, user=_common_user)
 
-    response = client.delete(reverse('gestor:gestor-detail',
-                                     kwargs={'pk': gestor.pk}))
+    response = client.delete(_detail(kwargs={'pk': gestor.pk}))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
@@ -129,7 +156,7 @@ def test_persist_a_gestors_address(client):
     }
 
     response = client.post(
-            reverse('gestor:gestor-list'),
+            _list(),
             gestor,
             format='json'
     )
@@ -156,7 +183,7 @@ def test_update_a_gestors_address(client):
     }
 
     post = client.post(
-            reverse('gestor:gestor-list'),
+            _list(),
             gestor,
             format='json'
     )
@@ -165,7 +192,7 @@ def test_update_a_gestors_address(client):
     id_pub = json.loads(bytes.decode(post.content)).pop('id_pub')
 
     update = client.put(
-            reverse('gestor:gestor-detail', kwargs={'pk': id_pub}),
+            _detail(kwargs={'pk': id_pub}),
             json.dumps({
                 'nome': 'Fulano Cicrano',
                 'endereco': 'Conj 11, Casa 20'
