@@ -9,12 +9,17 @@ from django.core.urlresolvers import resolve
 
 from rest_framework import status
 
+from core.helper_functions import _
+
 from model_mommy import mommy
 
 from pracas.models import Praca
 
 from authentication.tests.test_user import _admin_user
 from authentication.tests.test_user import _common_user
+
+_list = _('pracas:praca-list')
+_detail = _('pracas:praca-detail')
 
 User = get_user_model()
 pytestmark = pytest.mark.django_db
@@ -30,7 +35,7 @@ def test_get_URL_OK_from_Pracas(client):
     Retorna 200 OK para a URL do endpoint que lista as Praças.
     """
 
-    response = client.get(reverse('pracas:praca-list'), format='json')
+    response = client.get(_list(), format='json')
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -42,7 +47,7 @@ def test_return_a_list_of_Pracas(client):
 
     mommy.make(Praca, _quantity=5)
 
-    response = client.get(reverse('pracas:praca-list'), format='json')
+    response = client.get(_list(), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response.data, list)
@@ -61,7 +66,7 @@ def test_if_an_instance_of_list_result_has_some_properties(client):
 
     praca = mommy.make(Praca, _quantity=5)
 
-    response = client.get(reverse('pracas:praca-list'), format='json')
+    response = client.get(_list(), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 5
@@ -76,9 +81,7 @@ def test_returning_a_praca(client):
 
     pracas = mommy.make(Praca, _quantity=5)
 
-    response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk': pracas[0].pk}),
-        format='json')
+    response = client.get(_detail(kwargs={'pk': pracas[0].pk}), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     assert str(pracas[0].pk) in response.data['id_pub']
@@ -98,8 +101,7 @@ def test_return_a_praca_with_some_properties(client):
 
     praca = mommy.make(Praca)
 
-    response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}), format='json')
+    response = client.get(_detail(kwargs={'pk': praca.pk}), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     for field in fields:
@@ -114,8 +116,7 @@ def test_not_returning_a_praca_giving_wrong_args(client):
 
     mommy.make(Praca)
 
-    response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk': 1}), format='json')
+    response = client.get(_detail(kwargs={'pk': 1}), format='json')
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -135,7 +136,7 @@ def test_create_a_new_praca_without_proper_identification(client):
         'situacao': 'i'
     }
 
-    response = client.post(reverse('pracas:praca-list'), praca, format='json')
+    response = client.post(_list(), praca, format='json')
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
@@ -155,7 +156,7 @@ def test_create_a_new_praca_as_common_user(_common_user, client):
         'situacao': 'i'
     }
 
-    response = client.post(reverse('pracas:praca-list'), praca, format='json')
+    response = client.post(_list(), praca, format='json')
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -176,7 +177,7 @@ def test_create_a_new_praca_as_admin_user(_admin_user, client):
         'situacao': 'i'
     }
 
-    response = client.post(reverse('pracas:praca-list'), praca, format='json')
+    response = client.post(_list(), praca, format='json')
 
     assert response.status_code == status.HTTP_201_CREATED
 
@@ -192,7 +193,7 @@ def test_update_Praca_information_without_credentials(client):
     praca_data = {'nome': 'Praça das Artes e Cultura'}
 
     response = client.patch(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}),
+        _detail(kwargs={'pk': praca.pk}),
         praca_data,
         content_type="application/json")
 
@@ -210,7 +211,7 @@ def test_update_Praca_information_as_common_user(_common_user, client):
     praca_data = json.dumps({'nome': 'Praça das Artes e Cultura'})
 
     response = client.patch(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}),
+        _detail(kwargs={'pk': praca.pk}),
         praca_data,
         content_type="application/json")
 
@@ -269,9 +270,7 @@ def test_defining_a_name_if_user_leave_it_blank(_admin_user, client):
 
     praca = mommy.make(Praca, nome="", municipio="Brasilia", uf="df")
 
-    response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.id_pub}),
-        format='json')
+    response = client.get(_detail(kwargs={'pk': praca.id_pub}), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['nome'] == "Praça CEU de Brasilia - DF"
@@ -288,9 +287,7 @@ def test_defining_a_slug_from_the_name(_admin_user, client):
 
     slug = slugify(praca.nome)
 
-    response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.id_pub}),
-        format='json')
+    response = client.get(_detail(kwargs={'pk': praca.id_pub}), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['slug'] == slug
@@ -308,9 +305,7 @@ def test_defining_a_name_and_a_slug(client):
 
     slug = slugify(praca.nome)
 
-    response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.id_pub}),
-        format='json')
+    response = client.get(_detail(kwargs={'pk': praca.id_pub}), format='json')
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['slug'] == slug
@@ -364,8 +359,7 @@ def test_retorna_informacoes_sobre_GG(client):
     praca = mommy.make(Praca)
     gg = mommy.make('GrupoGestor', praca=praca)
 
-    response = client.get(
-        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
+    response = client.get(_detail(kwargs={'pk': praca.pk}))
 
     assert response.data['grupo_gestor']
 
