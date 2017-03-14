@@ -641,6 +641,8 @@ def test_create_a_Gestor_object_when_a_process_is_approved(_admin_user,
 
     assert len(gestores) == 1
 
+    assert gestores[0].praca.get_manager()
+
 
 def test_return_today_date_when_create_a_new_process(client):
     """
