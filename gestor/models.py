@@ -95,5 +95,5 @@ def create_praca_manager(sender, instance, **kwargs):
     aprovado.
     """
     if instance.aprovado:
-        gestor = Gestor(praca=instance.praca, user=instance.user)
+        gestor = Gestor(praca=instance.praca, user=instance.user, atual=True)
         gestor.save()
