@@ -261,6 +261,31 @@ def test_excluir_praca_como_usuario_identificado(_common_user, client):
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
+def test_excluir_praca_como_gestor_de_praca(_common_user, client):
+    """
+    Testa a exclusão de uma Praça por seu próprio Gestor
+    """
+
+    praca = mommy.make(Praca)
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+
+    response = client.delete(_detail(kwargs={'pk': praca.pk}))
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_excluir_praca_como_administrador(_admin_user, client):
+    """
+    Testa a exclusão de uma Praça por um administrador
+    """
+
+    praca = mommy.make(Praca)
+
+    response = client.delete(_detail(kwargs={'pk': praca.pk}))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+
 def test_return_five_nearest_pracas(client):
     """
     Retorna as cinco pracas mais proximas dado uma coordenada
