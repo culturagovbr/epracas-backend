@@ -5,12 +5,10 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import MultiPartParser
 
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from rest_framework.response import Response
 
-from rest_framework.views import APIView
 from rest_framework.viewsets import ViewSet
 from rest_framework.viewsets import ModelViewSet
 
