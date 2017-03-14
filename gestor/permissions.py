@@ -8,6 +8,7 @@ MANAGER_SAFE_METHODS = ADMIN_SAFE_METHODS + ('POST', )
 
 ADMIN_FIELDS = ('aprovado', 'valido', 'verificado')
 
+
 class CommonUserOrReadOnly(BasePermission):
     """
     Permite criação apenas a usuários comuns, alteração e exclusão a usuários
@@ -23,5 +24,5 @@ class CommonUserOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         if bool(set(ADMIN_FIELDS).intersection(request.data)):
             return request.user.is_staff
-        else: 
+        else:
             return obj.user == request.user or request.user.is_staff
