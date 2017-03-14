@@ -14,7 +14,7 @@ class GestorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Gestor
-        fields = ('url', 'nome', 'email')
+        fields = ('url', 'nome', 'email', 'praca')
 
 
 class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
