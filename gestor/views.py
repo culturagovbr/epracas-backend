@@ -96,8 +96,7 @@ class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
         arquivo = get_object_or_404(ArquivosProcessoVinculacao, pk=pk)
 
         serializer = ArquivosProcessoVinculacaoSerializer(arquivo)
-        if serializer.is_valid():
-            return Response(serializer.data)
+        return Response(serializer.data)
 
     def partial_update(self, request, pk=None, processo_pk=None):
         arquivo = get_object_or_404(ArquivosProcessoVinculacao, pk=pk)
