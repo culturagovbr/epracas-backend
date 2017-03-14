@@ -11,6 +11,13 @@ class GestorSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     nome = serializers.CharField(source='user.full_name')
     email = serializers.EmailField(source='user.email')
+    praca = serializers.SerializerMethodField()
+
+    def get_praca(self, obj):
+        from pracas.serializers import PracaListSerializer
+        serializer = PracaListSerializer(
+            obj.praca, fields=('nome', 'url', 'municipio', 'uf', 'regiao'))
+        return serializer.data
 
     class Meta:
         model = Gestor
@@ -22,8 +29,8 @@ class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ArquivosProcessoVinculacao
-        fields = ('url', 'id_pub', 'data_envio', 'tipo', 'verificado', 'comentarios',
-                  'verificado_por', 'arquivo')
+        fields = ('url', 'id_pub', 'data_envio', 'tipo', 'verificado',
+                  'comentarios', 'verificado_por', 'arquivo')
 
 
 class ProcessoVinculacaoListSerializer(serializers.ModelSerializer):

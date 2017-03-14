@@ -7,6 +7,27 @@ from .models import Praca
 from .models import Parceiro
 
 
+class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+    """
+    A ModelSerializer that takes an additional `fields` argument that
+    controls which fields should be displayed.
+    """
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields.keys())
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+
 class GrupoGestorSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -18,15 +39,18 @@ class HeaderUploadSerializer(serializers.Serializer):
     header_url = serializers.SerializerMethodField()
 
     def get_header_url(self, obj):
-        request = self.context.get('request')
-        is_secure = request.is_secure()
-        host = request.get_host()
-        media_url = settings.MEDIA_URL
-        path = obj.header_img
-        if is_secure:
-            return "https://{}{}{}".format(host, media_url, path)
-        else:
-            return "http://{}{}{}".format(host, media_url, path)
+        try:
+            request = self.context.get('request')
+            is_secure = request.is_secure()
+            host = request.get_host()
+            media_url = settings.MEDIA_URL
+            path = obj.header_img
+            if is_secure:
+                return "https://{}{}{}".format(host, media_url, path)
+            else:
+                return "http://{}{}{}".format(host, media_url, path)
+        except:
+            return None
 
 
 class PracaBaseSerializer(serializers.ModelSerializer, HeaderUploadSerializer):
@@ -49,7 +73,7 @@ class PracaBaseSerializer(serializers.ModelSerializer, HeaderUploadSerializer):
             return None
 
 
-class PracaListSerializer(PracaBaseSerializer):
+class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
 
     class Meta:
         model = Praca
@@ -59,6 +83,7 @@ class PracaListSerializer(PracaBaseSerializer):
                 'nome',
                 'municipio',
                 'uf',
+                'regiao',
                 'modelo',
                 'modelo_descricao',
                 'situacao',
