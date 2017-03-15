@@ -14,15 +14,17 @@ class IsAdminOrManagerOrReadOnly(BasePermission):
 
     def has_permission(self, request, view):
         return (request.method in SAFE_METHODS or
-                request.method in MANAGER_SAFE_METHODS and request.user and
+                request.method in MANAGER_SAFE_METHODS and
                 is_authenticated(request.user) or
-                request.user and request.user.is_staff)
+                request.user.is_staff)
 
     def has_object_permission(self, request, view, obj):
         if request.method in SAFE_METHODS:
             return True
         elif request.method in MANAGER_SAFE_METHODS:
             try:
-                return request.user.is_staff or obj.manager.user == request.user
+                return request.user.is_staff or obj.gestor.user == request.user
             except:
                 return False
+        else:
+            return request.user.is_staff

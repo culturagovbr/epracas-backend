@@ -5,6 +5,7 @@ from rest_framework import serializers
 from .models import GrupoGestor
 from .models import Praca
 from .models import Parceiro
+from .models import ImagemPraca
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -137,6 +138,15 @@ class ParceiroSerialier(serializers.ModelSerializer):
             'acoes',
             'tempo_parceria'
         )
+
+
+class ImagemPracaSerializer(serializers.ModelSerializer):
+    praca = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+
+    class Meta:
+        model = ImagemPraca
+        fields = ('url', 'praca', 'arquivo', 'header')
 
 
 class DistanciaSerializer(PracaListSerializer):

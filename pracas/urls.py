@@ -1,12 +1,14 @@
 from django.conf.urls import include, url
 
-from rest_framework import routers
+from rest_framework_nested import routers
 
-from .views import PracaUploadHeader
-from .views import PracaVinculoUpload
+# from .views import PracaUploadHeader
+# from .views import PracaVinculoUpload
 from .views import PracaViewSet
 from .views import DistanceView
 from .views import GrupoGestorViewSet
+
+from .views import ImagemPracaViewSet
 
 from .views import ParceiroViewSet
 
@@ -17,18 +19,11 @@ router.register(r'pracas', PracaViewSet)
 router.register(r'parceiros', ParceiroViewSet)
 router.register(r'grupogestor', GrupoGestorViewSet)
 
+imagem_router = routers.NestedSimpleRouter(router, r'pracas', lookup='praca')
+imagem_router.register(r'imagens', ImagemPracaViewSet)
+
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^pracas/(?P<pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/header_upload/$',
-        PracaUploadHeader.as_view(),
-        name='praca-header_upload'
-        ),
-    url(r'^pracas/(?P<pk>[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12})/vinculo_upload/$',
-        PracaVinculoUpload.as_view(),
-        name='praca-vinculo_upload'
-        ),
-    url(r'^distancia/$',
-        DistanceView.as_view(),
-        name='distancia'
-        ),
+    url(r'^', include(imagem_router.urls)),
+    url(r'^distancia/$', DistanceView.as_view(), name='distancia'),
 ]

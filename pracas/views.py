@@ -20,10 +20,12 @@ from gestor.serializers import ProcessoVinculacaoSerializer
 from .models import Praca
 from .models import Parceiro
 from .models import GrupoGestor
+from .models import ImagemPraca
 
 from .serializers import PracaSerializer
 from .serializers import PracaListSerializer
-from .serializers import HeaderUploadSerializer
+from .serializers import ImagemPracaSerializer
+# from .serializers import HeaderUploadSerializer
 from .serializers import DistanciaSerializer
 from .serializers import GrupoGestorSerializer
 
@@ -44,6 +46,25 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
     serializers = {
             'list': PracaListSerializer,
             }
+
+
+class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
+
+    serializer_class = ImagemPracaSerializer
+    queryset = ImagemPraca.objects.all()
+
+    def create(self, request, praca_pk=None):
+        praca = Praca.objects.get(pk=praca_pk)
+
+        file_list = []
+        if request.FILES:
+            for afile in request.FILES.getlist('arquivo'):
+                file_list.append(ImagemPraca.objects.create(praca=praca,
+                                                            **request.data))
+
+        serializer = ImagemPracaSerializer(file_list, many=True)
+        return Response(serializer.data, status=201)
+
 
 
 class PracaUploadHeader(DefaultMixin, APIView):

@@ -8,6 +8,7 @@ from .models import ArquivosProcessoVinculacao
 
 
 class GestorSerializer(serializers.ModelSerializer):
+    
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     nome = serializers.CharField(source='user.full_name')
     email = serializers.EmailField(source='user.email')

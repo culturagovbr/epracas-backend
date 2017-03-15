@@ -374,16 +374,17 @@ def test_upload_an_image_as_public_page_header(_create_temporary_file, client):
     test_file.name = 'header.jpg'
 
     response = client.post(
-        reverse('pracas:praca-header_upload', kwargs={'pk': praca.id_pub}),
-        {'header_img': test_file},
-        format='multipart', )
+        reverse('pracas:imagempraca-list', kwargs={'praca_pk': praca.pk}),
+        {'arquivo': test_file, 'header': True},
+        format='multipart')
 
-    assert response.status_code == status.HTTP_200_OK
-    assert 'header_url' in response.data
-    assert 'header.jpg' in response.data['header_url']
+    assert response.status_code == status.HTTP_201_CREATED
+    assert 'arquivo' in response.data
+    assert not response.data['header']
+    assert 'header.jpg' in response.data['arquivo']
 
-    download_header = client.get(response.data['header_url'])
-    assert download_header.status_code == status.HTTP_200_OK
+    # download_header = client.get(response.data['header_url'])
+    # assert download_header.status_code == status.HTTP_200_OK
 
 
 def test_retorna_200_ok_enpoint_GG(client):
@@ -398,7 +399,7 @@ def test_retorna_200_ok_enpoint_GG(client):
 
     assert response.status_code == status.HTTP_200_OK
 
-    assert "{}:{}".format(namespace.namespace, namespace.url_name) == 'pracas:grupogestor-list'
+    assert f"{namespace.namespace}:{namespace.url_name}" == 'pracas:grupogestor-list'
 
 
 def test_retornar_informacoes_sobre_GG(client):

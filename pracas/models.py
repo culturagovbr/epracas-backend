@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext as _
 
+from rest_framework.reverse import reverse
 from rest_localflavor.br.br_states import STATE_CHOICES
 
 from core.choices import MODELO_CHOICES
@@ -124,6 +125,19 @@ class Praca(IdPubIdentifier):
         ordering = ['uf', 'municipio']
         verbose_name = 'praca'
         verbose_name_plural = 'pracas'
+
+
+class ImagemPraca(IdPubIdentifier):
+    praca = models.ForeignKey(Praca, related_name='imagem')
+    arquivo = models.FileField(blank=True, upload_to=upload_header_to)
+    header = models.BooleanField(default=False)
+
+    def get_absolute_url(self):
+        app_name = self._meta.app_label
+        basename = self._meta.object_name.lower()
+        url = app_name + ':' + basename + '-detail'
+
+        return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})
 
 
 class Parceiro(IdPubIdentifier):
