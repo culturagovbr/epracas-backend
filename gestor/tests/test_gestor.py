@@ -46,7 +46,7 @@ def test_return_manager_data_from_endpoint(client):
 
     response = client.get(_detail(kwargs={'pk': gestor.pk}))
 
-    fields = ('url', 'nome', 'email', 'praca')
+    fields = ('url', 'user_id_pub', 'nome', 'email', 'praca')
 
     assert response.status_code == status.HTTP_200_OK
     for field in fields:

@@ -8,10 +8,11 @@ from .models import ArquivosProcessoVinculacao
 
 
 class GestorSerializer(serializers.ModelSerializer):
-    
+
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     nome = serializers.CharField(source='user.full_name')
     email = serializers.EmailField(source='user.email')
+    user_id_pub = serializers.CharField(source='user.id_pub')
     praca = serializers.SerializerMethodField()
 
     def get_praca(self, obj):
@@ -22,7 +23,7 @@ class GestorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Gestor
-        fields = ('url', 'nome', 'email', 'praca')
+        fields = ('url', 'user_id_pub', 'nome', 'email', 'praca')
 
 
 class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
