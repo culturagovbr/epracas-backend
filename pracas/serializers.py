@@ -36,25 +36,7 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class HeaderUploadSerializer(serializers.Serializer):
-    header_url = serializers.SerializerMethodField()
-
-    def get_header_url(self, obj):
-        try:
-            request = self.context.get('request')
-            is_secure = request.is_secure()
-            host = request.get_host()
-            media_url = settings.MEDIA_URL
-            path = obj.header_img
-            if is_secure:
-                return "https://{}{}{}".format(host, media_url, path)
-            else:
-                return "http://{}{}{}".format(host, media_url, path)
-        except:
-            return None
-
-
-class PracaBaseSerializer(serializers.ModelSerializer, HeaderUploadSerializer):
+class PracaBaseSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     modelo_descricao = serializers.CharField(
             source='get_modelo_display',
@@ -89,7 +71,7 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
                 'modelo_descricao',
                 'situacao',
                 'situacao_descricao',
-                'header_url',
+                'header_img',
                 'gestor',
                 )
         read_only_fields = ('gestor',)
@@ -115,7 +97,7 @@ class PracaSerializer(PracaBaseSerializer):
                 'modelo_descricao',
                 'situacao',
                 'situacao_descricao',
-                'header_url',
+                'header_img',
                 'lat',
                 'long',
                 'gestor',
@@ -171,7 +153,7 @@ class DistanciaSerializer(PracaListSerializer):
                 'modelo_descricao',
                 'situacao',
                 'situacao_descricao',
-                'header_url',
+                'header_img',
                 'latlong',
                 'distancia',
         )

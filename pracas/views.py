@@ -1,21 +1,11 @@
-from django.shortcuts import get_object_or_404
-
-from rest_framework.parsers import MultiPartParser
-from rest_framework.parsers import FormParser
-from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from oidc_auth.authentication import JSONWebTokenAuthentication
 
 from core.views import DefaultMixin
 from core.views import MultiSerializerViewSet
-
-from gestor.models import ProcessoVinculacao
-from gestor.models import ArquivosProcessoVinculacao
-from gestor.serializers import ProcessoVinculacaoSerializer
 
 from .models import Praca
 from .models import Parceiro
@@ -25,7 +15,6 @@ from .models import ImagemPraca
 from .serializers import PracaSerializer
 from .serializers import PracaListSerializer
 from .serializers import ImagemPracaSerializer
-# from .serializers import HeaderUploadSerializer
 from .serializers import DistanciaSerializer
 from .serializers import GrupoGestorSerializer
 
@@ -56,59 +45,13 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
     def create(self, request, praca_pk=None):
         praca = Praca.objects.get(pk=praca_pk)
 
-        file_list = []
-        if request.FILES:
-            for afile in request.FILES.getlist('arquivo'):
-                file_list.append(ImagemPraca.objects.create(praca=praca,
-                                                            **request.data))
+        if request.data['header']:
+            praca.header_img = request.FILES['arquivo']
+            praca.save()
 
-        serializer = ImagemPracaSerializer(file_list, many=True)
+        serializer = PracaListSerializer(praca)
+
         return Response(serializer.data, status=201)
-
-
-
-class PracaUploadHeader(DefaultMixin, APIView):
-
-    parser_classes = (MultiPartParser, FormParser, )
-
-    def post(self, request, pk):
-        praca = get_object_or_404(Praca, pk=pk)
-        praca.header_img = request.FILES['header_img']
-        praca.clean_fields()
-        praca.save()
-
-        serializer = HeaderUploadSerializer(
-                praca,
-                context={'request': request})
-        return Response(serializer.data)
-
-
-class PracaVinculoUpload(DefaultMixin, APIView):
-
-    parser_classes = (JSONParser, MultiPartParser, FormParser)
-    authentication_classes = (JSONWebTokenAuthentication,)
-
-    def post(self, request, pk):
-        user = request.user
-        praca = get_object_or_404(Praca, pk=pk)
-
-        processo, created = ProcessoVinculacao.objects.get_or_create(
-            praca=praca,
-            defaults={'user': user, 'praca': praca}
-            )
-
-        for tipo in request.FILES:
-            arq = ArquivosProcessoVinculacao(
-                processo=processo,
-                tipo=tipo,
-                arquivo=request.FILES[tipo])
-            arq.clean_fields()
-            arq.save()
-
-        serializer = ProcessoVinculacaoSerializer(
-            processo,
-            context={'request': request})
-        return Response(serializer.data)
 
 
 class DistanceView(DefaultMixin, APIView):

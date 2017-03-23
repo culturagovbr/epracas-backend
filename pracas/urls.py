@@ -2,8 +2,6 @@ from django.conf.urls import include, url
 
 from rest_framework_nested import routers
 
-# from .views import PracaUploadHeader
-# from .views import PracaVinculoUpload
 from .views import PracaViewSet
 from .views import DistanceView
 from .views import GrupoGestorViewSet
