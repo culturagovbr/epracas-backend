@@ -41,7 +41,7 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
 class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAdminOrManagerOrReadOnly,)
 
     serializer_class = ImagemPracaSerializer
     queryset = ImagemPraca.objects.all()
