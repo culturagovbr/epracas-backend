@@ -97,7 +97,7 @@ def test_return_a_praca_with_some_properties(client):
 
     fields = ('url', 'id_pub', 'nome', 'slug', 'municipio', 'uf', 'modelo',
               'modelo_descricao', 'situacao', 'situacao_descricao',
-              'header_url')
+              'header_img')
 
     praca = mommy.make(Praca)
 
@@ -293,7 +293,7 @@ def test_return_five_nearest_pracas(client):
 
     fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'modelo',
               'modelo_descricao', 'situacao', 'situacao_descricao',
-              'header_url')
+              'header_img')
 
     data = {'lat': -15.7833, 'long': -47.9167}
 
@@ -379,12 +379,11 @@ def test_upload_an_image_as_public_page_header(_create_temporary_file, client):
         format='multipart')
 
     assert response.status_code == status.HTTP_201_CREATED
-    assert 'arquivo' in response.data
-    assert not response.data['header']
-    assert 'header.jpg' in response.data['arquivo']
+    assert 'header_img' in response.data
+    assert 'header.jpg' in response.data['header_img']
 
-    # download_header = client.get(response.data['header_url'])
-    # assert download_header.status_code == status.HTTP_200_OK
+    download_header = client.get(response.data['header_img'])
+    assert download_header.status_code == status.HTTP_200_OK
 
 
 def test_retorna_200_ok_enpoint_GG(client):
