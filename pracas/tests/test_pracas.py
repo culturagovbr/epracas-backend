@@ -20,6 +20,7 @@ from authentication.tests.test_user import _common_user
 
 _list = _('pracas:praca-list')
 _detail = _('pracas:praca-detail')
+_imagem_list = _('pracas:imagempraca-list')
 
 User = get_user_model()
 pytestmark = pytest.mark.django_db
@@ -359,6 +360,46 @@ def test_defining_a_name_and_a_slug(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['slug'] == slug
+
+
+def test_upload_an_image_as_public_page_header_wo_credentials(
+        _create_temporary_file, client):
+    """
+    Testa o envio de uma imagem para ser utilizada no cabeçalho da pagina
+    publica de uma Praça, sem credenciais de identificação
+    """
+
+    praca = mommy.make(Praca)
+
+    test_file = _create_temporary_file
+    test_file.name = 'header.jpg'
+
+    response = client.post(
+        _imagem_list(kwargs={'praca_pk': praca.pk}),
+        data={'header': True, 'arquivo': test_file},
+        format='multipart')
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_upload_an_image_as_public_page_header_w_credentials(
+        _create_temporary_file, _common_user, client):
+    """
+    Testa o envio de uma imagem para ser utilizada no cabeçalho da pagina
+    publica de uma Praça, com credenciais, porém, sem permissões de gestor da
+    Praça
+    """
+
+    praca = mommy.make(Praca)
+
+    test_file = _create_temporary_file
+
+    response = client.post(
+        _imagem_list(kwargs={'praca_pk': praca.pk}),
+        data={'header': True, 'arquivo': test_file},
+        format='multipart')
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 def test_upload_an_image_as_public_page_header(_create_temporary_file, client):

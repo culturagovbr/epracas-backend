@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from oidc_auth.authentication import JSONWebTokenAuthentication
 
@@ -33,11 +34,14 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
     search_fields = ('nome', 'municipio', 'uf')
 
     serializers = {
-            'list': PracaListSerializer,
-            }
+        'list': PracaListSerializer,
+    }
 
 
 class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
+
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     serializer_class = ImagemPracaSerializer
     queryset = ImagemPraca.objects.all()
@@ -55,21 +59,17 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
 
 
 class DistanceView(DefaultMixin, APIView):
-
     def post(self, request, latlong=None):
         latlong = (request.data['lat'], request.data['long'])
         distancias = sorted(
-                [
-                    (praca, praca.get_distance(latlong))
-                    for praca in Praca.objects.all()
-                ],
-                key=lambda distancia: distancia[1]
-                )
+            [(praca, praca.get_distance(latlong))
+             for praca in Praca.objects.all()],
+            key=lambda distancia: distancia[1])
         pracas = [praca for (praca, distancia) in distancias[:5]]
 
-        serializer = DistanciaSerializer(pracas, context={'origem': latlong,
-                                                          'request': request}, many=True)
-
+        serializer = DistanciaSerializer(
+            pracas, context={'origem': latlong,
+                             'request': request}, many=True)
 
         return Response(serializer.data)
 
