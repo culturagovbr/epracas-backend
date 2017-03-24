@@ -428,6 +428,26 @@ def test_upload_an_image_as_public_page_header(
     assert download_header.status_code == status.HTTP_200_OK
 
 
+def test_upload_an_image_to_a_Praca_gallery_without_credentials(
+    _create_temporary_file, client):
+    """
+    Testa o envio de uma imagem para a galeria de uma Praça sem utilizar
+    credenciais de identificação.
+    """
+
+    praca = mommy.make(Praca)
+
+    test_file = _create_temporary_file
+    test_file.name = 'foto.jpg'
+
+    response = client.post(
+        _imagem_list(kwargs={'praca_pk': praca.pk}),
+        {'imagem': test_file},
+        format='multipart')
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
 def test_retorna_200_ok_enpoint_GG(client):
     """
     Testa o acesso ao endpoint de Grupo Gestor
