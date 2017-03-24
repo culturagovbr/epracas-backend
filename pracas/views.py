@@ -51,11 +51,16 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
         praca = Praca.objects.get(pk=praca_pk)
         self.check_object_permissions(request, praca)
 
-        if request.data['header']:
-            praca.header_img = request.FILES['arquivo']
-            praca.save()
-
-        serializer = PracaListSerializer(praca)
+        try:
+            if request.data['header']:
+                praca.header_img = request.FILES['arquivo']
+                praca.save()
+                serializer = PracaListSerializer(praca)
+        except:
+            imagem = ImagemPraca.objects.create(
+                praca=praca,
+                arquivo=request.FILES['arquivo'])
+            serializer = ImagemPracaSerializer(imagem)
 
         return Response(serializer.data, status=201)
 

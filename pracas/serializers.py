@@ -125,10 +125,11 @@ class ParceiroSerialier(serializers.ModelSerializer):
 class ImagemPracaSerializer(serializers.ModelSerializer):
     praca = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
     url = serializers.URLField(source='get_absolute_url', read_only=True)
+    header = serializers.BooleanField(default=False)
 
     class Meta:
         model = ImagemPraca
-        fields = ('url', 'praca', 'arquivo', 'header')
+        fields = ('url', 'id_pub', 'praca', 'arquivo', 'header')
 
 
 class DistanciaSerializer(PracaListSerializer):

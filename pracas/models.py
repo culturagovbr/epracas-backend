@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+from django.utils.text import slugify
 
 from rest_framework.reverse import reverse
 from rest_localflavor.br.br_states import STATE_CHOICES
@@ -13,10 +14,16 @@ from .choices import PARCEIRO_RAMO_ATIVIDADE
 from core.models import IdPubIdentifier
 
 
-def upload_header_to(instance, filename):
-    ext = filename.split('.')[-1]
-    id_pub = instance.id_pub
-    return '{}/images/header.{}'.format(id_pub, ext)
+def upload_image_to(instance, filename):
+    ext = filename.split('.').pop(-1)
+    filename = slugify(filename.split('.').remove(ext))
+    try:
+        praca = instance.praca.id_pub
+        id_pub = instance.id_pub
+    except:
+        praca = instance.id_pub
+        id_pub = 'header'
+    return f'{praca}/images/{id_pub}.{ext}'
 
 
 class Praca(IdPubIdentifier):
@@ -81,7 +88,7 @@ class Praca(IdPubIdentifier):
         )
     header_img = models.FileField(
         blank=True,
-        upload_to=upload_header_to,
+        upload_to=upload_image_to,
         )
 
     def get_latlong(self):
@@ -111,11 +118,9 @@ class Praca(IdPubIdentifier):
             self.nome = "Praça CEU de {} - {}".format(
                 self.municipio, self.uf.upper())
             if not self.slug:
-                from django.utils.text import slugify
                 self.slug = slugify(self.nome)
                 super(Praca, self).save(*args, **kwargs)
         elif not self.slug:
-            from django.utils.text import slugify
             self.slug = slugify(self.nome)
             super(Praca, self).save(*args, **kwargs)
         else:
@@ -129,7 +134,7 @@ class Praca(IdPubIdentifier):
 
 class ImagemPraca(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='imagem')
-    arquivo = models.FileField(blank=True, upload_to=upload_header_to)
+    arquivo = models.FileField(blank=True, upload_to=upload_image_to)
     header = models.BooleanField(default=False)
 
     def get_absolute_url(self):
