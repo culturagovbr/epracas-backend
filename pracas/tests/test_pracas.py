@@ -448,6 +448,26 @@ def test_upload_an_image_to_a_Praca_gallery_without_credentials(
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
+def test_upload_an_image_to_a_Praca_gallery_with_credentials(
+    _create_temporary_file, _common_user, client):
+    """
+    Testa o envio de uma imagem para a galeria de uma Praça utilizando
+    credenciais de identificação.
+    """
+    
+    praca = mommy.make(Praca)
+
+    test_file = _create_temporary_file
+    test_file.name = 'fotoi.jpg'
+
+    response = client.post(
+        _imagem_list(kwargs={'praca_pk': praca.pk}),
+        {'imagem': test_file},
+        format='multipart')
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
 def test_retorna_200_ok_enpoint_GG(client):
     """
     Testa o acesso ao endpoint de Grupo Gestor
