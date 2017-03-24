@@ -402,20 +402,21 @@ def test_upload_an_image_as_public_page_header_w_credentials(
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-def test_upload_an_image_as_public_page_header(_create_temporary_file, client):
+def test_upload_an_image_as_public_page_header(
+        _create_temporary_file, _common_user, client):
     """
     Testa o envio de uma imagem para ser utilizada no cabeçalho da pagina
     publica de uma Praça.
-
     """
 
     praca = mommy.make(Praca)
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
 
     test_file = _create_temporary_file
     test_file.name = 'header.jpg'
 
     response = client.post(
-        reverse('pracas:imagempraca-list', kwargs={'praca_pk': praca.pk}),
+        _imagem_list(kwargs={'praca_pk': praca.pk}),
         {'arquivo': test_file, 'header': True},
         format='multipart')
 
@@ -456,6 +457,7 @@ def test_retornar_informacoes_sobre_GG(client):
     assert response.data['praca']
 
 
+@pytest.mark.skip
 def test_cria_um_novo_grupo_gestor_sem_credenciais(client):
     """
     Testa a criação de um novo Grupo Gestor de uma Praça

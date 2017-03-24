@@ -22,6 +22,7 @@ from .serializers import GrupoGestorSerializer
 from .serializers import ParceiroSerialier
 
 from .permissions import IsAdminOrManagerOrReadOnly
+from .permissions import IsOwnerOrReadOnly
 
 
 class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
@@ -41,13 +42,14 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
 class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAdminOrManagerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
     serializer_class = ImagemPracaSerializer
     queryset = ImagemPraca.objects.all()
 
     def create(self, request, praca_pk=None):
         praca = Praca.objects.get(pk=praca_pk)
+        self.check_object_permissions(request, praca)
 
         if request.data['header']:
             praca.header_img = request.FILES['arquivo']
