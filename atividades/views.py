@@ -20,6 +20,8 @@ class AgendaViewSet(DefaultMixin, ModelViewSet):
     partial = True
     queryset = Agenda.objects.all()
 
+    filter_fields = ('praca',)
+
 
 class RelatorioViewSet(DefaultMixin, ViewSet):
 
