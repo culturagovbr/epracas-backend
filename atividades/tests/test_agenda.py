@@ -95,13 +95,20 @@ def test_return_events_related_with_a_Praca(client):
     praca1 = mommy.make('Praca')
     praca2 = mommy.make('Praca')
 
-    mommy.make('Agenda', praca=praca1)
+    agenda1 = mommy.make('Agenda', praca=praca1)
+    agenda2 = mommy.make('Agenda', praca=praca2)
 
     response = client.get(
         reverse('atividades:agenda-list') + '?praca={}'.format(praca1.id_pub))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data[0]['praca'] == praca1.id_pub
+
+    response = client.get(
+        reverse('atividades:agenda-list') + '?praca={}'.format(praca2.id_pub))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data[0]['praca'] == praca2.id_pub
 
 
 def test_get_all_ocurrances_from_a_month(client):
@@ -317,6 +324,7 @@ def test_persisting_an_image_on_report_about_occurence(_create_temporary_file, c
 
     assert response.status_code == status.HTTP_201_CREATED
     assert len(response.data) == 2
+
 
 def test_persisting_an_occurrence_with_just_one_weekday(client):
     """
