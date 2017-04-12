@@ -136,6 +136,8 @@ class ImagemPraca(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='imagem')
     arquivo = models.FileField(blank=True, upload_to=upload_image_to)
     header = models.BooleanField(default=False)
+    titulo = models.CharField(blank=True, null=True, max_length=140)
+    descricao = models.TextField(blank=True, null=True)
 
     def get_absolute_url(self):
         app_name = self._meta.app_label

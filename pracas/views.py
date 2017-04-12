@@ -57,9 +57,15 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
                 praca.save()
                 serializer = PracaListSerializer(praca)
         except:
-            imagem = ImagemPraca.objects.create(
-                praca=praca,
-                arquivo=request.FILES['arquivo'])
+            imagem = ImagemPracaSerializer(data=request.data)
+            if imagem.is_valid():
+                imagem.save(praca=praca)
+                return Response(imagem.data, status=201)
+            # imagem = ImagemPraca.objects.create(
+            #     praca=praca,
+            #     titulo=request.data['titulo'],
+            #     descricao=request.data['descricao'],
+            #     arquivo=request.FILES['arquivo'])
             serializer = ImagemPracaSerializer(imagem)
 
         return Response(serializer.data, status=201)
