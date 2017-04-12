@@ -36,6 +36,18 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ImagemPracaSerializer(serializers.ModelSerializer):
+    praca = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    header = serializers.BooleanField(default=False)
+    titulo = serializers.CharField(default=' ')
+
+    class Meta:
+        model = ImagemPraca
+        fields = ('url', 'id_pub', 'praca', 'arquivo', 'header', 'titulo',
+                  'descricao')
+
+
 class PracaBaseSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     modelo_descricao = serializers.CharField(
@@ -78,6 +90,7 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
 
 
 class PracaSerializer(PracaBaseSerializer):
+    imagem = ImagemPracaSerializer(many=True)
 
     class Meta:
         model = Praca
@@ -102,8 +115,9 @@ class PracaSerializer(PracaBaseSerializer):
                 'long',
                 'gestor',
                 'grupo_gestor',
+                'imagem',
                 )
-        read_only_fields = ('gestor', 'grupo_gestor')
+        read_only_fields = ('gestor', 'grupo_gestor', 'imagem')
 
 
 class ParceiroSerialier(serializers.ModelSerializer):
@@ -120,18 +134,6 @@ class ParceiroSerialier(serializers.ModelSerializer):
             'acoes',
             'tempo_parceria'
         )
-
-
-class ImagemPracaSerializer(serializers.ModelSerializer):
-    praca = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
-    url = serializers.URLField(source='get_absolute_url', read_only=True)
-    header = serializers.BooleanField(default=False)
-    titulo = serializers.CharField(default=' ')
-
-    class Meta:
-        model = ImagemPraca
-        fields = ('url', 'id_pub', 'praca', 'arquivo', 'header', 'titulo',
-                  'descricao')
 
 
 class DistanciaSerializer(PracaListSerializer):

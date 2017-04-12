@@ -161,10 +161,11 @@ class Parceiro(IdPubIdentifier):
         blank=True,
         null=True,
         )
-    telefone = models.IntegerField(
+    telefone = models.CharField(
         _('Telefone de Contato'),
         blank=True,
         null=True,
+        max_length=15
         )
     email = models.EmailField(
         _('Email de Contato'),
