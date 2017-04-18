@@ -90,6 +90,13 @@ class Praca(IdPubIdentifier):
         blank=True,
         upload_to=upload_image_to,
         )
+    repasse = models.DecimalField(
+        _('Repasses do Ministério'),
+        decimal_places=2,
+        max_digits=12,
+        null=True,
+        blank=True,
+        )
 
     def get_latlong(self):
         """
