@@ -121,3 +121,20 @@ PUBLICO_CHOICES = (
     (26, GRUPOS_ARTISTAS),
     (27, MESTRES_CULTURA_POPULAR),
 )
+
+
+CRIANCAS = "Crianças"
+ADOLESCENTES = "Adolescentes"
+JOVENS = "Jovens"
+ADULTOS = "Adultos"
+IDOSOS = "Idosos"
+LIVRE = "Livre"
+
+FAIXA_ETARIA_CHOICES = (
+    (1, CRIANCAS),
+    (2, ADOLESCENTES),
+    (3, JOVENS),
+    (4, ADULTOS),
+    (5, IDOSOS),
+    (6, LIVRE),
+)

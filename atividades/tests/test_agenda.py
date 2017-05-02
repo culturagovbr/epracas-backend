@@ -388,3 +388,36 @@ def test_persist_a_list_with_locations_of_event(_common_user, client):
     assert response.status_code == status.HTTP_201_CREATED
     assert "espaco" in response.data
     assert 1, 2 in response.data['espaco']
+
+
+def test_persist_a_list_with_ages_targeted_of_event(_common_user, client):
+    """
+    Testa a persistencia de uma lista de faixas etarias em um Evento
+    """
+
+    praca = mommy.make('Praca')
+
+    data = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'Festival Teste',
+        'justificativa': 'Justo',
+        'faixa_etaria': [1, 2],
+        'tipo': 1,
+        'publico': 1,
+        'carga_horaria': 10,
+        'publico_esperado': 100,
+        'descricao': 'Evento para testes',
+        'ocorrencia':
+        {
+            'start': '2017-01-01T00:00',
+            'repeat_until': '2017-01-23',
+            'frequency_type': 'daily',
+            'weekday': 'mo',
+        },
+    })
+
+    response = client.post(_list(), data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert 'faixa_etaria' in response.data
+    assert 1, 2 in response.data['faixa_etaria']

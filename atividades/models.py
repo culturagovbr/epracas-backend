@@ -14,6 +14,7 @@ from core.choices import FAIXA_ETARIA_CHOICES
 from pracas.models import Praca
 
 from .choices import ESPACOS_CHOICES
+from .choices import FAIXA_ETARIA_CHOICES
 from .choices import TIPO_ATIVIDADE_CHOICES
 from .choices import TERRITORIO_CHOICES
 from .choices import PUBLICO_CHOICES
@@ -55,11 +56,12 @@ class Agenda(IdPubIdentifier, BaseEvent):
     # area = models.ForeignKey(Area)
     justificativa = models.TextField(
         _('Justificativa da Atividade'), blank=True, null=True)
-    # faixa_etaria = models.CharField(
-    #     _('Faixa Etaria do Publico Alvo'),
-    #     choices=FAIXA_ETARIA_CHOICES,
-    #     max_length=1
-    #     )
+    faixa_etaria = ArrayField(
+        models.IntegerField(
+            choices=FAIXA_ETARIA_CHOICES,
+            null=True),
+        null=True,
+        default=list())
     espaco = ArrayField(
         models.IntegerField(
             choices=ESPACOS_CHOICES,
