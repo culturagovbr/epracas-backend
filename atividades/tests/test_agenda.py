@@ -1,5 +1,3 @@
-# coding: utf-8
-
 import json
 import pytest
 
@@ -8,17 +6,21 @@ from datetime import datetime
 
 from rest_framework import status
 from rest_framework.reverse import reverse
-from rest_framework.test import APIClient
+
+from core.helper_functions import _
 
 from model_mommy import mommy
 
-from authentication.tests.test_user import _common_user as authentication
+from authentication.tests.test_user import _common_user
 
 from pracas.tests.test_pracas import _create_temporary_file
 
 
 pytestmark = pytest.mark.django_db
 
+
+_list = _('atividades:agenda-list')
+_detail = _('atividades:agenda-detail')
 
 agenda_list_url = reverse('atividades:agenda-list')
 
@@ -67,7 +69,6 @@ def test_return_event_properties(client):
         'justificativa',
         'tipo',
         # 'area',
-        'espaco',
         # 'parceiros',
         # 'faixa_etaria',
         'publico',
@@ -166,7 +167,6 @@ def test_create_an_event_with_occurences_using_POST(client):
         'praca': str(praca.id_pub),
         'titulo': 'Festival Teste',
         'justificativa': 'Justo',
-        'espaco': 1,
         'tipo': 1,
         'publico': 1,
         'carga_horaria': 10,
@@ -201,7 +201,6 @@ def test_create_and_returning_a_list_of_dates(client):
         'praca': str(praca.id_pub),
         'titulo': 'Festival Teste',
         'justificativa': 'Justo',
-        'espaco': 1,
         'tipo': 1,
         'publico': 1,
         'carga_horaria': 10,
@@ -284,8 +283,6 @@ def test_posting_information_about_an_occurrence(client):
         }
     )
 
-    # import ipdb
-    # ipdb.set_trace()
     response = client.post(
         reverse(
             'atividades:relatorio-list',
@@ -336,7 +333,6 @@ def test_persisting_an_occurrence_with_just_one_weekday(client):
         'praca': str(praca.id_pub),
         'titulo': 'Festival Teste',
         'justificativa': 'Justo',
-        'espaco': 1,
         'tipo': 1,
         'publico': 1,
         'carga_horaria': 10,
@@ -358,3 +354,37 @@ def test_persisting_an_occurrence_with_just_one_weekday(client):
 
     assert response.status_code == status.HTTP_201_CREATED
     assert len(response.data['ocorrencia']['calendar']) == 4
+
+
+def test_persist_a_list_with_locations_of_event(_common_user, client):
+    """
+    Testa a persistencia de uma lista de Locais de Atividade em um Evento
+    """
+
+    praca = mommy.make('Praca')
+
+    data = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'Festival Teste',
+        'justificativa': 'Justo',
+        'espaco': [1, 2],
+        'tipo': 1,
+        'publico': 1,
+        'carga_horaria': 10,
+        'publico_esperado': 100,
+        'territorio': 1,
+        'descricao': 'Evento para testes',
+        'ocorrencia':
+        {
+            'start': '2017-01-01T00:00',
+            'repeat_until': '2017-01-23',
+            'frequency_type': 'daily',
+            'weekday': 'mo',
+        },
+    })
+
+    response = client.post(_list(), data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert "espaco" in response.data
+    assert 1, 2 in response.data['espaco']

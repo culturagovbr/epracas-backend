@@ -1,15 +1,11 @@
 from rest_framework import serializers
 
-from pracas.models import Praca
-
-from .choices import ESPACOS_CHOICES
-from .choices import TIPO_ATIVIDADE_CHOICES
-from .choices import TERRITORIO_CHOICES
-
 from .models import Agenda
 from .models import Ocorrencia
 from .models import Relatorio
 from .models import RelatorioImagem
+
+from .choices import ESPACOS_CHOICES
 
 
 class RelatorioImagemSerializer(serializers.ModelSerializer):

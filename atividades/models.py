@@ -1,10 +1,10 @@
-# coding: utf-8
-from datetime import datetime, time
 from uuid import uuid4
 
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+
+from django.contrib.postgres.fields import ArrayField
 
 from eventtools.models import BaseEvent, BaseOccurrence
 
@@ -60,11 +60,12 @@ class Agenda(IdPubIdentifier, BaseEvent):
     #     choices=FAIXA_ETARIA_CHOICES,
     #     max_length=1
     #     )
-    espaco = models.IntegerField(
-        _('Espaço de Realização do Atividade'),
-        blank=True,
+    espaco = ArrayField(
+        models.IntegerField(
+            choices=ESPACOS_CHOICES,
+            null=True),
         null=True,
-        choices=ESPACOS_CHOICES)
+        default=list())
     tipo = models.IntegerField(
         _('Categoria da Atividade'), choices=TIPO_ATIVIDADE_CHOICES)
     publico = models.CharField(
