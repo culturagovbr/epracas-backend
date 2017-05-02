@@ -122,6 +122,7 @@ class ParceiroDetailSerializer(ParceiroBaseSerializer):
             'tempo_parceria',
             'lat',
             'long',
+            'recursos_financeiros',
         )
 
 

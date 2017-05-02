@@ -9,9 +9,9 @@ from core.choices import MODELO_CHOICES
 from core.choices import REGIOES_CHOICES
 from core.choices import SITUACAO_CHOICES
 
-from .choices import PARCEIRO_RAMO_ATIVIDADE
-
 from core.models import IdPubIdentifier
+
+from .choices import PARCEIRO_RAMO_ATIVIDADE
 
 
 def upload_image_to(instance, filename):
@@ -155,7 +155,7 @@ class ImagemPraca(IdPubIdentifier):
 
 
 class Parceiro(IdPubIdentifier):
-    praca = models.ForeignKey(Praca, related_name='parceiros')
+    praca = models.ForeignKey(Praca, related_name='parceiros', null=True)
     nome = models.CharField(
         _('Nome Institucional do Parceiro'),
         max_length=300,
@@ -192,6 +192,12 @@ class Parceiro(IdPubIdentifier):
     tempo_parceria = models.IntegerField(
         _('Tempo previsto para a parceria'),
         blank=True,
+        null=True
+        )
+    recursos_financeiros = models.DecimalField(
+        _('Recursos Financeiros'),
+        max_digits=12,
+        decimal_places=2,
         null=True
         )
     lat = models.DecimalField(
