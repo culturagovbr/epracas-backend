@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -19,7 +21,7 @@ from .serializers import ImagemPracaSerializer
 from .serializers import DistanciaSerializer
 from .serializers import GrupoGestorSerializer
 
-from .serializers import ParceiroSerialier
+from .serializers import ParceiroDetailSerializer
 
 from .permissions import IsAdminOrManagerOrReadOnly
 from .permissions import IsOwnerOrReadOnly
@@ -61,11 +63,6 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
             if imagem.is_valid():
                 imagem.save(praca=praca)
                 return Response(imagem.data, status=201)
-            # imagem = ImagemPraca.objects.create(
-            #     praca=praca,
-            #     titulo=request.data['titulo'],
-            #     descricao=request.data['descricao'],
-            #     arquivo=request.FILES['arquivo'])
             serializer = ImagemPracaSerializer(imagem)
 
         return Response(serializer.data, status=201)
@@ -89,13 +86,21 @@ class DistanceView(DefaultMixin, APIView):
 
 class ParceiroViewSet(DefaultMixin, ModelViewSet):
 
-    serializer_class = ParceiroSerialier
-    queryset = Parceiro.objects.all()
-    # search_fields = ('nome', 'municipio', 'uf')
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
-    # serializers = {
-    #         'list': PracaListSerializer,
-    #         }
+    serializer_class = ParceiroDetailSerializer
+    queryset = Parceiro.objects.all()
+
+    def create(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        parceiro = ParceiroDetailSerializer(data=request.data)
+        if parceiro.is_valid():
+            parceiro.save(praca=praca)
+
+            return Response(parceiro.data, status=201)
 
 
 class GrupoGestorViewSet(DefaultMixin, ModelViewSet):

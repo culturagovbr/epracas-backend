@@ -89,8 +89,56 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
         read_only_fields = ('gestor',)
 
 
+class ParceiroBaseSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Parceiro
+        fields = (
+            'praca',
+            'nome',
+            'endereco',
+            'contato',
+            'telefone',
+            'email',
+            'ramo_atividade',
+            'acoes',
+            'tempo_parceria'
+        )
+
+
+class ParceiroDetailSerializer(ParceiroBaseSerializer):
+
+    class Meta:
+        model = Parceiro
+        fields = (
+            'praca',
+            'nome',
+            'endereco',
+            'contato',
+            'telefone',
+            'email',
+            'ramo_atividade',
+            'acoes',
+            'tempo_parceria',
+            'lat',
+            'long',
+        )
+
+
+class ParceiroListSerializer(ParceiroBaseSerializer):
+
+    class Meta:
+        model = Parceiro
+        fields = (
+            'nome',
+            'email',
+            'ramo_atividade',
+        )
+
+
 class PracaSerializer(PracaBaseSerializer):
     imagem = ImagemPracaSerializer(many=True)
+    parceiros = ParceiroListSerializer(many=True)
 
     class Meta:
         model = Praca
@@ -115,25 +163,10 @@ class PracaSerializer(PracaBaseSerializer):
                 'long',
                 'gestor',
                 'grupo_gestor',
+                'parceiros',
                 'imagem',
                 )
-        read_only_fields = ('gestor', 'grupo_gestor', 'imagem')
-
-
-class ParceiroSerialier(serializers.ModelSerializer):
-
-    class Meta:
-        model = Parceiro
-        fields = (
-            'nome',
-            'endereco',
-            'contato',
-            'telefone',
-            'email',
-            'ramo_atividade',
-            'acoes',
-            'tempo_parceria'
-        )
+        read_only_fields = ('gestor', 'grupo_gestor', 'imagem', 'parceiros')
 
 
 class DistanciaSerializer(PracaListSerializer):

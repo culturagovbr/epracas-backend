@@ -21,6 +21,8 @@ from authentication.tests.test_user import _common_user
 _list = _('pracas:praca-list')
 _detail = _('pracas:praca-detail')
 _imagem_list = _('pracas:imagempraca-list')
+_parceiros_list = _('pracas:parceiro-list')
+_parceiros_detail = _('pracas:parceiro-detail')
 
 User = get_user_model()
 pytestmark = pytest.mark.django_db
@@ -533,7 +535,6 @@ def test_cria_um_novo_grupo_gestor_sem_credenciais(client):
                            content_type="application/json")
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    assert response.data['previsao_espacos'] == 5
 
 
 def test_retorna_informacoes_sobre_GG(client):
@@ -570,3 +571,141 @@ def test_cadastra_um_novo_membro_no_GG(client):
 
     praca = mommy.make(Praca)
     gg = mommy.make('GrupoGestor', praca=praca)
+
+
+@pytest.mark.skip
+def test_retorna_200_ok_enpoint_parceiros(client):
+    """
+    Testa o acesso ao endpoint de Parceiros da Praça
+    """
+
+    url = "/api/v1/parceiros/"
+
+    response = client.get(url)
+    namespace = resolve(url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert f"{namespace.namespace}:{namespace.url_name}" == 'pracas:parceiro-list'
+
+
+def test_retornar_informacoes_sobre_parceiros(client):
+    """
+    Testa o retorno de informações sobre os Parceiros de uma Praça
+    """
+
+    praca = mommy.make('Praca')
+    parceiro = mommy.make('Parceiro', praca=praca)
+
+    fields = ('nome', 'email', 'ramo_atividade')
+
+    response = client.get(_detail(kwargs={'pk': praca.pk}))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['parceiros']
+    for field in fields:
+        assert field in response.data['parceiros'][0]
+
+
+def test_persiste_um_parceiro_sem_credenciais_identificacao(client):
+    """
+    Testa a criação de um novo Parceiro sem utilizar credenciais de
+    identificação
+    """
+
+    praca = mommy.make('Praca')
+
+    data = json.dumps({
+        'praca': str(praca.pk),
+        'nome': 'Fulano',
+        'endereco': 'Praca Sao Jorge, n5',
+        'telefone': 22555554444,
+        'email': 'fulano@cicrano.com.br',
+        'ramo_atividade': 1,
+        'acoes': 'Apoio a grupos de leitura',
+        'tempo_parceria': 366,
+    })
+
+    response = client.post(
+        _parceiros_list(kwargs={'praca_pk': praca.pk}),
+        data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_persiste_um_parceiro_com_credenciais_identificacao(_common_user,
+                                                            client):
+    """
+    Testa a criação de um novo Parceiro utilizando credenciais de
+    identificação, porém sem acessos de gestor de uma Praça.
+    """
+
+    praca = mommy.make('Praca')
+
+    data = json.dumps({
+        'praca': str(praca.pk),
+        'nome': 'Fulano',
+        'endereco': 'Praca Sao Jorge, n5',
+        'telefone': 22555554444,
+        'email': 'fulano@cicrano.com.br',
+        'ramo_atividade': 1,
+        'acoes': 'Apoio a grupos de leitura',
+        'tempo_parceria': 366,
+    })
+
+    response = client.post(_parceiros_list(kwargs={'praca_pk': praca.pk}),
+                           data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_persiste_um_parceiro_com_permissoes_de_gestor(_common_user,
+                                                       client):
+    """
+    Testa a criação de um novo Parceiro utilizando credenciais de
+    identificação e acessos de gestor de uma Praça.
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+
+    data = json.dumps({
+        'praca': str(praca.pk),
+        'nome': 'Fulano',
+        'endereco': 'Praca Sao Jorge, n5',
+        'telefone': 22555554444,
+        'email': 'fulano@cicrano.com.br',
+        'ramo_atividade': 1,
+        'acoes': 'Apoio a grupos de leitura',
+        'tempo_parceria': 366,
+    })
+
+    response = client.post(_parceiros_list(kwargs={'praca_pk': praca.pk}),
+                           data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+
+
+def test_persiste_um_parceiro_com_permissoes_de_gestor(_admin_user,
+                                                       client):
+    """
+    Testa a criação de um novo Parceiro utilizando credenciais de
+    identificação de gestor do Ministério.
+    """
+
+    praca = mommy.make('Praca')
+
+    data = json.dumps({
+        'praca': str(praca.pk),
+        'nome': 'Fulano',
+        'endereco': 'Praca Sao Jorge, n5',
+        'telefone': 22555554444,
+        'email': 'fulano@cicrano.com.br',
+        'ramo_atividade': 1,
+        'acoes': 'Apoio a grupos de leitura',
+        'tempo_parceria': 366,
+    })
+
+    response = client.post(_parceiros_list(kwargs={'praca_pk': praca.pk}),
+                           data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED

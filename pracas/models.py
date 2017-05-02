@@ -155,6 +155,7 @@ class ImagemPraca(IdPubIdentifier):
 
 
 class Parceiro(IdPubIdentifier):
+    praca = models.ForeignKey(Praca, related_name='parceiros')
     nome = models.CharField(
         _('Nome Institucional do Parceiro'),
         max_length=300,
