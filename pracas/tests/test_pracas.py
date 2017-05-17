@@ -522,7 +522,6 @@ def test_retornar_informacoes_sobre_GG(client):
     assert response.data['praca']
 
 
-@pytest.mark.skip
 def test_cria_um_novo_grupo_gestor_sem_credenciais(client):
     """
     Testa a criação de um novo Grupo Gestor de uma Praça
