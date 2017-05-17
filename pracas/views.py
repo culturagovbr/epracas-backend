@@ -105,5 +105,8 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
 
 class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
 
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
+
     serializer_class = GrupoGestorSerializer
     queryset = GrupoGestor.objects.all()
