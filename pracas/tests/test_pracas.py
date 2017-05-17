@@ -23,6 +23,7 @@ _detail = _('pracas:praca-detail')
 _imagem_list = _('pracas:imagempraca-list')
 _parceiros_list = _('pracas:parceiro-list')
 _parceiros_detail = _('pracas:parceiro-detail')
+_grupogestor_list = _('pracas:grupogestor-list')
 
 User = get_user_model()
 pytestmark = pytest.mark.django_db
@@ -528,12 +529,27 @@ def test_cria_um_novo_grupo_gestor_sem_credenciais(client):
     """
 
     praca = mommy.make('Praca')
-    data = json.dumps({'praca': str(praca.pk), 'previsao_espacos': 5})
+    data = json.dumps({'praca': f'{praca.pk}', 'previsao_espacos': 5})
 
     response = client.post(reverse('pracas:grupogestor-list'), data,
                            content_type="application/json")
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_cria_um_novo_grupo_gestor_com_credenciais(_common_user, client):
+    """
+    Testa a criação de um novo Grupo Gestor de uma Praça, utilizando um usuário
+    identificado.
+    """
+
+    praca = mommy.make('Praca')
+    data = json.dumps({'praca': f'{praca.pk}', 'previsao_espacos': 5})
+
+    response = client.post(_grupogestor_list(), data,
+                           content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
 def test_retorna_informacoes_sobre_GG(client):
