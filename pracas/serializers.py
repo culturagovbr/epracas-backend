@@ -86,7 +86,7 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
                 'header_img',
                 'gestor',
                 )
-        read_only_fields = ('gestor',)
+        read_only_fields = ('url', 'gestor', 'header_img')
 
 
 class ParceiroBaseSerializer(serializers.ModelSerializer):
@@ -138,8 +138,8 @@ class ParceiroListSerializer(ParceiroBaseSerializer):
 
 
 class PracaSerializer(PracaBaseSerializer):
-    imagem = ImagemPracaSerializer(many=True)
-    parceiros = ParceiroListSerializer(many=True)
+    imagem = ImagemPracaSerializer(many=True, read_only=True)
+    parceiros = ParceiroListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Praca
