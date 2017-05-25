@@ -644,6 +644,39 @@ def test_create_a_Gestor_object_when_a_process_is_approved(_admin_user,
     assert gestores[0].praca.get_manager()
 
 
+def test_only_one_manager_at_time(_admin_user, client):
+    """
+    Testa haver apenas um unico gesto de Praça por vez.
+    """
+    with pytest.raises(Exception) as e:
+        User = get_user_model()
+        user1 = mommy.make(User)
+        user2 = mommy.make(User)
+
+        praca = mommy.make('Praca')
+        gestor = mommy.make('Gestor', praca=praca, user=user1, atual=True)
+        processo = mommy.make('ProcessoVinculacao', praca=praca, user=user2)
+        arquivos = mommy.make(
+            'ArquivosProcessoVinculacao', processo=processo, verificado=True)
+
+        data = json.dumps({'aprovado': True})
+
+        response = client.patch(
+            reverse(
+                'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),
+            data,
+            content_type="application/json")
+
+    assert str(e.value) == 'Já existe um Gestor para esta Praça'
+    # assert response.status_code == status.HTTP_200_OK
+
+    # gestores = Gestor.objects.all()
+    # assert len(gestores) == 2
+
+    # assert praca.get_manager()
+    # assert len(Gestor.objects.filter(praca=praca, atual=True)) == 1
+
+
 def test_return_today_date_when_create_a_new_process(client):
     """
     Testa se um processo tem instanciada a data do dia atual.

@@ -116,7 +116,7 @@ class Praca(IdPubIdentifier):
         Retorna o atual gestor da Praça
         """
         try:
-            return self.gestor.get(atual=True)
+            return self.gestor.filter(data_encerramento_gestao=None).get(atual=True)
         except:
             return None
 
