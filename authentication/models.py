@@ -91,3 +91,13 @@ class User(AbstractBaseUser, IdPubIdentifier):
 
     def __str__(self):
         return str("{} - {}").format(self.sub, self.full_name)
+
+    def is_praca_manager(self):
+        """
+        Retorna a URL da Praça da qual este usuário é Gestor
+        """
+        try:
+            gestor = self.gestor.get(atual=True)
+            return gestor.praca.get_absolute_url()
+        except:
+            return None

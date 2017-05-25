@@ -20,7 +20,8 @@ from rest_localflavor.br.br_states import STATE_CHOICES
 
 
 class Gestor(IdPubIdentifier):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+                             related_name='gestor')
     praca = models.ForeignKey(Praca, related_name='gestor', null=True)
     atual = models.BooleanField(_('Gestor Atual'), default=False)
     data_inicio_gestao = models.DateField(
@@ -33,7 +34,7 @@ class Gestor(IdPubIdentifier):
     def save(self, *args, **kwargs):
         if self.atual:
             try:
-                assert Gestor.objects.filter(atual=True).count() == 0
+                assert Gestor.objects.filter(atual=True).filter(praca=self.praca).count() == 0
             except AssertionError:
                 raise Exception(_('Já existe um Gestor para esta Praça'))
         super(Gestor, self).save(*args, **kwargs)
