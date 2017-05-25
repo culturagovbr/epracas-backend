@@ -141,6 +141,7 @@ def test_return_only_own_information_as_common_user(_common_user, client):
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 1
 
+
 def test_returning_404_when_its_user_first_login(_common_user, client):
     """
     Testa o retorno de um erro 404 quando do primeiro login de um usuário na
@@ -155,6 +156,7 @@ def test_returning_404_when_its_user_first_login(_common_user, client):
         )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+
 
 def test_update_user_information(_common_user, client):
     """
@@ -172,6 +174,7 @@ def test_update_user_information(_common_user, client):
     assert response.status_code == status.HTTP_200_OK
     assert response.data['email'] == user_data['email']
 
+
 def test_common_user_trying_to_get_staff_permissions(_common_user, client):
     """
     Testa a capacidade de um usuário comum obter permissões de gestor de
@@ -180,10 +183,11 @@ def test_common_user_trying_to_get_staff_permissions(_common_user, client):
 
     response = client.patch(
         reverse('auth:user-detail', kwargs={'sub': user_data['sub']}),
-        data=json.dumps({ "is_staff": True }),
+        data=json.dumps({"is_staff": True}),
         content_type="application/json")
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
 
 def test_common_user_trying_to_giveup_on_staff_permissions(_admin_user, client):
     """
@@ -199,3 +203,19 @@ def test_common_user_trying_to_giveup_on_staff_permissions(_admin_user, client):
         content_type="application/json")
 
     assert response.status_code == status.HTTP_200_OK
+
+
+def test_manager_information_on_user_profile(_common_user, client):
+    """
+    Testa o retorno de informações do perfil de Gestor de Praça.
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+
+    response = client.get(
+        reverse('auth:user-detail', kwargs={'sub': _common_user.sub})
+        )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "praca_manager" in response.data[0]
