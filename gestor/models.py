@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from rest_framework.reverse import reverse
@@ -22,6 +23,20 @@ class Gestor(IdPubIdentifier):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True)
     praca = models.ForeignKey(Praca, related_name='gestor', null=True)
     atual = models.BooleanField(_('Gestor Atual'), default=False)
+    data_inicio_gestao = models.DateField(
+        _('Data de Inicio da Gestão'),
+        default=timezone.now)
+    data_encerramento_gestao = models.DateField(
+        _('Data de Encerramento da Gestão'),
+        null=True)
+
+    def save(self, *args, **kwargs):
+        if self.atual:
+            try:
+                assert Gestor.objects.filter(atual=True).count() == 0
+            except AssertionError:
+                raise Exception(_('Já existe um Gestor para esta Praça'))
+        super(Gestor, self).save(*args, **kwargs)
 
 
 class ProcessoVinculacao(IdPubIdentifier):
@@ -34,6 +49,7 @@ class ProcessoVinculacao(IdPubIdentifier):
         blank=False)
     data_finalizacao = models.DateTimeField(
         _('Data de Conclusão do Processo de Vinculação'),
+        default=timezone.now,
         null=True,
         blank=True)
     aprovado = models.BooleanField(
@@ -41,7 +57,11 @@ class ProcessoVinculacao(IdPubIdentifier):
         default=False, )
     valido = models.BooleanField(
         _('Processo Válido'),
-        default=True, )
+        default=True)
+    despacho = models.TextField(
+        _('Despacho do Processo'),
+        null=True,
+        blank=True)
 
     def get_documentation_status(self):
         arquivos = ArquivosProcessoVinculacao.objects.filter(processo=self)
@@ -85,7 +105,7 @@ def validate_process(sender, instance, **kwargs):
             instance.full_clean()
         else:
             raise ValidationError(
-                _("Existem documentos não verificados impedindo a aprovação"))
+                _('Existem documentos não verificados impedindo a aprovação'))
 
 
 @receiver(post_save, sender=ProcessoVinculacao)
