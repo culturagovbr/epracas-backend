@@ -28,12 +28,13 @@ from .serializers import ProcessoVinculacaoDetailSerializer
 from .serializers import ArquivosProcessoVinculacaoSerializer
 
 from .permissions import CommonUserOrReadOnly
+from .permissions import IsManagerOrReadOnly
 
 
 class GestorViewSet(DefaultMixin, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication, )
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsManagerOrReadOnly, )
 
     queryset = Gestor.objects.all()
     serializer_class = GestorSerializer
