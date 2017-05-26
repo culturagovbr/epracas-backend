@@ -1,9 +1,12 @@
 from rest_framework import filters
 from rest_framework.viewsets import ModelViewSet
 
+from django_filters.rest_framework import DjangoFilterBackend
+# from django_filters.rest_framework import filters
+
 
 class DefaultMixin(object):
-    filter_backends = (filters.DjangoFilterBackend, filters.SearchFilter)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
 
 
 class MultiSerializerViewSet(ModelViewSet):
