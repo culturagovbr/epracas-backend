@@ -222,3 +222,35 @@ def test_return_a_FQDN_URL_from_Gestor_method(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert gestor_url == url
+
+
+def test_end_manager_relation_with_a_Praca(client):
+    """
+    Testa finalizar a relação de um Gestor com sua Praça, sem utilizar
+    credenciais de identificação
+    """
+
+    gestor = mommy.make('Gestor')
+    url = reverse(
+        'gestor:gestor-detail',
+        kwargs={'pk': gestor.id_pub})
+
+    response = client.delete(url)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_end_manager_relation_with_a_Praca_using_id(_common_user, client):
+    """
+    Testa finalizar a relação de um Gestor com sua Praça, utilizando um
+    usuário já identificado
+    """
+
+    gestor = mommy.make('Gestor')
+    url = reverse(
+        'gestor:gestor-detail',
+        kwargs={'pk': gestor.id_pub})
+
+    response = client.delete(url, content_type='application/json')
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
