@@ -1,4 +1,7 @@
+from datetime import date
+
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.utils.text import slugify
 
@@ -12,6 +15,8 @@ from core.choices import SITUACAO_CHOICES
 from core.models import IdPubIdentifier
 
 from .choices import PARCEIRO_RAMO_ATIVIDADE
+from .choices import ORIGEM_CHOICES
+from .choices import DOCUMENTO_CHOICES
 
 
 def upload_image_to(instance, filename):
@@ -120,6 +125,15 @@ class Praca(IdPubIdentifier):
         except:
             return None
 
+    def get_grupogestor(self):
+        """
+        Retorna o grupo gestor vigente da Praça
+        """
+        try:
+            return self.grupo_gestor.get(data_finalizacao=None)
+        except:
+            return None
+
     def save(self, *args, **kwargs):
         if not self.nome:
             self.nome = "Praça CEU de {} - {}".format(
@@ -212,11 +226,51 @@ class Parceiro(IdPubIdentifier):
         max_digits=9,
         decimal_places=6,
         null=True,
-        blank=True
-        )
+        blank=True)
 
 
 class GrupoGestor(IdPubIdentifier):
-    praca = models.OneToOneField(Praca, related_name='grupo_gestor')
+    praca = models.ForeignKey(Praca, related_name='grupo_gestor')
     previsao_espacos = models.IntegerField(
         _('Qtde de membros previstos no Grupo Gestor'), max_length=2)
+    data_instituicao = models.DateField(
+        _('Data de Instituição do Grupo Gestor'),
+        default=timezone.now)
+    data_finalizacao = models.DateField(
+        _('Data de Finalização do Grupo Gestor'),
+        blank=True,
+        null=True)
+    documento_constituicao = models.FileField(
+        _('Documento de Constituição do Grupo Gestor'),
+        blank=True,
+        null=True)
+    tipo_documento = models.CharField(
+        _('Tipo de documento de constituição'),
+        max_length=1,
+        blank=True,
+        null=True,
+        choices=DOCUMENTO_CHOICES)
+
+    class Meta:
+        ordering = ['-data_instituicao']
+
+
+class MembroGestor(IdPubIdentifier):
+    grupo_gestor = models.ForeignKey(GrupoGestor, related_name='membros')
+    nome = models.CharField(_('Nome do Gestor'), max_length=120)
+    origem = models.CharField(_('Origem do Membro'),
+                              max_length=1, choices=ORIGEM_CHOICES)
+    data_posse = models.DateField(
+        _('Data de Posse do Membro Gestor'),
+        default=timezone.now
+        )
+    documento_posse = models.FileField(
+        _('Documento de Posse do Membro Gestor'),
+        blank=True,
+        null=True)
+    tipo_documento = models.CharField(
+        _('Tipo de documento de posse'),
+        max_length=1,
+        blank=True,
+        null=True,
+        choices=DOCUMENTO_CHOICES)

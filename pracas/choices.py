@@ -21,3 +21,35 @@ PARCEIRO_RAMO_ATIVIDADE = (
     (20, "serviços domésticos"),
     (21, "organismos internacionais e outras instituições extraterritoriais"),
 )
+
+# Grupo Gestor Origem Choices
+"""
+Lista de escolhas para a Origem de um Membro do Grupo Gestor de uma Praça
+"""
+
+PODER_PUBLICO = "Poder Publico"
+SOCIEDADE_CIVIL = "Sociedade Civil"
+MORADORES_ENTORNO = "Moradores do Entorno"
+
+ORIGEM_CHOICES = (
+    (1, PODER_PUBLICO),
+    (2, SOCIEDADE_CIVIL),
+    (3, MORADORES_ENTORNO),
+)
+
+# Tipo de Documento de Constituição
+"""
+Lista de escolhas para o Tipo de Documento de Constituição de um Grupo Gestor
+"""
+
+DECRETO = "Decreto"
+PORTARIA = "Portaria"
+LEI = "Lei"
+NAO_FORMALIZADO = "Não Formalizado"
+
+DOCUMENTO_CHOICES = (
+    ('d', DECRETO),
+    ('p', PORTARIA),
+    ('l', LEI),
+    ('n', NAO_FORMALIZADO)
+)
