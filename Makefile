@@ -2,7 +2,7 @@ runserver:
 	DEBUG=True TEST_ENV=True python ./manage.py runserver
 
 test-createdb:
-	DEBUG=True TEST_ENV=True py.test --ds=epracas.settings -s --create-db
+	DEBUG=True TEST_ENV=True py.test -W ignore --ds=epracas.settings -s --create-db
 
 test:
 	DEBUG=True TEST_ENV=True py.test -W ignore --ds=epracas.settings -s
