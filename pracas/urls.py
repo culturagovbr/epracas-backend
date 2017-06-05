@@ -5,6 +5,7 @@ from rest_framework_nested import routers
 from .views import PracaViewSet
 from .views import DistanceView
 from .views import GrupoGestorViewSet
+from .views import MembroGestorViewSet
 
 from .views import ImagemPracaViewSet
 
@@ -14,7 +15,6 @@ from .views import ParceiroViewSet
 router = routers.SimpleRouter()
 
 router.register(r'pracas', PracaViewSet)
-router.register(r'grupogestor', GrupoGestorViewSet)
 
 imagem_router = routers.NestedSimpleRouter(router, r'pracas', lookup='praca')
 imagem_router.register(r'imagens', ImagemPracaViewSet)
@@ -22,9 +22,17 @@ imagem_router.register(r'imagens', ImagemPracaViewSet)
 parceiro_router = routers.NestedSimpleRouter(router, r'pracas', lookup='praca')
 parceiro_router.register(r'parceiros', ParceiroViewSet)
 
+grupogestor_router = routers.NestedSimpleRouter(router, r'pracas', lookup='praca')
+grupogestor_router.register(r'grupogestor', GrupoGestorViewSet)
+
+membrogestor_router = routers.NestedSimpleRouter(grupogestor_router, r'grupogestor', lookup='grupogestor')
+membrogestor_router.register(r'membrogestor', MembroGestorViewSet)
+
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^', include(imagem_router.urls)),
     url(r'^', include(parceiro_router.urls)),
+    url(r'^', include(grupogestor_router.urls)),
+    url(r'^', include(membrogestor_router.urls)),
     url(r'^distancia/$', DistanceView.as_view(), name='distancia'),
 ]

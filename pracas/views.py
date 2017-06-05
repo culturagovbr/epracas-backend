@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -13,6 +14,7 @@ from core.views import MultiSerializerViewSet
 from .models import Praca
 from .models import Parceiro
 from .models import GrupoGestor
+from .models import MembroGestor
 from .models import ImagemPraca
 
 from .serializers import PracaSerializer
@@ -20,7 +22,7 @@ from .serializers import PracaListSerializer
 from .serializers import ImagemPracaSerializer
 from .serializers import DistanciaSerializer
 from .serializers import GrupoGestorSerializer
-
+from .serializers import MembroGestorSerializer
 from .serializers import ParceiroDetailSerializer
 
 from .permissions import IsAdminOrManagerOrReadOnly
@@ -106,7 +108,38 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
 class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAdminOrManagerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
     serializer_class = GrupoGestorSerializer
     queryset = GrupoGestor.objects.all()
+
+    def create(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        gg = GrupoGestorSerializer(data=request.data)
+        if gg.is_valid():
+            gg.save(praca=praca)
+
+            return Response(gg.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(gg.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MembroGestorViewSet(DefaultMixin, ModelViewSet):
+
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
+    serializer_class = MembroGestorSerializer
+    queryset = MembroGestor.objects.all()
+
+    def create(self, request, praca_pk=None, grupogestor_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        gg = get_object_or_404(GrupoGestor, pk=grupogestor_pk)
+
+        membro = MembroGestorSerializer(data=request.data)
+        if membro.is_valid(raise_exception=True):
+            membro.save(grupo_gestor=gg)
+            return Response(membro.data, status=status.HTTP_201_CREATED)
