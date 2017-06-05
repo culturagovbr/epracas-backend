@@ -53,7 +53,7 @@ class IsOwnerOrReadOnly(BasePermission):
         elif request.method in self.MANAGER_SAFE_METHODS:
             try:
                 return request.user.is_staff or obj.get_manager().user == request.user
-            except:
+            except AttributeError:
                 return False
         else:
             return request.user.is_staff
