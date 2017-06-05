@@ -73,7 +73,9 @@ class Agenda(IdPubIdentifier, BaseEvent):
     publico = models.CharField(
         _('Publico alvo da atividade'),
         choices=PUBLICO_CHOICES,
-        max_length=2)
+        max_length=2,
+        null=True,
+        blank=True)
     carga_horaria = models.IntegerField(_('Carga Horaria da Atividade'))
     publico_esperado = models.IntegerField(
         _('Publico Esperado para a Atividade'))
