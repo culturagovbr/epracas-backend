@@ -6,6 +6,7 @@ from .models import GrupoGestor
 from .models import Praca
 from .models import Parceiro
 from .models import ImagemPraca
+from .models import MembroGestor
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -34,6 +35,14 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = GrupoGestor
         fields = '__all__'
+        read_only_fields = ('praca',)
+
+
+class MembroGestorSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MembroGestor
+        fields = ('nome', 'origem')
 
 
 class ImagemPracaSerializer(serializers.ModelSerializer):
@@ -57,12 +66,19 @@ class PracaBaseSerializer(serializers.ModelSerializer):
             source='get_situacao_display',
             read_only=True)
     gestor = serializers.SerializerMethodField()
-    grupo_gestor = GrupoGestorSerializer(read_only=True)
+    grupo_gestor = serializers.SerializerMethodField()
 
     def get_gestor(self, obj):
         if obj.get_manager():
             from gestor.serializers import GestorSerializer
             serializer = GestorSerializer(obj.get_manager())
+            return serializer.data
+        else:
+            return None
+
+    def get_grupo_gestor(self, obj):
+        if obj.get_grupogestor():
+            serializer = GrupoGestorSerializer(obj.get_grupogestor())
             return serializer.data
         else:
             return None
