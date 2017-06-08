@@ -1,4 +1,3 @@
-#coding: utf-8
 import uuid
 
 from django.conf import settings
@@ -9,8 +8,6 @@ from rest_framework.reverse import reverse
 from rest_localflavor.br.br_states import STATE_CHOICES
 
 from .choices import REGIOES_CHOICES
-
-# from pracas.models import Praca
 
 
 class IdPubIdentifier(models.Model):
@@ -35,14 +32,20 @@ class IdPubIdentifier(models.Model):
 def upload_header_to(instance, filename):
     ext = filename.split('.')[-1]
     id_pub = instance.id_pub
-    return '{}/images/header.{}'.format(id_pub, ext)
+    return f'{id_pub}/images/header.{ext}'
 
 
 def upload_doc_to(instance, filename):
-    new_name = slugify(filename.split('.')[:-1])
-    ext = filename.split('.')[-1]
+    ext = slugify(filename.split('.').pop(-1))
+    new_name = slugify(filename.rsplit('.', 1)[0])
     id_pub = instance.processo.praca.id_pub
-    return '{id_pub}/docs/{new_name}.{ext}'.format(
-        id_pub=id_pub,
-        new_name=new_name,
-        ext=ext)
+    basename = instance.processo._meta.object_name.lower()
+    return f'{id_pub}/docs/{basename}/{new_name}.{ext}'
+
+
+def upload_grupogestor_to(instance, filename):
+    ext = slugify(filename.split('.').pop(-1))
+    new_name = slugify(filename.rsplit('.', 1)[0])
+    id_pub = instance.praca.id_pub
+    basename = instance._meta.object_name.lower()
+    return f'{id_pub}/docs/{basename}/{new_name}.{ext}'
