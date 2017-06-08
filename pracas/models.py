@@ -13,6 +13,7 @@ from core.choices import REGIOES_CHOICES
 from core.choices import SITUACAO_CHOICES
 
 from core.models import IdPubIdentifier
+from core.models import upload_grupogestor_to
 
 from .choices import PARCEIRO_RAMO_ATIVIDADE
 from .choices import ORIGEM_CHOICES
@@ -242,6 +243,7 @@ class GrupoGestor(IdPubIdentifier):
         null=True)
     documento_constituicao = models.FileField(
         _('Documento de Constituição do Grupo Gestor'),
+        upload_to=upload_grupogestor_to,
         blank=True,
         null=True)
     tipo_documento = models.CharField(
@@ -259,13 +261,19 @@ class MembroGestor(IdPubIdentifier):
     grupo_gestor = models.ForeignKey(GrupoGestor, related_name='membros')
     nome = models.CharField(_('Nome do Gestor'), max_length=120)
     origem = models.CharField(_('Origem do Membro'),
-                              max_length=1, choices=ORIGEM_CHOICES)
+                              max_length=2, choices=ORIGEM_CHOICES)
     data_posse = models.DateField(
         _('Data de Posse do Membro Gestor'),
-        default=timezone.now
+        default=date.today
+        )
+    data_desligamento = models.DateField(
+        _('Data de Desligamento do Membro Gestor'),
+        blank=True,
+        null=True,
         )
     documento_posse = models.FileField(
         _('Documento de Posse do Membro Gestor'),
+        upload_to=upload_grupogestor_to,
         blank=True,
         null=True)
     tipo_documento = models.CharField(

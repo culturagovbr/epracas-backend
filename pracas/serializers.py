@@ -30,19 +30,22 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
                 self.fields.pop(field_name)
 
 
-class GrupoGestorSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = GrupoGestor
-        fields = '__all__'
-        read_only_fields = ('praca',)
-
-
 class MembroGestorSerializer(serializers.ModelSerializer):
+    origem_descricao = serializers.CharField(source='get_origem_display')
 
     class Meta:
         model = MembroGestor
-        fields = ('nome', 'origem')
+        fields = ('nome', 'origem', 'origem_descricao')
+        read_only_fields = ('data_posse',)
+
+
+class GrupoGestorSerializer(serializers.ModelSerializer):
+    membros = MembroGestorSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = GrupoGestor
+        fields = ('id_pub', 'data_instituicao', 'data_finalizacao',
+                  'tipo_documento', 'documento_constituicao', 'membros')
 
 
 class ImagemPracaSerializer(serializers.ModelSerializer):

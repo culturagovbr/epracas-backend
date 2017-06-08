@@ -143,3 +143,5 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
         if membro.is_valid(raise_exception=True):
             membro.save(grupo_gestor=gg)
             return Response(membro.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(membro.errors, status=status.HTTP_400_BAD_REQUEST)
