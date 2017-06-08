@@ -32,9 +32,9 @@ SOCIEDADE_CIVIL = "Sociedade Civil"
 MORADORES_ENTORNO = "Moradores do Entorno"
 
 ORIGEM_CHOICES = (
-    (1, PODER_PUBLICO),
-    (2, SOCIEDADE_CIVIL),
-    (3, MORADORES_ENTORNO),
+    ('pp', PODER_PUBLICO),
+    ('sc', SOCIEDADE_CIVIL),
+    ('me', MORADORES_ENTORNO),
 )
 
 # Tipo de Documento de Constituição
