@@ -16,6 +16,7 @@ from .models import Parceiro
 from .models import GrupoGestor
 from .models import MembroGestor
 from .models import ImagemPraca
+from .models import MembroUgl
 
 from .serializers import PracaSerializer
 from .serializers import PracaListSerializer
@@ -24,6 +25,7 @@ from .serializers import DistanciaSerializer
 from .serializers import GrupoGestorSerializer
 from .serializers import MembroGestorSerializer
 from .serializers import ParceiroDetailSerializer
+from .serializers import MembroUglSerializer
 
 from .permissions import IsAdminOrManagerOrReadOnly
 from .permissions import IsOwnerOrReadOnly
@@ -130,6 +132,7 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
+
     serializer_class = MembroGestorSerializer
     queryset = MembroGestor.objects.all()
 
@@ -142,6 +145,26 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
         membro = MembroGestorSerializer(data=request.data)
         if membro.is_valid(raise_exception=True):
             membro.save(grupo_gestor=gg)
+            return Response(membro.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(membro.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class MembroUglViewSet(DefaultMixin, ModelViewSet):
+
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
+
+    serializer_class = MembroUglSerializer
+    queryset = MembroUgl.objects.all()
+
+    def create(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        membro = MembroUglSerializer(data=request.data)
+        if membro.is_valid(raise_exception=True):
+            membro.save(praca=praca)
             return Response(membro.data, status=status.HTTP_201_CREATED)
         else:
             return Response(membro.errors, status=status.HTTP_400_BAD_REQUEST)

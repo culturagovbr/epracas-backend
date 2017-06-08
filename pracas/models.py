@@ -282,3 +282,8 @@ class MembroGestor(IdPubIdentifier):
         blank=True,
         null=True,
         choices=DOCUMENTO_CHOICES)
+
+
+class MembroUgl(IdPubIdentifier):
+    praca = models.ForeignKey(Praca, related_name='ugl')
+    nome = models.CharField(_('Nome do Membro'), max_length=150)

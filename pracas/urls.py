@@ -6,6 +6,7 @@ from .views import PracaViewSet
 from .views import DistanceView
 from .views import GrupoGestorViewSet
 from .views import MembroGestorViewSet
+from .views import MembroUglViewSet
 
 from .views import ImagemPracaViewSet
 
@@ -28,11 +29,15 @@ grupogestor_router.register(r'grupogestor', GrupoGestorViewSet)
 membrogestor_router = routers.NestedSimpleRouter(grupogestor_router, r'grupogestor', lookup='grupogestor')
 membrogestor_router.register(r'membrogestor', MembroGestorViewSet)
 
+membrougl_router = routers.NestedSimpleRouter(router, r'pracas', lookup='praca')
+membrougl_router.register(r'unidadegestora', MembroUglViewSet)
+
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^', include(imagem_router.urls)),
     url(r'^', include(parceiro_router.urls)),
     url(r'^', include(grupogestor_router.urls)),
     url(r'^', include(membrogestor_router.urls)),
+    url(r'^', include(membrougl_router.urls)),
     url(r'^distancia/$', DistanceView.as_view(), name='distancia'),
 ]

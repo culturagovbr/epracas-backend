@@ -7,6 +7,7 @@ from .models import Praca
 from .models import Parceiro
 from .models import ImagemPraca
 from .models import MembroGestor
+from .models import MembroUgl
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -46,6 +47,13 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
         model = GrupoGestor
         fields = ('id_pub', 'data_instituicao', 'data_finalizacao',
                   'tipo_documento', 'documento_constituicao', 'membros')
+
+
+class MembroUglSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MembroUgl
+        fields = ('nome',)
 
 
 class ImagemPracaSerializer(serializers.ModelSerializer):
@@ -159,6 +167,7 @@ class ParceiroListSerializer(ParceiroBaseSerializer):
 class PracaSerializer(PracaBaseSerializer):
     imagem = ImagemPracaSerializer(many=True, read_only=True)
     parceiros = ParceiroListSerializer(many=True, read_only=True)
+    unidade_gestora = MembroUglSerializer(source='ugl', many=True, read_only=True)
 
     class Meta:
         model = Praca
@@ -182,11 +191,12 @@ class PracaSerializer(PracaBaseSerializer):
                 'lat',
                 'long',
                 'gestor',
+                'unidade_gestora',
                 'grupo_gestor',
                 'parceiros',
                 'imagem',
                 )
-        read_only_fields = ('gestor', 'grupo_gestor', 'imagem', 'parceiros')
+        read_only_fields = ('gestor', 'unidade_gestora', 'grupo_gestor', 'imagem', 'parceiros')
 
 
 class DistanciaSerializer(PracaListSerializer):
