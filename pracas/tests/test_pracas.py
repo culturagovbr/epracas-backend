@@ -104,7 +104,7 @@ def test_return_a_praca_with_some_properties(client):
 
     fields = ('url', 'id_pub', 'nome', 'slug', 'municipio', 'uf', 'modelo',
               'modelo_descricao', 'situacao', 'situacao_descricao',
-              'header_img')
+              'header_img', 'bio')
 
     praca = mommy.make(Praca)
 
@@ -223,6 +223,25 @@ def test_update_Praca_information_as_common_user(_common_user, client):
         content_type="application/json")
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_update_Praca_information_as_manager(_common_user, client):
+    """
+    Testa atualizar as informações de uma praça usando PATCH com credenciais de
+    Gestor da Praça.
+    """
+
+    praca = mommy.make(Praca)
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+
+    praca_data = json.dumps({'nome': 'Praça das Artes e Cultura'})
+
+    response = client.patch(
+        _detail(kwargs={'pk': praca.pk}),
+        praca_data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
 
 
 def test_update_praca_information_as_admin_user(_admin_user, client):
@@ -527,7 +546,6 @@ def test_retornar_informacoes_sobre_GG(client):
                                   }))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['praca']
 
 
 def test_cria_um_novo_grupo_gestor_sem_credenciais(client):
@@ -582,8 +600,6 @@ def test_retorna_qtde_membros_GG(client):
 
     response = client.get(_detail(kwargs={'pk': praca.pk}))
 
-    # import ipdb
-    # ipdb.set_trace()
     assert response.data['grupo_gestor']['previsao_espacos'] == 5
 
 
@@ -641,7 +657,7 @@ def test_cadastra_um_novo_membro_no_GG_como_gestor(_common_user, client):
 
     data = json.dumps({
         'nome': 'Cicrano Fulano',
-        'origem': '1',
+        'origem': 'sc',
         'data_posse': f'{datetime.date.today()}',
     })
 
