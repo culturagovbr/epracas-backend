@@ -25,7 +25,7 @@ class IsAdminOrManagerOrReadOnly(BasePermission):
             return True
         elif request.method in self.MANAGER_SAFE_METHODS:
             try:
-                return request.user.is_staff or obj.gestor.user == request.user
+                return request.user.is_staff or obj.get_manager().user == request.user
             except:
                 return False
         else:

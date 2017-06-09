@@ -92,6 +92,11 @@ class Praca(IdPubIdentifier):
         null=True,
         blank=True
         )
+    bio = models.TextField(
+        _('Descrição/Biografia da Praça'),
+        null=True,
+        blank=True
+        )
     header_img = models.FileField(
         blank=True,
         upload_to=upload_image_to,

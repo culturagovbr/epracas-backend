@@ -32,12 +32,12 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
 
 class MembroGestorSerializer(serializers.ModelSerializer):
-    origem_descricao = serializers.CharField(source='get_origem_display')
+    origem_descricao = serializers.CharField(source='get_origem_display',
+                                             read_only=True)
 
     class Meta:
         model = MembroGestor
         fields = ('nome', 'origem', 'origem_descricao')
-        read_only_fields = ('data_posse',)
 
 
 class GrupoGestorSerializer(serializers.ModelSerializer):
@@ -46,7 +46,8 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
     class Meta:
         model = GrupoGestor
         fields = ('id_pub', 'data_instituicao', 'data_finalizacao',
-                  'tipo_documento', 'documento_constituicao', 'membros')
+                  'tipo_documento', 'documento_constituicao',
+                  'previsao_espacos', 'membros')
 
 
 class MembroUglSerializer(serializers.ModelSerializer):
@@ -110,6 +111,7 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
                 'modelo_descricao',
                 'situacao',
                 'situacao_descricao',
+                'repasse',
                 'header_img',
                 'gestor',
                 )
@@ -187,6 +189,8 @@ class PracaSerializer(PracaBaseSerializer):
                 'modelo_descricao',
                 'situacao',
                 'situacao_descricao',
+                'repasse',
+                'bio',
                 'header_img',
                 'lat',
                 'long',
