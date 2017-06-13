@@ -806,3 +806,110 @@ def test_persiste_um_parceiro_com_permissoes_de_gestor(_admin_user,
                            data, content_type="application/json")
 
     assert response.status_code == status.HTTP_201_CREATED
+
+
+def test_mudar_o_numero_de_contrato_de_uma_Praca_por_um_gestor_de_Praca(_common_user, client):
+    """
+    Testa a alteração do numero de contrato de uma Praça por um gestor de Praça
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', user=_common_user, praca=praca, atual=True)
+
+    data = json.dumps({
+        'contrato': 12345678
+    })
+
+    response = client.patch(_detail(kwargs={'pk': praca.pk}),
+                            data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_mudar_o_numero_de_contrato_de_uma_Praca_por_um_gestor_MinC(_admin_user, client):
+    """
+    Testa a alteração do numero de contrato de uma Praça por um gestor MinC
+    """
+
+    praca = mommy.make('Praca')
+
+    data = json.dumps({
+        'contrato': 12345678
+    })
+
+    response = client.patch(_detail(kwargs={'pk': praca.pk}),
+                            data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_mudar_o_valor_de_repasse_de_uma_Praca_por_um_gestor_de_Praca(_common_user, client):
+    """
+    Testa a alteração do valor de repasse para a construção da Praça, pelo
+    gestor da Praça
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', user=_common_user, praca=praca, atual=True)
+
+    data = json.dumps({
+        'repasse': 0
+    })
+
+    response = client.patch(_detail(kwargs={'pk': praca.pk}),
+                            data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_mudar_o_valor_de_repasse_de_uma_Praca_por_um_gestor_MinC(_admin_user, client):
+    """
+    Testa a alteração do valor de repasse para a construção da Praça, pelo
+    gestor MinC
+    """
+
+    praca = mommy.make('Praca')
+
+    data = json.dumps({
+        'repasse': 0
+    })
+
+    response = client.patch(_detail(kwargs={'pk': praca.pk}),
+                            data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+
+
+def test_mudar_o_modelo_de_Praca_pelo_gestor_de_Praca(_common_user, client):
+    """
+    Testa a alteração do modelo de uma Praça, pelo gestor da Praça
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', user=_common_user, praca=praca, atual=True)
+
+    data = json.dumps({
+        'modelo': 'm'
+    })
+
+    response = client.patch(_detail(kwargs={'pk': praca.pk}),
+                            data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_mudar_o_modelo_de_Praca_por_um_gestor_MinC(_admin_user, client):
+    """
+    Testa a alteração do modelo de uma Praça, pelo gestor MinC
+    """
+
+    praca = mommy.make('Praca')
+
+    data = json.dumps({
+        'modelo': 'm'
+    })
+
+    response = client.patch(_detail(kwargs={'pk': praca.pk}),
+                            data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
