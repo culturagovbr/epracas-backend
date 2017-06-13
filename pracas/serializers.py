@@ -115,7 +115,7 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
                 'header_img',
                 'gestor',
                 )
-        read_only_fields = ('url', 'gestor', 'header_img')
+        read_only_fields = ('url', 'gestor', 'header_img', 'id_pub')
 
 
 class ParceiroBaseSerializer(serializers.ModelSerializer):
@@ -191,6 +191,12 @@ class PracaSerializer(PracaBaseSerializer):
                 'situacao_descricao',
                 'repasse',
                 'bio',
+                'telefone1',
+                'telefone2',
+                'fax',
+                'email',
+                'pagina',
+                'data_inauguracao',
                 'header_img',
                 'lat',
                 'long',
@@ -200,7 +206,7 @@ class PracaSerializer(PracaBaseSerializer):
                 'parceiros',
                 'imagem',
                 )
-        read_only_fields = ('gestor', 'unidade_gestora', 'grupo_gestor', 'imagem', 'parceiros')
+        read_only_fields = ('id_pub', 'gestor', 'unidade_gestora', 'grupo_gestor', 'imagem', 'parceiros')
 
 
 class DistanciaSerializer(PracaListSerializer):

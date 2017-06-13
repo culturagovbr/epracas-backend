@@ -108,6 +108,34 @@ class Praca(IdPubIdentifier):
         null=True,
         blank=True,
         )
+    telefone1 = models.CharField(
+        _('Telefone de Contato'),
+        blank=True,
+        null=True,
+        max_length=15
+        )
+    telefone2 = models.CharField(
+        _('Telefone de Contato'),
+        blank=True,
+        null=True,
+        max_length=15
+        )
+    fax = models.CharField(
+        _('Fax'),
+        blank=True,
+        null=True,
+        max_length=15
+        )
+    email = models.EmailField(
+        _('Email de Contato'),
+        blank=True,
+        null=True,
+        )
+    pagina = models.URLField(
+        _('Pagina do CEU nas redes sociais'),
+        blank=True,
+        null=True,
+        )
 
     def get_latlong(self):
         """
