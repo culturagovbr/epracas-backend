@@ -97,14 +97,16 @@ def test_returning_a_praca(client):
 def test_return_a_praca_with_some_properties(client):
     """
     Testa o retorno de uma praça especifica com as seguintes propriedades:
-    url, id_pub, nome, slug, municipio, uf, modelo, modelo_descricao, situacao
-    e situacao_descricao.
+    url, id_pub, nome, slug, municipio, uf, modelo, modelo_descricao,
+    situacao, situacao_descricao, bio, telefone1, telefone2, fax, email,
+    pagina e data_inauguracao.
 
     """
 
     fields = ('url', 'id_pub', 'nome', 'slug', 'municipio', 'uf', 'modelo',
-              'modelo_descricao', 'situacao', 'situacao_descricao',
-              'header_img', 'bio')
+              'modelo_descricao', 'situacao', 'situacao_descricao', 'bio',
+              'telefone1', 'telefone2', 'fax', 'email', 'pagina',
+              'data_inauguracao', 'header_img', 'lat', 'long')
 
     praca = mommy.make(Praca)
 
