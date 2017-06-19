@@ -18,6 +18,7 @@ from core.models import upload_grupogestor_to
 from .choices import PARCEIRO_RAMO_ATIVIDADE
 from .choices import ORIGEM_CHOICES
 from .choices import DOCUMENTO_CHOICES
+from .choices import MEMBRO_UGL_CHOICES
 
 
 def upload_image_to(instance, filename):
@@ -320,3 +321,17 @@ class MembroGestor(IdPubIdentifier):
 class MembroUgl(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='ugl')
     nome = models.CharField(_('Nome do Membro'), max_length=150)
+    tipo = models.CharField(_('Tipo de Membro'), max_length=3,
+                            choices=MEMBRO_UGL_CHOICES,
+                            default='cg')
+    telefone = models.CharField(
+        _('Telefone de Contato'),
+        blank=True,
+        null=True,
+        max_length=15
+        )
+    email = models.EmailField(
+        _('Email de Contato'),
+        blank=True,
+        null=True,
+        )

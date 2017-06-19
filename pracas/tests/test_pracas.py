@@ -914,3 +914,21 @@ def test_mudar_o_modelo_de_Praca_por_um_gestor_MinC(_admin_user, client):
                             data, content_type="application/json")
 
     assert response.status_code == status.HTTP_200_OK
+
+
+def test_propriedades_de_um_membro_UGL(client):
+    """
+    Testa a existencia de determinadas propriedades de um membro da Unidade
+    Gestora Local de uma Praça.
+    """
+
+    praca = mommy.make('Praca')
+    ugl = mommy.make('MembroUgl', praca=praca)
+
+    fields = ('tipo', 'nome', 'telefone', 'email')
+
+    response = client.get(_detail(kwargs={'pk': praca.pk}),
+                          content_type="application/json")
+
+    for field in fields:
+        assert field in response.data['unidade_gestora'][0]

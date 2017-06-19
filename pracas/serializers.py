@@ -54,7 +54,7 @@ class MembroUglSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MembroUgl
-        fields = ('nome',)
+        fields = ('nome', 'tipo', 'telefone', 'email')
 
 
 class ImagemPracaSerializer(serializers.ModelSerializer):

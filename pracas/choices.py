@@ -53,3 +53,28 @@ DOCUMENTO_CHOICES = (
     ('l', LEI),
     ('n', NAO_FORMALIZADO)
 )
+
+# Tipo de Membros da Unidade Gestora Local
+"""
+Lista de escolhas para o Tipo de Membro da Unidade Gestora Local de uma Praça
+"""
+
+COORD_GERAL = "Coordenador Geral"
+COORD_ENG = "Coordenador de Engenharia (responsável pela obra)"
+COORD_CULT = "Coordenador de Cultura"
+COORD_ESP = "Coordenador de Esporte"
+COORD_ASS = "Coordenador de Assistência Social"
+COORD_DSE = "Coordenador de Desenvolvimento Econômico"
+COORD_SEGC = "Coordenador de Segurança Cidadã"
+COORD_ID = "Coordenador de Inclusão Digital"
+
+MEMBRO_UGL_CHOICES = (
+    ('cg', COORD_GERAL),
+    ('ce', COORD_ENG),
+    ('cc', COORD_CULT),
+    ('ces', COORD_ESP),
+    ('cas', COORD_ASS),
+    ('cds', COORD_DSE),
+    ('csc', COORD_SEGC),
+    ('cid', COORD_ID),
+)
