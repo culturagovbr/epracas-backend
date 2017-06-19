@@ -106,7 +106,8 @@ def test_return_a_praca_with_some_properties(client):
     fields = ('url', 'id_pub', 'nome', 'slug', 'municipio', 'uf', 'modelo',
               'modelo_descricao', 'situacao', 'situacao_descricao', 'bio',
               'telefone1', 'telefone2', 'fax', 'email', 'pagina',
-              'data_inauguracao', 'header_img', 'lat', 'long')
+              'data_inauguracao', 'repasse', 'contrato', 'header_img', 'lat',
+              'long')
 
     praca = mommy.make(Praca)
 
