@@ -22,6 +22,7 @@ from authentication.tests.test_user import _common_user
 _list = _('pracas:praca-list')
 _detail = _('pracas:praca-detail')
 _imagem_list = _('pracas:imagempraca-list')
+_imagem_detail = _('pracas:imagempraca-detail')
 _parceiros_list = _('pracas:parceiro-list')
 _parceiros_detail = _('pracas:parceiro-detail')
 _grupogestor_list = _('pracas:grupogestor-list')
@@ -517,6 +518,95 @@ def test_upload_an_image_to_a_Praca_gallery_as_manager(
     assert response.status_code == status.HTTP_201_CREATED
     assert str(response.data['praca']) in response.data['arquivo']
     assert response.data['id_pub'] in response.data['arquivo']
+
+
+def test_change_title_of_an_image_at_gallery_wo_credentials(
+    _create_temporary_file, client):
+    """
+    Testa a alteração de informações de uma imagem da galeria de uma Praca, sem
+    utilizar credenciais de identificação.
+    """
+
+    praca = mommy.make(Praca)
+    imagem = mommy.make('ImagemPraca', praca=praca)
+
+    data = json.dumps({
+        "titulo": "Titulo Teste",
+        "descricao": "Descrição Teste"
+    })
+
+    image_response = client.patch(
+        _imagem_detail(kwargs={'praca_pk': praca.pk, 'pk': imagem.pk}),
+        data, content_type="application/json")
+
+    assert image_response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_change_title_of_an_image_at_gallery_w_credentials(
+    _create_temporary_file, _common_user, client):
+    """
+    Testa a alteração de informações de uma imagem da galeria de uma Praca,
+    utilizando credenciais de identificação.
+    """
+
+    praca = mommy.make(Praca)
+    imagem = mommy.make('ImagemPraca', praca=praca)
+
+    data = json.dumps({
+        "titulo": "Titulo Teste",
+        "descricao": "Descrição Teste"
+    })
+
+    image_response = client.patch(
+        _imagem_detail(kwargs={'praca_pk': praca.pk, 'pk': imagem.pk}),
+        data, content_type="application/json")
+
+    assert image_response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_change_title_of_an_image_at_gallery_as_manager(
+    _create_temporary_file, _common_user, client):
+    """
+    Testa a alteração de informações de uma imagem da galeria de uma Praca,
+    utilizando credenciais de identificação de um gestor de Praça
+    """
+
+    praca = mommy.make(Praca)
+    imagem = mommy.make('ImagemPraca', praca=praca)
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+
+    data = json.dumps({
+        "titulo": "Titulo Teste",
+        "descricao": "Descrição Teste"
+    })
+
+    image_response = client.patch(
+        _imagem_detail(kwargs={'praca_pk': praca.pk, 'pk': imagem.pk}),
+        data, content_type="application/json")
+
+    assert image_response.status_code == status.HTTP_200_OK
+
+
+def test_change_title_of_an_image_at_gallery_as_minc_manager(
+    _create_temporary_file, _admin_user, client):
+    """
+    Testa a alteração de informações de uma imagem da galeria de uma Praca,
+    utilizando credenciais de identificação de um gestor do MinC
+    """
+
+    praca = mommy.make(Praca)
+    imagem = mommy.make('ImagemPraca', praca=praca)
+
+    data = json.dumps({
+        "titulo": "Titulo Teste",
+        "descricao": "Descrição Teste"
+    })
+
+    image_response = client.patch(
+        _imagem_detail(kwargs={'praca_pk': praca.pk, 'pk': imagem.pk}),
+        data, content_type="application/json")
+
+    assert image_response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.skip

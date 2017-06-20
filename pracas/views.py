@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -54,7 +55,7 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
     queryset = ImagemPraca.objects.all()
 
     def create(self, request, praca_pk=None):
-        praca = Praca.objects.get(pk=praca_pk)
+        praca = get_object_or_404(Praca, pk=praca_pk)
         self.check_object_permissions(request, praca)
 
         try:
@@ -70,6 +71,33 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
             serializer = ImagemPracaSerializer(imagem)
 
         return Response(serializer.data, status=201)
+
+    def list(self, request, praca_pk=None):
+        if not praca_pk:
+            imagens = ImagemPraca.objects.all()
+            serializer = ImagemPracaSerializer(imagens, many=True)
+
+            return Response(serializer.data, status=200)
+
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        imagens = praca.imagem.all()
+        serializer = ImagemPracaSerializer(imagens, many=True)
+
+        return Response(serializer.data, status=200)
+
+    def partial_update(self, request, pk=None, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        imagem = get_object_or_404(ImagemPraca, pk=pk)
+
+        self.check_object_permissions(request, praca)
+        serializer = ImagemPracaSerializer(imagem, data=request.data,
+                                           partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            raise ValidationError('serializer.errors')
 
 
 class DistanceView(DefaultMixin, APIView):
