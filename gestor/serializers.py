@@ -7,13 +7,28 @@ from .models import ProcessoVinculacao
 from .models import ArquivosProcessoVinculacao
 
 
+class GestorBaseSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    nome = serializers.CharField(source='user.full_name', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
+    user_id_pub = serializers.CharField(source='user.id_pub', read_only=True)
+    profile_picture_url = serializers.CharField(
+        source='user.profile_picture_url', read_only=True)
+
+    class Meta:
+        model = Gestor
+        fields = ('url', 'user_id_pub', 'nome', 'email', 'profile_picture_url')
+
+
 class GestorSerializer(serializers.ModelSerializer):
 
     url = serializers.URLField(source='get_absolute_url', read_only=True)
-    nome = serializers.CharField(source='user.full_name')
-    email = serializers.EmailField(source='user.email')
-    user_id_pub = serializers.CharField(source='user.id_pub')
-    praca = serializers.SerializerMethodField()
+    nome = serializers.CharField(source='user.full_name', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
+    user_id_pub = serializers.CharField(source='user.id_pub', read_only=True)
+    profile_picture_url = serializers.CharField(
+        source='user.profile_picture_url', read_only=True)
+    praca = serializers.SerializerMethodField(read_only=True)
 
     def get_praca(self, obj):
         from pracas.serializers import PracaListSerializer
@@ -23,7 +38,8 @@ class GestorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Gestor
-        fields = ('url', 'user_id_pub', 'nome', 'email', 'praca')
+        fields = ('url', 'user_id_pub', 'nome', 'email', 'praca',
+                  'profile_picture_url')
 
 
 class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):

@@ -1,5 +1,3 @@
-from django.conf import settings
-
 from rest_framework import serializers
 
 from .models import GrupoGestor
@@ -82,8 +80,8 @@ class PracaBaseSerializer(serializers.ModelSerializer):
 
     def get_gestor(self, obj):
         if obj.get_manager():
-            from gestor.serializers import GestorSerializer
-            serializer = GestorSerializer(obj.get_manager())
+            from gestor.serializers import GestorBaseSerializer
+            serializer = GestorBaseSerializer(obj.get_manager())
             return serializer.data
         else:
             return None
