@@ -15,8 +15,8 @@ MODELO_CHOICES = (
 )
 
 SITUACAO_CHOICES = (
-    ('c', 'Concluida'),
-    ('a', 'Em andamento'),
+    ('c', 'Obras Concluidas'),
+    ('a', 'Obras em Andamento'),
     ('i', 'Inaugurada'),
 )
 
