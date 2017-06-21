@@ -255,3 +255,19 @@ def test_end_manager_relation_with_a_Praca_using_id(_common_user, client):
     response = client.delete(url, content_type='application/json')
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_list_only_managers_with_mandate(client):
+    """
+    Testa exibir todos os gestores, de todas as Praças com mandato ativo.
+    """
+
+    pracas = mommy.make('Praca', _quantity=2)
+    gestor = mommy.make('Gestor', praca=pracas[0], atual=True)
+    gestores = mommy.make('Gestor', _quantity=5)
+
+    response = client.get(_list() + '?atual=true')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 1
+

@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save
@@ -15,6 +17,8 @@ from core.models import upload_doc_to
 from pracas.models import Praca
 
 from core.choices import REGIOES_CHOICES
+
+from .choices import SITUACAO
 
 from rest_localflavor.br.br_states import STATE_CHOICES
 
@@ -55,7 +59,10 @@ class ProcessoVinculacao(IdPubIdentifier):
         blank=True)
     aprovado = models.BooleanField(
         _('Processo aprovado'),
-        default=False, )
+        default=False)
+    finalizado = models.BooleanField(
+        _('Processo finalizado'),
+        default=False)
     valido = models.BooleanField(
         _('Processo Válido'),
         default=True)
@@ -91,6 +98,25 @@ class ArquivosProcessoVinculacao(IdPubIdentifier):
         url = app_name + ':' + basename + '-detail'
 
         return reverse(url, kwargs={'processo_pk': self.processo.pk, 'pk': self.pk})
+
+
+class RegistroProcessoVinculacao(models.Model):
+    processo = models.ForeignKey(ProcessoVinculacao, related_name='registro')
+    data = models.DateField(
+        _('Data do Evento'),
+        default=date.today)
+    situacao = models.CharField(
+        _('Situacao'),
+        max_length=1,
+        choices=SITUACAO)
+    descricao = models.TextField(
+        _('Descrição'),
+        blank=True,
+        null=True)
+
+    class Meta:
+        ordering = ['-data']
+    
 
 @receiver(pre_save, sender=ProcessoVinculacao)
 def validate_process(sender, instance, **kwargs):

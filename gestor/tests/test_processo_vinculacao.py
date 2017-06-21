@@ -10,6 +10,8 @@ from rest_framework.reverse import reverse
 
 from model_mommy import mommy
 
+from core.helper_functions import _
+
 from pracas.models import Praca
 from gestor.models import Gestor
 from gestor.models import ProcessoVinculacao
@@ -18,6 +20,28 @@ from authentication.tests.test_user import _admin_user
 from authentication.tests.test_user import _common_user
 
 pytestmark = pytest.mark.django_db
+
+_list = _('gestor:processovinculacao-list')
+"""
+Metodo _list() que retorna URL da View gestor:processovinculacao-list.
+
+Returns:
+    Retorna uma string contendo a URL construida com os parametros informados
+
+"""
+
+_detail = _('gestor:processovinculacao-detail')
+"""
+Metodo _detail() que retorna URL da View gestor:processovinculacao-detail.
+
+Args:
+    kwargs: Um dict contendo os parametros a serem utilizados na construção da
+    URL.
+
+Returns:
+    Retorna uma string contendo a URL construida com os parametros informados
+
+"""
 
 
 @pytest.fixture
@@ -175,6 +199,48 @@ def test_return_a_list_of_process(client):
     assert isinstance(response.data, list)
 
 
+def test_return_a_list_of_open_processes(client):
+    """
+    Testa o retorno de uma lista de processos abertos aguardando despacho do
+    gestor do MinC.
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca)
+    arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
+                          verificado=True, _quantity=5)
+    processo.aprovado = True
+    processo.save()
+
+    processos = mommy.make('ProcessoVinculacao', praca=praca, aprovado=False,
+                           _quantity=5)
+
+    response = client.get(f'{_list()}?aprovado=false')
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 5
+
+
+def test_return_changes_on_status_processes(_admin_user, client):
+    """
+    Testa o retorno das mudanças na situacao do Processo de Vinculação.
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca)
+
+    data = json.dumps({
+        "situacao": "p",
+        "descricao": "Documentação não legivel"
+    })
+
+    response = client.patch(_detail(kwargs={"pk": processo.pk}), 
+                            data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "situacao" in response.data['registro'][0]
+
+
 def test_which_fields_returns_on_a_list_of_process(client):
     """
     Testa o retorno de determinados campos na lista de Processos de Vinculação
@@ -183,7 +249,8 @@ def test_which_fields_returns_on_a_list_of_process(client):
     praca = mommy.make('Praca')
     processo = mommy.make('ProcessoVinculacao', praca=praca)
 
-    fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura', 'concluido')
+    fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura',
+              'data_finalizacao', 'finalizado')
 
     response = client.get(
         reverse('gestor:processovinculacao-list'), format='json')
@@ -300,8 +367,10 @@ def test_returning_fields_on_a_detailed_process_as_owner(_common_user, client):
     praca = mommy.make('Praca')
     processo = mommy.make('ProcessoVinculacao', praca=praca, user=_common_user)
 
-    fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura', 'aprovado',
-              'files', )
+    fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura',
+              'data_finalizacao', 'aprovado', 'finalizado', 'despacho',
+              'files', 'registro')
+
     response = client.get(
         reverse(
             'gestor:processovinculacao-detail', kwargs={'pk': processo.pk}),

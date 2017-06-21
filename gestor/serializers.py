@@ -5,6 +5,7 @@ from authentication.serializers import UserSerializer
 from .models import Gestor
 from .models import ProcessoVinculacao
 from .models import ArquivosProcessoVinculacao
+from .models import RegistroProcessoVinculacao
 
 
 class GestorBaseSerializer(serializers.ModelSerializer):
@@ -51,9 +52,15 @@ class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
                   'comentarios', 'verificado_por', 'arquivo')
 
 
+class RegistroProcessoVinculacaoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RegistroProcessoVinculacao
+        fields = ('data', 'situacao', 'descricao')
+
+
 class ProcessoVinculacaoListSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
-    concluido = serializers.BooleanField(source='aprovado', read_only=True)
     praca = serializers.SerializerMethodField(read_only=True)
     user = UserSerializer(read_only=True)
 
@@ -65,14 +72,15 @@ class ProcessoVinculacaoListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProcessoVinculacao
         fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura',
-                  'concluido', )
+                  'data_finalizacao', 'finalizado')
 
 
 class ProcessoVinculacaoDetailSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     praca = serializers.SerializerMethodField(read_only=True)
     user = UserSerializer(read_only=True)
-    files = ArquivosProcessoVinculacaoSerializer(many=True)
+    files = ArquivosProcessoVinculacaoSerializer(many=True, read_only=True)
+    registro = RegistroProcessoVinculacaoSerializer(many=True, read_only=True)
 
     def get_praca(self, obj):
         from pracas.serializers import PracaListSerializer
@@ -82,7 +90,8 @@ class ProcessoVinculacaoDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProcessoVinculacao
         fields = ('url', 'id_pub', 'praca', 'user', 'data_abertura',
-                  'aprovado', 'files')
+                  'data_finalizacao', 'aprovado', 'finalizado', 'files',
+                  'despacho', 'registro')
 
 
 class ProcessoVinculacaoSerializer(serializers.ModelSerializer):

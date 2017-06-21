@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 
 from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import ValidationError
 
 from rest_framework.parsers import JSONParser
 from rest_framework.parsers import MultiPartParser
@@ -26,6 +27,7 @@ from .serializers import ProcessoVinculacaoSerializer
 from .serializers import ProcessoVinculacaoListSerializer
 from .serializers import ProcessoVinculacaoDetailSerializer
 from .serializers import ArquivosProcessoVinculacaoSerializer
+from .serializers import RegistroProcessoVinculacaoSerializer
 
 from .permissions import CommonUserOrReadOnly
 from .permissions import IsManagerOrReadOnly
@@ -39,7 +41,7 @@ class GestorViewSet(DefaultMixin, ModelViewSet):
     queryset = Gestor.objects.all()
     serializer_class = GestorSerializer
 
-    filter_fields = ('praca', )
+    filter_fields = ('praca', 'atual')
 
 
 class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
@@ -54,7 +56,30 @@ class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
         'retrieve': ProcessoVinculacaoDetailSerializer,
     }
 
-    search_fields = ('gestor', 'praca')
+    filter_fields = ('praca', 'aprovado')
+
+    def partial_update(self, request, pk=None):
+        processo = get_object_or_404(ProcessoVinculacao, pk=pk)
+
+        self.check_object_permissions(request, processo)
+
+        if 'situacao' in request.data:
+            serializer = RegistroProcessoVinculacaoSerializer(
+                data=request.data)
+            if serializer.is_valid():
+                serializer.save(processo=processo)
+                serializer = ProcessoVinculacaoDetailSerializer(processo)
+                return Response(serializer.data)
+            else:
+                raise ValidationError(serializer.errors)
+
+        serializer = ProcessoVinculacaoDetailSerializer(processo,
+                                                        data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            raise ValidationError(serializer.errors)
 
 
 class ArquivoProcessoViewSet(DefaultMixin, ViewSet):
