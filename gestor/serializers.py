@@ -15,14 +15,31 @@ class GestorBaseSerializer(serializers.ModelSerializer):
     user_id_pub = serializers.CharField(source='user.id_pub', read_only=True)
     profile_picture_url = serializers.CharField(
         source='user.profile_picture_url', read_only=True)
+    praca = serializers.SerializerMethodField(read_only=True)
+
+    def get_praca(self, obj):
+        from pracas.serializers import PracaListSerializer
+        serializer = PracaListSerializer(
+            obj.praca, fields=('nome', 'url', 'municipio', 'uf', 'regiao',
+                               'header_img'))
+        return serializer.data
 
     class Meta:
         model = Gestor
-        fields = ('url', 'user_id_pub', 'nome', 'email', 'profile_picture_url')
+        fields = ('url', 'user_id_pub', 'nome', 'email', 'profile_picture_url',
+                  'data_inicio_gestao', 'data_encerramento_gestao', 'atual',
+                  'praca')
+
+
+class GestorListSerializer(GestorBaseSerializer):
+
+    class Meta:
+        model = Gestor
+        fields = ('url', 'nome', 'profile_picture_url', 'data_inicio_gestao',
+                  'data_encerramento_gestao', 'atual', 'praca')
 
 
 class GestorSerializer(serializers.ModelSerializer):
-
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     nome = serializers.CharField(source='user.full_name', read_only=True)
     email = serializers.EmailField(source='user.email', read_only=True)
@@ -34,7 +51,8 @@ class GestorSerializer(serializers.ModelSerializer):
     def get_praca(self, obj):
         from pracas.serializers import PracaListSerializer
         serializer = PracaListSerializer(
-            obj.praca, fields=('nome', 'url', 'municipio', 'uf', 'regiao'))
+            obj.praca, fields=('nome', 'url', 'municipio', 'uf', 'regiao',
+                               'header_img'))
         return serializer.data
 
     class Meta:
