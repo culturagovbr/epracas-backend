@@ -40,7 +40,7 @@ class Gestor(IdPubIdentifier):
             try:
                 assert Gestor.objects.filter(atual=True).filter(praca=self.praca).count() == 0
             except AssertionError:
-                raise Exception(_('Já existe um Gestor para esta Praça'))
+                raise ValidationError(_('Já existe um Gestor para esta Praça'))
         super(Gestor, self).save(*args, **kwargs)
 
 
