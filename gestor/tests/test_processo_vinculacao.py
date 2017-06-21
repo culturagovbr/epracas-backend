@@ -787,3 +787,25 @@ def test_return_process_status_from_an_ente(_common_user, client):
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response.data['aprovado'], bool)
+
+
+def test_finalize_a_process_with_canceling(_admin_user, client):
+    """
+    Testa a finalização de um Processo com o cancelamento do mesmo
+    """
+
+    praca = mommy.make('Praca')
+    processo = mommy.make('ProcessoVinculacao', praca=praca)
+
+    data = json.dumps({
+        "situacao": "c",
+        "descricao": "Documentação não legivel",
+        "finalizado": True
+    })
+
+    response = client.patch(_detail(kwargs={"pk": processo.pk}),
+                            data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "situacao" in response.data['registro'][0]
+    assert response.data['finalizado']

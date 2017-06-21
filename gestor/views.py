@@ -64,12 +64,20 @@ class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
         self.check_object_permissions(request, processo)
 
         if 'situacao' in request.data:
+            situacao = {
+                "situacao": request.data.pop('situacao'),
+                "descricao": request.data.pop('descricao'),
+            }
             serializer = RegistroProcessoVinculacaoSerializer(
-                data=request.data)
+                data=situacao)
             if serializer.is_valid():
                 serializer.save(processo=processo)
-                serializer = ProcessoVinculacaoDetailSerializer(processo)
-                return Response(serializer.data)
+                serializer = ProcessoVinculacaoDetailSerializer(processo, data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data)
+                else:
+                    raise ValidationError(serializer.errors)
             else:
                 raise ValidationError(serializer.errors)
 
