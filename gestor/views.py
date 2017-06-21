@@ -56,7 +56,7 @@ class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
         'retrieve': ProcessoVinculacaoDetailSerializer,
     }
 
-    filter_fields = ('praca', 'aprovado')
+    filter_fields = ('praca', 'aprovado', 'finalizado')
 
     def partial_update(self, request, pk=None):
         processo = get_object_or_404(ProcessoVinculacao, pk=pk)

@@ -209,13 +209,13 @@ def test_return_a_list_of_open_processes(client):
     processo = mommy.make('ProcessoVinculacao', praca=praca)
     arquivos = mommy.make('ArquivosProcessoVinculacao', processo=processo,
                           verificado=True, _quantity=5)
-    processo.aprovado = True
+    processo.finalizado = True
     processo.save()
 
-    processos = mommy.make('ProcessoVinculacao', praca=praca, aprovado=False,
+    processos = mommy.make('ProcessoVinculacao', praca=praca, finalizado=False,
                            _quantity=5)
 
-    response = client.get(f'{_list()}?aprovado=false')
+    response = client.get(f'{_list()}?finalizado=false')
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 5
@@ -234,7 +234,7 @@ def test_return_changes_on_status_processes(_admin_user, client):
         "descricao": "Documentação não legivel"
     })
 
-    response = client.patch(_detail(kwargs={"pk": processo.pk}), 
+    response = client.patch(_detail(kwargs={"pk": processo.pk}),
                             data, content_type="application/json")
 
     assert response.status_code == status.HTTP_200_OK
