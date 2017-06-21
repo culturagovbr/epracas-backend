@@ -97,7 +97,7 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
             serializer.save()
             return Response(serializer.data)
         else:
-            raise ValidationError('serializer.errors')
+            raise ValidationError(serializer.errors)
 
 
 class DistanceView(DefaultMixin, APIView):
