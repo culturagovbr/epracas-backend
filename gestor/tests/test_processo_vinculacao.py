@@ -748,9 +748,8 @@ def test_return_today_date_when_create_a_new_process(client):
 
     processo = mommy.make(ProcessoVinculacao)
 
-    data = processo.data_abertura.replace(tzinfo=None)
-
-    data_abertura = pendulum.instance(data, tz='America/Sao_Paulo')
+    from pendulum import Date
+    data_abertura = Date.instance(processo.data_abertura)
 
     assert data_abertura.is_today()
 
@@ -766,9 +765,6 @@ def test_return_data_abertura_in_get_response(_common_user, client):
         'gestor:processovinculacao-detail', kwargs={'pk': processo.pk})
 
     response = client.get(url)
-
-    date = pendulum.instance(
-        processo.data_abertura.replace(tzinfo=None), tz='America/Sao_Paulo')
 
     assert 'data_abertura' in response.data
 

@@ -47,14 +47,14 @@ class Gestor(IdPubIdentifier):
 class ProcessoVinculacao(IdPubIdentifier):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
     praca = models.ForeignKey(Praca)
-    data_abertura = models.DateTimeField(
+    data_abertura = models.DateField(
         _('Data de Abertura do Processo'),
         auto_now_add=True,
         editable=False,
         blank=False)
-    data_finalizacao = models.DateTimeField(
+    data_finalizacao = models.DateField(
         _('Data de Conclusão do Processo de Vinculação'),
-        default=timezone.now,
+        default=date.today,
         null=True,
         blank=True)
     aprovado = models.BooleanField(
@@ -63,9 +63,6 @@ class ProcessoVinculacao(IdPubIdentifier):
     finalizado = models.BooleanField(
         _('Processo finalizado'),
         default=False)
-    valido = models.BooleanField(
-        _('Processo Válido'),
-        default=True)
     despacho = models.TextField(
         _('Despacho do Processo'),
         null=True,

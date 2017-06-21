@@ -23,6 +23,7 @@ from .models import ProcessoVinculacao
 from .models import ArquivosProcessoVinculacao
 
 from .serializers import GestorSerializer
+from .serializers import GestorListSerializer
 from .serializers import ProcessoVinculacaoSerializer
 from .serializers import ProcessoVinculacaoListSerializer
 from .serializers import ProcessoVinculacaoDetailSerializer
@@ -33,13 +34,17 @@ from .permissions import CommonUserOrReadOnly
 from .permissions import IsManagerOrReadOnly
 
 
-class GestorViewSet(DefaultMixin, ModelViewSet):
+class GestorViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication, )
     permission_classes = (IsManagerOrReadOnly, )
 
     queryset = Gestor.objects.all()
     serializer_class = GestorSerializer
+
+    serializers = {
+        'list': GestorListSerializer,
+    }
 
     filter_fields = ('praca', 'atual')
 
