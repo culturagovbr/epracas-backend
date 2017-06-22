@@ -320,7 +320,7 @@ class MembroGestor(IdPubIdentifier):
 
 class MembroUgl(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='ugl')
-    nome = models.CharField(_('Nome do Membro'), max_length=150)
+    nome = models.CharField(_('Nome do Membro'), max_length=250)
     tipo = models.CharField(_('Tipo de Membro'), max_length=3,
                             choices=MEMBRO_UGL_CHOICES,
                             default='cg')
