@@ -21,7 +21,7 @@ class GestorBaseSerializer(serializers.ModelSerializer):
         from pracas.serializers import PracaListSerializer
         serializer = PracaListSerializer(
             obj.praca, fields=('nome', 'url', 'municipio', 'uf', 'regiao',
-                               'header_img'))
+                               'header_img', 'situacao', 'data_inauguracao'))
         return serializer.data
 
     class Meta:
@@ -35,7 +35,7 @@ class GestorListSerializer(GestorBaseSerializer):
 
     class Meta:
         model = Gestor
-        fields = ('url', 'nome', 'profile_picture_url', 'data_inicio_gestao',
+        fields = ('url', 'nome', 'email', 'profile_picture_url', 'data_inicio_gestao',
                   'data_encerramento_gestao', 'atual', 'praca')
 
 
