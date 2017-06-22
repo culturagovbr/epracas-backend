@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
 from rest_framework import status
 from rest_framework.generics import ListAPIView
@@ -7,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotAuthenticated
 from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import PermissionDenied
 
@@ -58,6 +60,19 @@ class UserView(DefaultMixin, APIView):
         else:
             return Response(serializer.errors)
 
+    def delete(self, request, sub):
+
+        if request.user.is_staff:
+            user = get_object_or_404(User, sub=sub)
+            user.delete()
+            return Response(status=204)
+
+        if not request.user:
+            raise NotAuthenticated
+
+        if not request.user.is_staff:
+            raise PermissionDenied
+
     def patch(self, request, sub):
         manager = request.user
 
@@ -101,3 +116,5 @@ class UserView(DefaultMixin, APIView):
                 return Response(serializer.data)
             else:
                 return Response(serializer.errors)
+
+

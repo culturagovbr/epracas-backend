@@ -219,3 +219,17 @@ def test_manager_information_on_user_profile(_common_user, client):
 
     assert response.status_code == status.HTTP_200_OK
     assert "praca_manager" in response.data[0]
+
+
+def test_exclude_a_user_as_minc_manager(_admin_user, client):
+    """
+    Testa a exclusão de um usuário utilizando o perfil de Gestor do Ministério
+    """
+
+    user = mommy.make(User, sub=12345678)
+
+    response = client.delete(
+        reverse('auth:user-detail', kwargs={'sub': user.sub})
+        )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
