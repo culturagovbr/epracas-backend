@@ -89,6 +89,9 @@ class User(AbstractBaseUser, IdPubIdentifier):
     USERNAME_FIELD = 'sub'
     objects = MyManager()
 
+    class Meta:
+        ordering = ['full_name']
+
     def __str__(self):
         return str("{} - {}").format(self.sub, self.full_name)
 
