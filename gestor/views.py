@@ -1,4 +1,8 @@
+from datetime import date
+
 from django.shortcuts import get_object_or_404
+
+from rest_framework import status
 
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.exceptions import ValidationError
@@ -47,6 +51,18 @@ class GestorViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
     }
 
     filter_fields = ('praca', 'atual')
+
+    def destroy(self, request, pk=None):
+        gestor = get_object_or_404(Gestor, pk=pk)
+
+        self.check_object_permissions(request, gestor)
+
+        gestor.data_encerramento_gestao = date.today()
+
+        gestor.atual = False
+        gestor.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):

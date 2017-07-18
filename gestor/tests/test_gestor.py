@@ -6,11 +6,14 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.reverse import reverse
 
-from core.helper_functions import _
-
 from model_mommy import mommy
 
+from core.helper_functions import _
+
+from authentication.tests.test_user import _admin_user
 from authentication.tests.test_user import _common_user
+
+from gestor.models import Gestor
 
 User = get_user_model()
 pytestmark = pytest.mark.django_db
@@ -232,29 +235,68 @@ def test_end_manager_relation_with_a_Praca(client):
     """
 
     gestor = mommy.make('Gestor')
-    url = reverse(
-        'gestor:gestor-detail',
-        kwargs={'pk': gestor.id_pub})
+    url = reverse('gestor:gestor-detail', kwargs={'pk': gestor.id_pub})
 
     response = client.delete(url)
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_end_manager_relation_with_a_Praca_using_id(_common_user, client):
+def test_delete_a_manager_from_a_praca_with_credentials(_common_user, client):
     """
-    Testa finalizar a relação de um Gestor com sua Praça, utilizando um
-    usuário já identificado
+    Testa finalizar a gestão de um Gestor utilizando o perfil de gestor de
+    Praça
     """
 
-    gestor = mommy.make('Gestor')
-    url = reverse(
-        'gestor:gestor-detail',
-        kwargs={'pk': gestor.id_pub})
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
 
-    response = client.delete(url, content_type='application/json')
+    response = client.delete(_detail(kwargs={'pk': gestor.pk}))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_delete_a_manager_from_a_praca_with_MinC_credentials(_admin_user,
+                                                             client):
+    """
+    Testa finalizar a gestão de um Gestor em uma Praça utilizando o perfil de
+    gestor do Ministério
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca)
+
+    response = client.delete(_detail(kwargs={'pk': gestor.pk}))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    response = client.get(
+        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
+
+    assert not response.data['gestor']
+
+
+def test_delete_a_manager_from_a_praca_with_MinC_credentials(_admin_user,
+                                                             client):
+    """
+    Testa o processo de arquivar um gestor. Este deve permanecer na base a fins
+    de auditoria e histórico, porém, sem permissões sobre a Praça.
+    """
+
+    praca = mommy.make('Praca')
+    user = mommy.make(User)
+    gestor = mommy.make('Gestor', praca=praca, user=user, atual=True)
+
+    response = client.delete(_detail(kwargs={'pk': gestor.pk}))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    response = client.get(
+        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
+
+    assert not response.data['gestor']
+
+    assert Gestor.objects.count() == 1
 
 
 def test_list_only_managers_with_mandate(client):
@@ -270,4 +312,3 @@ def test_list_only_managers_with_mandate(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == 1
-
