@@ -83,8 +83,8 @@ def test_return_a_praca_with_manager_information(client):
     user = mommy.make(User, full_name="Fulano")
     gestor = mommy.make('Gestor', atual=True, praca=praca, user=user)
 
-    response = client.get(reverse('pracas:praca-detail', kwargs={'pk':
-                                                                 praca.pk}))
+    response = client.get(
+        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
 
     assert response.status_code == status.HTTP_200_OK
     assert 'gestor' in response.data
@@ -100,8 +100,8 @@ def test_return_only_the_current_praca_manager(client):
     gestor = mommy.make('Gestor', praca=praca, atual=True)
     gestores = mommy.make('Gestor', praca=praca, _quantity=2)
 
-    response = client.get(reverse('pracas:praca-detail', kwargs={'pk':
-                                                                 praca.pk}))
+    response = client.get(
+        reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
 
     assert response.status_code == status.HTTP_200_OK
     assert 'nome' in response.data['gestor']
@@ -128,42 +128,20 @@ def test_return_all_managers_from_a_praca(client):
 
 
 @pytest.mark.skip
-def test_delete_a_manager_from_a_praca_with_credentials(_common_user, client):
-    """
-    Testa finalizar a gestão de um Gestor em uma Praça
-    """
-
-    praca = mommy.make('Praca')
-    gestor = mommy.make('Gestor', praca=praca, user=_common_user)
-
-    response = client.delete(_detail(kwargs={'pk': gestor.pk}))
-
-    assert response.status_code == status.HTTP_204_NO_CONTENT
-
-    response = client.get(reverse('pracas:praca-detail', kwargs={'pk': praca.pk}))
-
-    assert not response.data['gestor']
-
-
-@pytest.mark.skip
 def test_persist_a_gestors_address(client):
     """
     Testa persistir o endereço de um gestor
     """
 
     gestor = {
-            'nome': 'Fulano Cicrano',
-            'endereco': 'Conj 10, Casa 19',
-            'cidade': 'Altamira',
-            'uf': 'pa',
-            'regiao': 'N'
+        'nome': 'Fulano Cicrano',
+        'endereco': 'Conj 10, Casa 19',
+        'cidade': 'Altamira',
+        'uf': 'pa',
+        'regiao': 'N'
     }
 
-    response = client.post(
-            _list(),
-            gestor,
-            format='json'
-    )
+    response = client.post(_list(), gestor, format='json')
     response_content = json.loads(bytes.decode(response.content))
     response_content.pop('id_pub')
 
@@ -179,31 +157,26 @@ def test_update_a_gestors_address(client):
     """
 
     gestor = {
-            'nome': 'Fulano Cicrano',
-            'endereco': 'Conj 10, Casa 19',
-            'cidade': 'Altamira',
-            'uf': 'pa',
-            'regiao': 'N'
+        'nome': 'Fulano Cicrano',
+        'endereco': 'Conj 10, Casa 19',
+        'cidade': 'Altamira',
+        'uf': 'pa',
+        'regiao': 'N'
     }
 
-    post = client.post(
-            _list(),
-            gestor,
-            format='json'
-    )
+    post = client.post(_list(), gestor, format='json')
     assert post.status_code == status.HTTP_201_CREATED
 
     id_pub = json.loads(bytes.decode(post.content)).pop('id_pub')
 
     update = client.put(
-            _detail(kwargs={'pk': id_pub}),
-            json.dumps({
-                'nome': 'Fulano Cicrano',
-                'endereco': 'Conj 11, Casa 20'
-            }),
-            format='json',
-            content_type='application/json'
-    )
+        _detail(kwargs={'pk': id_pub}),
+        json.dumps({
+            'nome': 'Fulano Cicrano',
+            'endereco': 'Conj 11, Casa 20'
+        }),
+        format='json',
+        content_type='application/json')
     update_content = bytes.decode(update.content)
 
     assert update.status_code == status.HTTP_200_OK
@@ -218,9 +191,8 @@ def test_return_a_FQDN_URL_from_Gestor_method(client):
 
     gestor = mommy.make(Gestor, nome='Fulano Cicrano')
     url = reverse(
-            'gestor:gestor-detail',
-            kwargs={'pk': gestor.id_pub},
-          )
+        'gestor:gestor-detail',
+        kwargs={'pk': gestor.id_pub}, )
     response = client.get(url, format='json')
     gestor_url = gestor.get_absolute_url()
 
