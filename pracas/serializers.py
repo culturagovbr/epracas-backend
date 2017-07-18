@@ -110,6 +110,7 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
                 'situacao',
                 'situacao_descricao',
                 'repasse',
+                'contrato',
                 'header_img',
                 'gestor',
                 )
