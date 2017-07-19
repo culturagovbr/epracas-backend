@@ -127,8 +127,13 @@ class Praca(IdPubIdentifier):
         null=True,
         max_length=15
         )
-    email = models.EmailField(
-        _('Email de Contato'),
+    email1 = models.EmailField(
+        _('Primeiro Email de Contato'),
+        blank=True,
+        null=True,
+        )
+    email2 = models.EmailField(
+        _('Segundo Email de Contato'),
         blank=True,
         null=True,
         )

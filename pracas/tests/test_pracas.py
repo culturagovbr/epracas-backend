@@ -99,14 +99,15 @@ def test_return_a_praca_with_some_properties(client):
     """
     Testa o retorno de uma praça especifica com as seguintes propriedades:
     url, id_pub, nome, slug, municipio, uf, modelo, modelo_descricao,
-    situacao, situacao_descricao, bio, telefone1, telefone2, fax, email,
-    pagina e data_inauguracao.
+    situacao, situacao_descricao, bio, telefone1, telefone2, fax, email1,
+    email2, pagina, data_inauguracao, repasse, contrato, cabeçalho e
+    localização geográfica.
 
     """
 
     fields = ('url', 'id_pub', 'nome', 'slug', 'municipio', 'uf', 'modelo',
               'modelo_descricao', 'situacao', 'situacao_descricao', 'bio',
-              'telefone1', 'telefone2', 'fax', 'email', 'pagina',
+              'telefone1', 'telefone2', 'fax', 'email1', 'email2', 'pagina',
               'data_inauguracao', 'repasse', 'contrato', 'header_img', 'lat',
               'long')
 
