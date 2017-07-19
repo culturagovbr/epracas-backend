@@ -30,8 +30,8 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
 
 class MembroGestorSerializer(serializers.ModelSerializer):
-    origem_descricao = serializers.CharField(source='get_origem_display',
-                                             read_only=True)
+    origem_descricao = serializers.CharField(
+        source='get_origem_display', read_only=True)
 
     class Meta:
         model = MembroGestor
@@ -49,7 +49,6 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
 
 
 class MembroUglSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = MembroUgl
         fields = ('nome', 'tipo', 'telefone', 'email')
@@ -70,11 +69,9 @@ class ImagemPracaSerializer(serializers.ModelSerializer):
 class PracaBaseSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
     modelo_descricao = serializers.CharField(
-            source='get_modelo_display',
-            read_only=True)
+        source='get_modelo_display', read_only=True)
     situacao_descricao = serializers.CharField(
-            source='get_situacao_display',
-            read_only=True)
+        source='get_situacao_display', read_only=True)
     gestor = serializers.SerializerMethodField()
     grupo_gestor = serializers.SerializerMethodField()
 
@@ -95,118 +92,53 @@ class PracaBaseSerializer(serializers.ModelSerializer):
 
 
 class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
-
     class Meta:
         model = Praca
-        fields = (
-                'url',
-                'id_pub',
-                'nome',
-                'municipio',
-                'uf',
-                'regiao',
-                'modelo',
-                'modelo_descricao',
-                'situacao',
-                'situacao_descricao',
-                'repasse',
-                'contrato',
-                'header_img',
-                'gestor',
-                )
+        fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'regiao',
+                  'modelo', 'modelo_descricao', 'situacao',
+                  'situacao_descricao', 'repasse', 'contrato', 'header_img',
+                  'gestor', )
         read_only_fields = ('url', 'gestor', 'header_img', 'id_pub')
 
 
 class ParceiroBaseSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Parceiro
-        fields = (
-            'praca',
-            'nome',
-            'endereco',
-            'contato',
-            'telefone',
-            'email',
-            'ramo_atividade',
-            'acoes',
-            'tempo_parceria'
-        )
+        fields = ('praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
+                  'ramo_atividade', 'acoes', 'tempo_parceria')
 
 
 class ParceiroDetailSerializer(ParceiroBaseSerializer):
-
     class Meta:
         model = Parceiro
-        fields = (
-            'praca',
-            'nome',
-            'endereco',
-            'contato',
-            'telefone',
-            'email',
-            'ramo_atividade',
-            'acoes',
-            'tempo_parceria',
-            'lat',
-            'long',
-            'recursos_financeiros',
-        )
+        fields = ('praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
+                  'ramo_atividade', 'acoes', 'tempo_parceria', 'lat', 'long',
+                  'recursos_financeiros', )
 
 
 class ParceiroListSerializer(ParceiroBaseSerializer):
-
     class Meta:
         model = Parceiro
-        fields = (
-            'nome',
-            'email',
-            'ramo_atividade',
-        )
+        fields = ('nome', 'email', 'ramo_atividade', )
 
 
 class PracaSerializer(PracaBaseSerializer):
     imagem = ImagemPracaSerializer(many=True, read_only=True)
     parceiros = ParceiroListSerializer(many=True, read_only=True)
-    unidade_gestora = MembroUglSerializer(source='ugl', many=True, read_only=True)
+    unidade_gestora = MembroUglSerializer(
+        source='ugl', many=True, read_only=True)
 
     class Meta:
         model = Praca
-        fields = (
-                'url',
-                'nome',
-                'slug',
-                'id_pub',
-                'contrato',
-                'logradouro',
-                'cep',
-                'bairro',
-                'regiao',
-                'uf',
-                'municipio',
-                'modelo',
-                'modelo_descricao',
-                'situacao',
-                'situacao_descricao',
-                'repasse',
-                'bio',
-                'telefone1',
-                'telefone2',
-                'fax',
-                'email1',
-                'email2',
-                'pagina',
-                'data_inauguracao',
-                'header_img',
-                'lat',
-                'long',
-                'gestor',
-                'unidade_gestora',
-                'grupo_gestor',
-                'parceiros',
-                'imagem',
-                )
-        read_only_fields = ('id_pub', 'gestor', 'unidade_gestora', 'grupo_gestor', 'imagem', 'parceiros')
+        fields = ('url', 'nome', 'slug', 'id_pub', 'contrato', 'logradouro',
+                  'cep', 'bairro', 'regiao', 'uf', 'municipio', 'modelo',
+                  'modelo_descricao', 'situacao', 'situacao_descricao',
+                  'repasse', 'bio', 'telefone1', 'telefone2', 'fax', 'email1',
+                  'email2', 'pagina', 'data_inauguracao', 'header_img', 'lat',
+                  'long', 'gestor', 'unidade_gestora', 'grupo_gestor',
+                  'parceiros', 'imagem', )
+        read_only_fields = ('id_pub', 'gestor', 'unidade_gestora',
+                            'grupo_gestor', 'imagem', 'parceiros')
 
 
 class DistanciaSerializer(PracaListSerializer):
@@ -221,17 +153,6 @@ class DistanciaSerializer(PracaListSerializer):
 
     class Meta:
         model = Praca
-        fields = (
-                'url',
-                'id_pub',
-                'nome',
-                'municipio',
-                'uf',
-                'modelo',
-                'modelo_descricao',
-                'situacao',
-                'situacao_descricao',
-                'header_img',
-                'latlong',
-                'distancia',
-        )
+        fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'modelo',
+                  'modelo_descricao', 'situacao', 'situacao_descricao',
+                  'header_img', 'latlong', 'distancia', )
