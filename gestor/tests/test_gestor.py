@@ -49,7 +49,7 @@ def test_return_manager_data_from_endpoint(client):
 
     response = client.get(_detail(kwargs={'pk': gestor.pk}))
 
-    fields = ('url', 'user_id_pub', 'nome', 'email', 'praca',
+    fields = ('url', 'id_pub', 'user_id_pub', 'nome', 'email', 'praca',
               'profile_picture_url')
 
     assert response.status_code == status.HTTP_200_OK

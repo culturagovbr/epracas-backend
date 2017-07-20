@@ -20,23 +20,24 @@ class GestorBaseSerializer(serializers.ModelSerializer):
     def get_praca(self, obj):
         from pracas.serializers import PracaListSerializer
         serializer = PracaListSerializer(
-            obj.praca, fields=('nome', 'url', 'municipio', 'uf', 'regiao',
-                               'header_img', 'situacao', 'data_inauguracao'))
+            obj.praca,
+            fields=('nome', 'url', 'municipio', 'uf', 'regiao', 'header_img',
+                    'situacao', 'data_inauguracao'))
         return serializer.data
 
     class Meta:
         model = Gestor
-        fields = ('url', 'user_id_pub', 'nome', 'email', 'profile_picture_url',
-                  'data_inicio_gestao', 'data_encerramento_gestao', 'atual',
-                  'praca')
+        fields = ('url', 'id_pub', 'user_id_pub', 'nome', 'email',
+                  'profile_picture_url', 'data_inicio_gestao',
+                  'data_encerramento_gestao', 'atual', 'praca')
 
 
 class GestorListSerializer(GestorBaseSerializer):
-
     class Meta:
         model = Gestor
-        fields = ('url', 'nome', 'email', 'profile_picture_url', 'data_inicio_gestao',
-                  'data_encerramento_gestao', 'atual', 'praca')
+        fields = ('url', 'id_pub', 'nome', 'email', 'profile_picture_url',
+                  'data_inicio_gestao', 'data_encerramento_gestao', 'atual',
+                  'praca')
 
 
 class GestorSerializer(serializers.ModelSerializer):
@@ -51,13 +52,13 @@ class GestorSerializer(serializers.ModelSerializer):
     def get_praca(self, obj):
         from pracas.serializers import PracaListSerializer
         serializer = PracaListSerializer(
-            obj.praca, fields=('nome', 'url', 'municipio', 'uf', 'regiao',
-                               'header_img'))
+            obj.praca,
+            fields=('nome', 'url', 'municipio', 'uf', 'regiao', 'header_img'))
         return serializer.data
 
     class Meta:
         model = Gestor
-        fields = ('url', 'user_id_pub', 'nome', 'email', 'praca',
+        fields = ('url', 'id_pub', 'user_id_pub', 'nome', 'email', 'praca',
                   'profile_picture_url')
 
 
@@ -71,7 +72,6 @@ class ArquivosProcessoVinculacaoSerializer(serializers.ModelSerializer):
 
 
 class RegistroProcessoVinculacaoSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = RegistroProcessoVinculacao
         fields = ('data', 'situacao', 'descricao')
