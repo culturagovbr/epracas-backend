@@ -142,7 +142,7 @@ class Relatorio(IdPubIdentifier):
         _('Pontos Negativos da Atividade'),
         blank=True,
         null=True, )
-    data_de_ocorrencia = models.DateField(default=timezone.now())
+    data_de_ocorrencia = models.DateField(default=timezone.now)
     data_prevista = models.DateTimeField(blank=True, null=True)
 
 
