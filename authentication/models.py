@@ -82,6 +82,11 @@ class User(AbstractBaseUser, IdPubIdentifier):
         blank=True,
         null=True
         )
+    cpf = models.IntegerField(
+        _('CPF'),
+        blank=True,
+        null=True,
+        )
     is_staff = models.BooleanField(
         default=False,
         )
