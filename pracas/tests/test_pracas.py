@@ -70,7 +70,8 @@ def test_if_an_instance_of_list_result_has_some_properties(client):
     """
 
     fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'modelo',
-              'modelo_descricao', 'situacao', 'situacao_descricao', 'contrato')
+              'modelo_descricao', 'situacao', 'situacao_descricao', 'contrato',
+              'repasse', 'data_inauguracao')
 
     praca = mommy.make(Praca, _quantity=5)
 

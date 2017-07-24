@@ -97,7 +97,7 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
         fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'regiao',
                   'modelo', 'modelo_descricao', 'situacao',
                   'situacao_descricao', 'repasse', 'contrato', 'header_img',
-                  'gestor', )
+                  'gestor', 'data_inauguracao')
         read_only_fields = ('url', 'gestor', 'header_img', 'id_pub')
 
 

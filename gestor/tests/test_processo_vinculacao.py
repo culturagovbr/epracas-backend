@@ -397,7 +397,8 @@ def test_returning_information_about_a_Praca_on_a_detailed_process(
 
     fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'modelo',
               'modelo_descricao', 'situacao', 'situacao_descricao',
-              'header_img', 'gestor', 'regiao', 'repasse', 'contrato')
+              'header_img', 'gestor', 'regiao', 'repasse', 'contrato',
+              'data_inauguracao')
 
     response = client.get(
         reverse(
