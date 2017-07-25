@@ -20,6 +20,18 @@ class MyManager(BaseUserManager):
 
         return user
 
+    def create_superuser(self, email, password=None, **kwargs):
+        user = self.model(
+            email=self.normalize_email(email),
+            name=kwargs.get('name'),
+            is_staff=True,
+        )
+
+        user.set_password(password)
+        user.save()
+
+        return user
+
 
 class User(AbstractBaseUser, IdPubIdentifier):
     email_verified = models.BooleanField(
@@ -82,11 +94,12 @@ class User(AbstractBaseUser, IdPubIdentifier):
         blank=True,
         null=True
         )
-    # cpf = models.IntegerField(
-    #     _('CPF'),
-    #     blank=True,
-    #     null=True,
-    #     )
+    cpf = models.CharField(
+        _('CPF'),
+        max_length=11,
+        blank=True,
+        null=True,
+        )
     is_staff = models.BooleanField(
         default=False,
         )

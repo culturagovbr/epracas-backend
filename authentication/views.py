@@ -94,11 +94,9 @@ class UserView(DefaultMixin, APIView):
                     partial=True
                 )
 
-                if serializer.is_valid():
+                if serializer.is_valid(raise_exception=True):
                     serializer.save()
                     return Response(serializer.data)
-                else:
-                    return Response(serializer.errors)
         else:
             try:
                 user = User.objects.get(sub=sub)
