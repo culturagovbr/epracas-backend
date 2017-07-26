@@ -5,7 +5,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from oidc_auth.authentication import JSONWebTokenAuthentication
 
@@ -18,6 +17,7 @@ from .models import GrupoGestor
 from .models import MembroGestor
 from .models import ImagemPraca
 from .models import MembroUgl
+from .models import Rh
 
 from .serializers import PracaSerializer
 from .serializers import PracaListSerializer
@@ -27,6 +27,7 @@ from .serializers import GrupoGestorSerializer
 from .serializers import MembroGestorSerializer
 from .serializers import ParceiroDetailSerializer
 from .serializers import MembroUglSerializer
+from .serializers import RhSerializer
 
 from .permissions import IsAdminOrManagerOrReadOnly
 from .permissions import IsOwnerOrReadOnly
@@ -196,3 +197,9 @@ class MembroUglViewSet(DefaultMixin, ModelViewSet):
             return Response(membro.data, status=status.HTTP_201_CREATED)
         else:
             return Response(membro.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RhViewSet(DefaultMixin, ModelViewSet):
+
+    serializer_class = RhSerializer
+    queryset = Rh.objects.all()

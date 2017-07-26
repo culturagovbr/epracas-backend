@@ -340,3 +340,28 @@ class MembroUgl(IdPubIdentifier):
         blank=True,
         null=True,
         )
+
+
+class Rh(IdPubIdentifier):
+    praca = models.ForeignKey(Praca, related_name='rh')
+    nome = models.CharField(_('Nome'), max_length=300)
+    rg = models.CharField(_('RG'), max_length=14, blank=True, null=True)
+    escolaridade = models.CharField(_('Escolaridade'), max_length=3,
+                                    blank=True, null=True)
+    formacao = models.CharField(_('Formação'), max_length=3, blank=True,
+                                null=True)
+    vinculo = models.CharField(_('Tipo de vínculo'), max_length=3, blank=True,
+                               null=True)
+    funcao = models.CharField(_('Função'), max_length=3, blank=True, null=True)
+    carga_horaria = models.CharField(_('Carga Horaria'), max_length=3,
+                                     blank=True, null=True)
+    remuneracao = models.DecimalField(_('Remuneração Mensal'), max_length=7,
+                                      decimal_places=2, max_digits=2,
+                                      blank=True, null=True)
+    local_trabalho = models.CharField(_('Local de Trabalho no CEU'),
+                                      max_length=3, blank=True, null=True)
+    data_entrada = models.DateField(_('Data de Entrada'), default=date.today)
+    data_saida = models.DateField(_('Data de Saída'), blank=True, null=True)
+
+    class Meta:
+        ordering = ['nome', 'data_entrada']

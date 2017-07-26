@@ -6,6 +6,7 @@ from .models import Parceiro
 from .models import ImagemPraca
 from .models import MembroGestor
 from .models import MembroUgl
+from .models import Rh
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -156,3 +157,9 @@ class DistanciaSerializer(PracaListSerializer):
         fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'modelo',
                   'modelo_descricao', 'situacao', 'situacao_descricao',
                   'header_img', 'latlong', 'distancia', )
+
+
+class RhSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rh
+        fields = '__all__'
