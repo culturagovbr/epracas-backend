@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.shortcuts import get_object_or_404
 
 from rest_framework import status
@@ -217,3 +219,19 @@ class RhViewSet(DefaultMixin, ModelViewSet):
             return Response(rh.data, status=status.HTTP_201_CREATED)
         else:
             return Response(rh.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, praca_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        rh = get_object_or_404(Rh, pk=pk)
+
+        if not request.data:
+            rh.data_saida = date.today()
+            rh.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            serializer = RhSerializer(rh, data=request.data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(status=status.HTTP_204_NO_CONTENT)

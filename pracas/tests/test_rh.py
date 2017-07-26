@@ -161,3 +161,103 @@ def test_retorna_determinados_campos_em_lista(client):
         del response.data[0][field]
 
     assert len(response.data[0]) == 0
+
+
+def test_arquiva_um_RH_usando_DELETE_sem_identificao(client):
+    """
+    Testa arquivar o registro de um Recurso Humano utilizando DELETE no
+    endpoint, não utilizando identificação.
+    """
+
+    praca = mommy.make('Praca')
+    rh = mommy.make('Rh', praca=praca, _quantity=2)
+
+    response = client.delete(_detail(
+        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_arquiva_um_RH_usando_DELETE_com_identificao(_common_user, client):
+    """
+    Testa arquivar o registro de um Recurso Humano utilizando DELETE no
+    endpoint, utilizando identificação.
+    """
+
+    praca = mommy.make('Praca')
+    rh = mommy.make('Rh', praca=praca, _quantity=2)
+
+    response = client.delete(_detail(
+        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_arquiva_um_RH_usando_DELETE_como_gestor(_common_user, client):
+    """
+    Testa arquivar o registro de um Recurso Humano utilizando DELETE no
+    endpoint, como gestor da Praça.
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+    rh = mommy.make('Rh', praca=praca, _quantity=2)
+
+    from pracas.models import Rh
+
+    response = client.delete(_detail(
+        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert Rh.objects.count() == 2
+
+
+def test_arquiva_um_RH_usando_DELETE_como_gestor_MinC(_admin_user, client):
+    """
+    Testa arquivar o registro de um Recurso Humano utilizando DELETE no
+    endpoint, como gestor do Ministério.
+    """
+
+    praca = mommy.make('Praca')
+    rh = mommy.make('Rh', praca=praca, _quantity=2)
+
+    from pracas.models import Rh
+
+    response = client.delete(_detail(
+        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert Rh.objects.count() == 2
+
+
+def test_arquiva_um_RH_usando_DELETE_fornecendo_data_de_saida(_common_user, client):
+    """
+    Testa arquivar o registro de um Recurso Humano utilizando DELETE no
+    endpoint
+    """
+
+    from datetime import datetime
+    from pracas.models import Rh
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+    rh = mommy.make('Rh', praca=praca, _quantity=2)
+
+    date = datetime.strptime('22062017', '%d%m%Y').date()
+    data = json.dumps({
+        "data_saida": date.isoformat()
+    })
+
+    response = client.delete(_detail(
+        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+        data, content_type="application/json")
+
+    rh = Rh.objects.get(pk=rh[0].pk)
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert Rh.objects.count() == 2
+    assert rh.data_saida == date

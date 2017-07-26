@@ -78,3 +78,85 @@ MEMBRO_UGL_CHOICES = (
     ('csc', COORD_SEGC),
     ('cid', COORD_ID),
 )
+
+# Tipo de Escolaridade de RH
+"""
+Lista de escolhas para a escolaridade do RH de uma Praça
+"""
+SEM_ESCOLARIDADE = "Sem Escolaridade"
+FUNDAMENTAL_INCOMPLETO = "Ensino Fundamental Incompleto"
+FUNDAMENTAL_COMPLETO = "Ensino Fundamental Completo"
+MEDIO_INCOMPLETO = "Ensino Médio Incompleto"
+MEDIO_COMPLETO = "Ensino Médio Completo"
+TECNICO_INCOMPLETO = "Ensino Técnico Incompleto"
+TECNICO_COMPLETO = "Ensino Técnico Completo"
+SUPERIOR_INCOMPLETO = "Ensino Superior Incompleto"
+SUPERIOR_COMPLETO = "Ensino Superior Completo"
+ESPECIALIZACAO = "Especialização"
+MESTRADO = "Mestrado"
+DOUTORADO = "Doutorado"
+
+ESCOLARIDADE_CHOICES = (
+    ('se', SEM_ESCOLARIDADE),
+    ('efi', FUNDAMENTAL_INCOMPLETO),
+    ('efc', FUNDAMENTAL_COMPLETO),
+    ('emi', MEDIO_INCOMPLETO),
+    ('emc', MEDIO_COMPLETO),
+    ('eti', TECNICO_INCOMPLETO),
+    ('etc', TECNICO_COMPLETO),
+    ('esi', SUPERIOR_INCOMPLETO),
+    ('esc', SUPERIOR_COMPLETO),
+    ('esp', ESPECIALIZACAO),
+    ('mes', MESTRADO),
+    ('doc', DOUTORADO),
+)
+
+# Tipo de Formação de RH
+"""
+Lista de escolhas para a Formação do RH de uma Praça
+"""
+
+BIBLIOTECONOMIA = "Biblioteconomia"
+EDUCACAO_FISICA = "Educação física"
+SERVICO_SOCIAL = "Serviço Social"
+PSICOLOGIA = "Psicologia"
+PEDAGOGIA = "Pedagogia"
+SONOPLASTIA = "Sonoplastia e iluminação"
+AUDIOVISUAL = "Audiovisual"
+OUTROS = "Outros"
+
+FORMACAO_CHOICES = (
+    ('bib', BIBLIOTECONOMIA),
+    ('edf', EDUCACAO_FISICA),
+    ('ss', SERVICO_SOCIAL),
+    ('psi', PSICOLOGIA),
+    ('ped', PEDAGOGIA),
+    ('son', SONOPLASTIA),
+    ('aud', AUDIOVISUAL),
+    ('otr', OUTROS),
+)
+
+# Tipo de Vinculo de RH
+"""
+Lista de tipos de vinculos do RH de uma Praça
+"""
+
+SERVIDOR_ESTATUTARIO = "Servidor Estatutário"
+SERVIDOR_TEMPORARIO = "Servidor Temporário"
+EMPREGADO_PUBLICO = "Empregado Público (CLT)"
+COMISSIONADO = "Comissionado"
+TERCEIRIZADO = "Terceirizado"
+COOPERADO = "Trabalhador de Empresa , Cooperativa ou Entidade Prestadora de Serviços"
+VOLUNTARIO = "Voluntário"
+OUTRO = "Outro vínculo não permanente"
+
+VINCULO_CHOICES = (
+    ('se', SERVIDOR_ESTATUTARIO),
+    ('st', SERVIDOR_TEMPORARIO),
+    ('ep', EMPREGADO_PUBLICO),
+    ('com', COMISSIONADO),
+    ('ter', TERCEIRIZADO),
+    ('coo', COOPERADO),
+    ('vol', VOLUNTARIO),
+    ('otr', OUTRO)
+)
