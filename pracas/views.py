@@ -201,5 +201,19 @@ class MembroUglViewSet(DefaultMixin, ModelViewSet):
 
 class RhViewSet(DefaultMixin, ModelViewSet):
 
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
+
     serializer_class = RhSerializer
     queryset = Rh.objects.all()
+
+    def create(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        rh = RhSerializer(data=request.data)
+        if rh.is_valid():
+            rh.save(praca=praca)
+            return Response(rh.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(rh.errors, status=status.HTTP_400_BAD_REQUEST)

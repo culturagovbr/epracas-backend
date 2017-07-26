@@ -363,5 +363,12 @@ class Rh(IdPubIdentifier):
     data_entrada = models.DateField(_('Data de Entrada'), default=date.today)
     data_saida = models.DateField(_('Data de Saída'), blank=True, null=True)
 
+    def get_absolute_url(self):
+        app_name = self._meta.app_label
+        basename = self._meta.object_name.lower()
+        url = app_name + ':' + basename + '-detail'
+
+        return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})
+
     class Meta:
         ordering = ['nome', 'data_entrada']

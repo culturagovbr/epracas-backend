@@ -123,11 +123,20 @@ class ParceiroListSerializer(ParceiroBaseSerializer):
         fields = ('nome', 'email', 'ramo_atividade', )
 
 
+class RhSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    class Meta:
+        model = Rh
+        fields = ('url', 'id_pub', 'nome', 'funcao', 'local_trabalho',
+                  'data_entrada', 'data_saida')
+
+
 class PracaSerializer(PracaBaseSerializer):
     imagem = ImagemPracaSerializer(many=True, read_only=True)
     parceiros = ParceiroListSerializer(many=True, read_only=True)
     unidade_gestora = MembroUglSerializer(
         source='ugl', many=True, read_only=True)
+    rh = RhSerializer(many=True, read_only=True)
 
     class Meta:
         model = Praca
@@ -137,7 +146,7 @@ class PracaSerializer(PracaBaseSerializer):
                   'repasse', 'bio', 'telefone1', 'telefone2', 'fax', 'email1',
                   'email2', 'pagina', 'data_inauguracao', 'header_img', 'lat',
                   'long', 'gestor', 'unidade_gestora', 'grupo_gestor',
-                  'parceiros', 'imagem', )
+                  'parceiros', 'rh', 'imagem',)
         read_only_fields = ('id_pub', 'gestor', 'unidade_gestora',
                             'grupo_gestor', 'imagem', 'parceiros')
 
@@ -157,9 +166,3 @@ class DistanciaSerializer(PracaListSerializer):
         fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'modelo',
                   'modelo_descricao', 'situacao', 'situacao_descricao',
                   'header_img', 'latlong', 'distancia', )
-
-
-class RhSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rh
-        fields = '__all__'
