@@ -21,6 +21,7 @@ from .choices import DOCUMENTO_CHOICES
 from .choices import MEMBRO_UGL_CHOICES
 from .choices import ESCOLARIDADE_CHOICES
 from .choices import FORMACAO_CHOICES
+from .choices import VINCULO_CHOICES
 
 from atividades.choices import ESPACOS_CHOICES
 
@@ -349,14 +350,17 @@ class MembroUgl(IdPubIdentifier):
 class Rh(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='rh')
     nome = models.CharField(_('Nome'), max_length=300)
-    id = models.CharField(_('RG'), max_length=14, blank=True, null=True)
+    identificacao = models.CharField(_('Documento Identidade'), max_length=14,
+                                     blank=True, null=True)
+    sexo = models.CharField(_('Sexo'), max_length=1, blank=True, null=True,
+                            choices=(('f', 'Feminino'), ('m', 'Masculino')))
     escolaridade = models.CharField(_('Escolaridade'), max_length=3,
                                     choices=ESCOLARIDADE_CHOICES, blank=True,
                                     null=True)
     formacao = models.CharField(_('Formação'), max_length=3, blank=True,
                                 choices=FORMACAO_CHOICES, null=True)
     vinculo = models.CharField(_('Tipo de vínculo'), max_length=3, blank=True,
-                               null=True)
+                               null=True, choices=VINCULO_CHOICES)
     funcao = models.CharField(_('Função'), max_length=200, blank=True,
                               null=True)
     carga_horaria = models.CharField(_('Carga Horaria'), max_length=3,

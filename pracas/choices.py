@@ -158,5 +158,5 @@ VINCULO_CHOICES = (
     ('ter', TERCEIRIZADO),
     ('coo', COOPERADO),
     ('vol', VOLUNTARIO),
-    ('otr', OUTRO)
+    ('otr', OUTRO),
 )
