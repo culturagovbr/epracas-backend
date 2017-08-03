@@ -160,7 +160,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -201,17 +201,17 @@ if os.getenv('TEST_ENV'):
 
     # Define CORS to allow client in development mode
     CORS_ORIGIN_WHITELIST = (
-        'localhost:5000',
+        'localhost:4000',
     )
 
 OIDC_AUTH = {
         'OIDC_ENDPOINT': os.getenv(
             'OIDC_ENDPOINT',
-            'https://alpha.id.cultura.gov.br'
+            'https://id.cultura.gov.br'
             ),
         'OIDC_AUDIENCES': os.getenv(
             'OIDC_AUDIENCES',
-            '12_5d1bf045zqo8o408g8cs8ogwco0kko4wwwk08sk8gwkosk08o0'
+            '18_t41s2lf05w0cwkw480owccsk4wwscgw00wo0s0so8c8c8c8ck'
             ),
         'OIDC_RESOLVE_USER_FUNCTION': 'oidc_auth.authentication.get_user_by_id',
         'OIDC_LEEWAY': 6000,
