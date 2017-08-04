@@ -1,3 +1,4 @@
+from datetime import date
 import json
 import pytest
 
@@ -11,7 +12,6 @@ from core.helper_functions import _
 
 from authentication.tests.test_user import _common_user
 from authentication.tests.test_user import _admin_user
-
 
 User = get_user_model()
 pytestmark = pytest.mark.django_db
@@ -30,8 +30,8 @@ def test_get_URL_OK_from_RH_endpoint(client):
 
     praca = mommy.make('Praca')
 
-    response = client.get(_list(kwargs={'praca_pk': praca.pk}),
-                          content_type='application/json')
+    response = client.get(
+        _list(kwargs={'praca_pk': praca.pk}), content_type='application/json')
 
     assert response.status_code == status.HTTP_200_OK
 
@@ -48,13 +48,16 @@ def test_persiste_um_recurso_humano_usando_POST_sem_identificacao(client):
         'nome': 'Fulano Cicrano',
     })
 
-    response = client.post(_list(kwargs={'praca_pk': praca.pk}),
-                           data, content_type="application/json")
+    response = client.post(
+        _list(kwargs={'praca_pk': praca.pk}),
+        data,
+        content_type="application/json")
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
 
-def test_persiste_um_recurso_humano_usando_POST_com_identificacao(_common_user, client):
+def test_persiste_um_recurso_humano_usando_POST_com_identificacao(_common_user,
+                                                                  client):
     """
     Testa a persistencia de um Recurso Humano utilizando um usuário
     identificado
@@ -66,13 +69,16 @@ def test_persiste_um_recurso_humano_usando_POST_com_identificacao(_common_user, 
         'nome': 'Fulano Cicrano',
     })
 
-    response = client.post(_list(kwargs={'praca_pk': praca.pk}),
-                           data, content_type="application/json")
+    response = client.post(
+        _list(kwargs={'praca_pk': praca.pk}),
+        data,
+        content_type="application/json")
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
 
-def test_persiste_um_recurso_humano_usando_POST_como_gestor(_common_user, client):
+def test_persiste_um_recurso_humano_usando_POST_como_gestor(_common_user,
+                                                            client):
     """
     Testa a persistencia de um Recurso Humano utilizando um usuário
     identificado como gestor de Praça
@@ -85,13 +91,16 @@ def test_persiste_um_recurso_humano_usando_POST_como_gestor(_common_user, client
         'nome': 'Fulano Cicrano',
     })
 
-    response = client.post(_list(kwargs={'praca_pk': praca.pk}),
-                           data, content_type="application/json")
+    response = client.post(
+        _list(kwargs={'praca_pk': praca.pk}),
+        data,
+        content_type="application/json")
 
     assert response.status_code == status.HTTP_201_CREATED
 
 
-def test_persiste_um_recurso_humano_usando_POST_como_gestor_MinC(_admin_user, client):
+def test_persiste_um_recurso_humano_usando_POST_como_gestor_MinC(_admin_user,
+                                                                 client):
     """
     Testa a persistencia de um Recurso Humano utilizando um usuário
     identificado como gestor do Ministério
@@ -103,8 +112,10 @@ def test_persiste_um_recurso_humano_usando_POST_como_gestor_MinC(_admin_user, cl
         'nome': 'Fulano Cicrano',
     })
 
-    response = client.post(_list(kwargs={'praca_pk': praca.pk}),
-                           data, content_type="application/json")
+    response = client.post(
+        _list(kwargs={'praca_pk': praca.pk}),
+        data,
+        content_type="application/json")
 
     assert response.status_code == status.HTTP_201_CREATED
 
@@ -117,8 +128,8 @@ def test_retorna_a_lista_de_rh_de_uma_Praca(client):
     praca = mommy.make('Praca')
     mommy.make('Rh', praca=praca, _quantity=5)
 
-    response = client.get(_list(kwargs={'praca_pk': praca.pk}),
-                          content_type="application/json")
+    response = client.get(
+        _list(kwargs={'praca_pk': praca.pk}), content_type="application/json")
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response.data, list)
@@ -134,8 +145,9 @@ def test_retorna_a_lista_de_rh_ao_consultar_uma_Praca(client):
     praca = mommy.make('Praca')
     mommy.make('Rh', praca=praca, _quantity=5)
 
-    response = client.get(_praca_detail(kwargs={'pk': praca.pk}),
-                          content_type="application/json")
+    response = client.get(
+        _praca_detail(kwargs={'pk': praca.pk}),
+        content_type="application/json")
 
     assert response.data['rh']
     assert isinstance(response.data['rh'], list)
@@ -147,20 +159,23 @@ def test_retorna_determinados_campos_em_lista(client):
     Testa quais campos retornam quando da listagem de RH de uma Praça
     """
 
-    fields = ['url', 'id_pub', 'nome', 'funcao', 'local_trabalho',
-              'data_entrada', 'data_saida']
+    fields = [
+        'url', 'id_pub', 'nome', 'funcao', 'local_trabalho', 'data_entrada',
+        'data_saida'
+    ]
 
     praca = mommy.make('Praca')
     mommy.make('Rh', praca=praca, _fill_optional=True)
 
-    response = client.get(_list(kwargs={'praca_pk': praca.pk}),
-                          content_type="application/json")
+    response = client.get(
+        _praca_detail(kwargs={'pk': praca.pk}),
+        content_type="application/json")
 
     for field in fields:
-        assert field in response.data[0]
-        del response.data[0][field]
+        assert field in response.data['rh'][0]
+        del response.data['rh'][0][field]
 
-    assert len(response.data[0]) == 0
+    assert len(response.data['rh'][0]) == 0
 
 
 def test_arquiva_um_RH_usando_DELETE_sem_identificao(client):
@@ -172,8 +187,9 @@ def test_arquiva_um_RH_usando_DELETE_sem_identificao(client):
     praca = mommy.make('Praca')
     rh = mommy.make('Rh', praca=praca, _quantity=2)
 
-    response = client.delete(_detail(
-        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+    response = client.delete(
+        _detail(kwargs={'praca_pk': praca.pk,
+                        'pk': rh[0].pk}),
         content_type="application/json")
 
     assert response.status_code == status.HTTP_401_UNAUTHORIZED
@@ -188,8 +204,9 @@ def test_arquiva_um_RH_usando_DELETE_com_identificao(_common_user, client):
     praca = mommy.make('Praca')
     rh = mommy.make('Rh', praca=praca, _quantity=2)
 
-    response = client.delete(_detail(
-        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+    response = client.delete(
+        _detail(kwargs={'praca_pk': praca.pk,
+                        'pk': rh[0].pk}),
         content_type="application/json")
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -207,8 +224,9 @@ def test_arquiva_um_RH_usando_DELETE_como_gestor(_common_user, client):
 
     from pracas.models import Rh
 
-    response = client.delete(_detail(
-        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+    response = client.delete(
+        _detail(kwargs={'praca_pk': praca.pk,
+                        'pk': rh[0].pk}),
         content_type="application/json")
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -226,15 +244,17 @@ def test_arquiva_um_RH_usando_DELETE_como_gestor_MinC(_admin_user, client):
 
     from pracas.models import Rh
 
-    response = client.delete(_detail(
-        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
+    response = client.delete(
+        _detail(kwargs={'praca_pk': praca.pk,
+                        'pk': rh[0].pk}),
         content_type="application/json")
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert Rh.objects.count() == 2
 
 
-def test_arquiva_um_RH_usando_DELETE_fornecendo_data_de_saida(_common_user, client):
+def test_arquiva_um_RH_usando_DELETE_fornecendo_data_de_saida(_common_user,
+                                                              client):
     """
     Testa arquivar o registro de um Recurso Humano utilizando DELETE no
     endpoint
@@ -248,16 +268,74 @@ def test_arquiva_um_RH_usando_DELETE_fornecendo_data_de_saida(_common_user, clie
     rh = mommy.make('Rh', praca=praca, _quantity=2)
 
     date = datetime.strptime('22062017', '%d%m%Y').date()
-    data = json.dumps({
-        "data_saida": date.isoformat()
-    })
+    data = json.dumps({"data_saida": date.isoformat()})
 
-    response = client.delete(_detail(
-        kwargs={'praca_pk': praca.pk, 'pk': rh[0].pk}),
-        data, content_type="application/json")
+    response = client.delete(
+        _detail(kwargs={'praca_pk': praca.pk,
+                        'pk': rh[0].pk}),
+        data,
+        content_type="application/json")
 
     rh = Rh.objects.get(pk=rh[0].pk)
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert Rh.objects.count() == 2
     assert rh.data_saida == date
+
+
+def test_retorna_a_lista_completa_de_RH_da_Praca(client):
+    """
+    Testa o retorno da lista de todo o Histórico de RH de uma determinada Praça
+    """
+
+    praca = mommy.make('Praca')
+    rhs = mommy.make('Rh', praca=praca, _quantity=4)
+    rhs_baixa = mommy.make(
+        'Rh', praca=praca, _quantity=4, _fill_optional=['data_saida'])
+
+    response = client.get(
+        _list(kwargs={'praca_pk': praca.pk}), content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == 8
+
+
+def test_exclui_o_registro_de_vinculo_de_RH(_common_user, client):
+    """
+    Testa a exclusão do registro de vinculo de um RH
+    """
+
+    praca = mommy.make('Praca')
+    rh = mommy.make('Rh', praca=praca)
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+
+    data = json.dumps({'excluir': True})
+
+    response = client.delete(
+        _detail(kwargs={'praca_pk': praca.pk,
+                        'pk': rh.pk}),
+        data,
+        content_type="application/json")
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    from pracas.models import Rh
+    assert Rh.objects.count() == 0
+
+
+def test_retorna_apenas_os_vinculos_ativos_de_RH_no_endpoint_praca(client):
+    """
+    Testa o retorno apenas dos vinculos ativos quando recuperado o registro de
+    uma Praça.
+    """
+
+    praca = mommy.make('Praca')
+    rh = mommy.make('Rh', praca=praca, _quantity=5)
+
+    rh[0].data_saida = date.today()
+    rh[0].save()
+
+    response = client.get(_praca_detail(kwargs={'pk': praca.pk}),
+                          content_type="application/json")
+
+    assert len(response.data['rh']) == 4

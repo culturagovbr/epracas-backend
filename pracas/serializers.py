@@ -123,12 +123,29 @@ class ParceiroListSerializer(ParceiroBaseSerializer):
         fields = ('nome', 'email', 'ramo_atividade', )
 
 
-class RhSerializer(serializers.ModelSerializer):
+class RhListSerializer(serializers.ModelSerializer):
     url = serializers.URLField(source='get_absolute_url', read_only=True)
+
     class Meta:
         model = Rh
         fields = ('url', 'id_pub', 'nome', 'funcao', 'local_trabalho',
                   'data_entrada', 'data_saida')
+
+
+class RhDetailSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+    escolaridade_descricao = serializers.CharField(source='get_escolaridade_display', read_only=True)
+    formacao_descricao = serializers.CharField(source='get_formacao_display', read_only=True)
+    vinculo_descricao = serializers.CharField(source='get_vinculo_display', read_only=True)
+    local_trabalho_descricao = serializers.CharField(source='get_local_trabalho_display', read_only=True)
+
+    class Meta:
+        model = Rh
+        fields = ('url', 'id_pub', 'nome', 'identificacao', 'sexo',
+                  'escolaridade', 'escolaridade_descricao', 'formacao',
+                  'formacao_descricao', 'vinculo', 'vinculo_descricao',
+                  'funcao', 'carga_horaria', 'remuneracao', 'local_trabalho',
+                  'local_trabalho_descricao', 'data_entrada', 'data_saida',)
 
 
 class PracaSerializer(PracaBaseSerializer):
@@ -136,7 +153,7 @@ class PracaSerializer(PracaBaseSerializer):
     parceiros = ParceiroListSerializer(many=True, read_only=True)
     unidade_gestora = MembroUglSerializer(
         source='ugl', many=True, read_only=True)
-    rh = RhSerializer(many=True, read_only=True)
+    rh = RhListSerializer(source='get_rh_ativos', many=True, read_only=True)
 
     class Meta:
         model = Praca

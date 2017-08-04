@@ -5,6 +5,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.utils.text import slugify
 
+from django.contrib.postgres.fields import ArrayField
+
 from rest_framework.reverse import reverse
 from rest_localflavor.br.br_states import STATE_CHOICES
 
@@ -176,6 +178,16 @@ class Praca(IdPubIdentifier):
         """
         try:
             return self.grupo_gestor.get(data_finalizacao=None)
+        except:
+            return None
+
+    def get_rh_ativos(self):
+        """
+        Retorna os Recursos Humanos ativos da Praça
+        """
+
+        try:
+            return self.rh.filter(data_saida=None)
         except:
             return None
 
@@ -368,9 +380,10 @@ class Rh(IdPubIdentifier):
     remuneracao = models.DecimalField(_('Remuneração Mensal'), max_length=7,
                                       decimal_places=2, max_digits=2,
                                       blank=True, null=True)
-    local_trabalho = models.CharField(_('Local de Trabalho no CEU'),
-                                      choices=ESPACOS_CHOICES, max_length=3,
-                                      blank=True, null=True)
+    local_trabalho = ArrayField(
+        models.IntegerField(_('Local de Trabalho no CEU'),
+                            choices=ESPACOS_CHOICES, blank=True,
+                            null=True), default=list)
     data_entrada = models.DateField(_('Data de Entrada'), default=date.today)
     data_saida = models.DateField(_('Data de Saída'), blank=True, null=True)
 

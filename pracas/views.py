@@ -29,7 +29,8 @@ from .serializers import GrupoGestorSerializer
 from .serializers import MembroGestorSerializer
 from .serializers import ParceiroDetailSerializer
 from .serializers import MembroUglSerializer
-from .serializers import RhSerializer
+from .serializers import RhDetailSerializer
+from .serializers import RhListSerializer
 
 from .permissions import IsAdminOrManagerOrReadOnly
 from .permissions import IsOwnerOrReadOnly
@@ -206,19 +207,26 @@ class RhViewSet(DefaultMixin, ModelViewSet):
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
 
-    serializer_class = RhSerializer
+    serializer_class = RhListSerializer
     queryset = Rh.objects.all()
 
     def create(self, request, praca_pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
         self.check_object_permissions(request, praca)
 
-        rh = RhSerializer(data=request.data)
+        rh = RhDetailSerializer(data=request.data)
         if rh.is_valid():
             rh.save(praca=praca)
             return Response(rh.data, status=status.HTTP_201_CREATED)
         else:
             return Response(rh.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def list(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+
+        rhs = Rh.objects.filter(praca=praca)
+        serializer = RhDetailSerializer(rhs, many=True)
+        return Response(serializer.data)
 
     def destroy(self, request, praca_pk=None, pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
@@ -226,12 +234,20 @@ class RhViewSet(DefaultMixin, ModelViewSet):
 
         rh = get_object_or_404(Rh, pk=pk)
 
-        if not request.data:
-            rh.data_saida = date.today()
-            rh.save()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        else:
-            serializer = RhSerializer(rh, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
+        try:
+            if request.data['excluir'] is True:
+                rh.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
+        except:
+            if not request.data:
+                rh.data_saida = date.today()
+                rh.save()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            else:
+                serializer = RhDetailSerializer(rh, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(status=status.HTTP_204_NO_CONTENT)
+                else:
+                    return Response(serializer.errors,
+                                    status=status.HTTP_400_BAD_REQUEST)
