@@ -284,6 +284,7 @@ class Parceiro(IdPubIdentifier):
         decimal_places=6,
         null=True,
         blank=True)
+    imagem = models.FileField(blank=True, upload_to=upload_image_to)
 
 
 class GrupoGestor(IdPubIdentifier):
@@ -302,12 +303,24 @@ class GrupoGestor(IdPubIdentifier):
         upload_to=upload_grupogestor_to,
         blank=True,
         null=True)
+    estatuto = models.FileField(
+        _('Estatuto do Grupo Gestor'),
+        upload_to=upload_grupogestor_to,
+        blank=True,
+        null=True)
     tipo_documento = models.CharField(
         _('Tipo de documento de constituição'),
         max_length=1,
         blank=True,
         null=True,
         choices=DOCUMENTO_CHOICES)
+
+    def get_absolute_url(self):
+        app_name = self._meta.app_label
+        basename = self._meta.object_name.lower()
+        url = app_name + ':' + basename + '-detail'
+
+        return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})
 
     class Meta:
         ordering = ['-data_instituicao']
@@ -339,6 +352,13 @@ class MembroGestor(IdPubIdentifier):
         null=True,
         choices=DOCUMENTO_CHOICES)
 
+    def get_absolute_url(self):
+        app_name = self._meta.app_label
+        basename = self._meta.object_name.lower()
+        url = app_name + ':' + basename + '-detail'
+
+        return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})
+
 
 class MembroUgl(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='ugl')
@@ -357,6 +377,13 @@ class MembroUgl(IdPubIdentifier):
         blank=True,
         null=True,
         )
+
+    def get_absolute_url(self):
+        app_name = self._meta.app_label
+        basename = self._meta.object_name.lower()
+        url = app_name + ':' + basename + '-detail'
+
+        return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})
 
 
 class Rh(IdPubIdentifier):

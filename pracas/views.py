@@ -154,7 +154,6 @@ class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
         gg = GrupoGestorSerializer(data=request.data)
         if gg.is_valid():
             gg.save(praca=praca)
-
             return Response(gg.data, status=status.HTTP_201_CREATED)
         else:
             return Response(gg.errors, status=status.HTTP_400_BAD_REQUEST)

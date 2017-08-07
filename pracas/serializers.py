@@ -40,12 +40,13 @@ class MembroGestorSerializer(serializers.ModelSerializer):
 
 
 class GrupoGestorSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url')
     membros = MembroGestorSerializer(read_only=True, many=True)
 
     class Meta:
         model = GrupoGestor
-        fields = ('id_pub', 'data_instituicao', 'data_finalizacao',
-                  'tipo_documento', 'documento_constituicao',
+        fields = ('url', 'id_pub', 'data_instituicao', 'data_finalizacao',
+                  'tipo_documento', 'documento_constituicao', 'estatuto',
                   'previsao_espacos', 'membros')
 
 
@@ -154,6 +155,16 @@ class PracaSerializer(PracaBaseSerializer):
     unidade_gestora = MembroUglSerializer(
         source='ugl', many=True, read_only=True)
     rh = RhListSerializer(source='get_rh_ativos', many=True, read_only=True)
+    # grupo_gestor = serializers.SerializerMethodField()
+
+    # def get_grupo_gestor(self, obj):
+    #     import ipdb
+    #     ipdb.set_trace()
+    #     if obj.get_grupogestor():
+    #         serializer = GrupoGestorSerializer(obj.get_grupogestor())
+    #         return serializer.data
+    #     else:
+    #         return None
 
     class Meta:
         model = Praca

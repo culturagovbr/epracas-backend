@@ -165,7 +165,7 @@ def test_retorna_determinados_campos_em_lista(client):
     ]
 
     praca = mommy.make('Praca')
-    mommy.make('Rh', praca=praca, _fill_optional=True)
+    mommy.make('Rh', praca=praca, _fill_optional=['data_entrada'], _quantity=2)
 
     response = client.get(
         _praca_detail(kwargs={'pk': praca.pk}),
