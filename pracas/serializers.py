@@ -107,7 +107,7 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Parceiro
         fields = ('praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
-                  'ramo_atividade', 'acoes', 'tempo_parceria')
+                  'ramo_atividade', 'acoes', 'tempo_parceria', 'imagem')
 
 
 class ParceiroDetailSerializer(ParceiroBaseSerializer):
@@ -115,13 +115,13 @@ class ParceiroDetailSerializer(ParceiroBaseSerializer):
         model = Parceiro
         fields = ('praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
                   'ramo_atividade', 'acoes', 'tempo_parceria', 'lat', 'long',
-                  'recursos_financeiros', )
+                  'recursos_financeiros', 'imagem')
 
 
 class ParceiroListSerializer(ParceiroBaseSerializer):
     class Meta:
         model = Parceiro
-        fields = ('nome', 'email', 'ramo_atividade', )
+        fields = ('nome', 'email', 'ramo_atividade', 'imagem')
 
 
 class RhListSerializer(serializers.ModelSerializer):

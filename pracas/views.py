@@ -135,8 +135,9 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
         parceiro = ParceiroDetailSerializer(data=request.data)
         if parceiro.is_valid():
             parceiro.save(praca=praca)
-
             return Response(parceiro.data, status=201)
+        else:
+            return Response(parceiro.errors, status=400)
 
 
 class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
