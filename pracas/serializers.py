@@ -40,7 +40,7 @@ class MembroGestorSerializer(serializers.ModelSerializer):
 
 
 class GrupoGestorSerializer(serializers.ModelSerializer):
-    url = serializers.URLField(source='get_absolute_url')
+    url = serializers.URLField(read_only=True, source='get_absolute_url')
     membros = MembroGestorSerializer(read_only=True, many=True)
 
     class Meta:
