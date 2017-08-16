@@ -7,7 +7,7 @@ from datetime import datetime
 from rest_framework import status
 from rest_framework.reverse import reverse
 
-from core.helper_functions import _
+from core.helper_functions import test_reverse as _
 
 from model_mommy import mommy
 

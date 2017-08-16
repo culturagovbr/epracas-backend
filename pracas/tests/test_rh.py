@@ -8,7 +8,7 @@ from rest_framework import status
 
 from model_mommy import mommy
 
-from core.helper_functions import _
+from core.helper_functions import test_reverse as _
 
 from authentication.tests.test_user import _common_user
 from authentication.tests.test_user import _admin_user

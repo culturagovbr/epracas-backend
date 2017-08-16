@@ -10,7 +10,7 @@ from rest_framework.reverse import reverse
 
 from model_mommy import mommy
 
-from core.helper_functions import _
+from core.helper_functions import test_reverse as _
 
 from pracas.models import Praca
 from gestor.models import Gestor

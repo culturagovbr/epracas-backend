@@ -10,7 +10,7 @@ from django.core.urlresolvers import resolve
 
 from rest_framework import status
 
-from core.helper_functions import _
+from core.helper_functions import test_reverse as _
 
 from model_mommy import mommy
 
