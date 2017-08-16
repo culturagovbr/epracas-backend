@@ -24,6 +24,8 @@ from .choices import MEMBRO_UGL_CHOICES
 from .choices import ESCOLARIDADE_CHOICES
 from .choices import FORMACAO_CHOICES
 from .choices import VINCULO_CHOICES
+from .choices import ATUACAO_CHOICES
+from .choices import DESCRICAO_CHOICES
 
 from atividades.choices import ESPACOS_CHOICES
 
@@ -423,3 +425,52 @@ class Rh(IdPubIdentifier):
 
     class Meta:
         ordering = ['nome', 'data_entrada']
+
+
+class Ator(IdPubIdentifier):
+    praca = models.ForeignKey(Praca, related_name='atores')
+    nome = models.CharField(_('Nome do Ator'), max_length=350)
+    area = models.CharField(_('Área de Atuação'), max_length=4,
+                            choices=ATUACAO_CHOICES)
+    descricao = models.IntegerField(_('Descrição da Atividade do Ator'),
+                                    choices=DESCRICAO_CHOICES)
+    imagem = models.FileField(blank=True, upload_to=upload_image_to)
+    endereco = models.TextField(_('Endereço'), blank=True, null=True)
+    telefone1 = models.CharField(
+        _('Telefone de Contato'),
+        blank=True,
+        null=True,
+        max_length=15
+        )
+    telefone2 = models.CharField(
+        _('Telefone de Contato'),
+        blank=True,
+        null=True,
+        max_length=15
+        )
+    email = models.EmailField(
+        _('Email de Contato'),
+        blank=True,
+        null=True,
+        )
+    lat = models.DecimalField(
+        _('Latitude'),
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True
+        )
+    long = models.DecimalField(
+        _('Longitutde'),
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        blank=True
+        )
+
+    def get_absolute_url(self):
+        app_name = self._meta.app_label
+        basename = self._meta.object_name.lower()
+        url = app_name + ':' + basename + '-detail'
+
+        return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})

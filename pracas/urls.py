@@ -8,6 +8,7 @@ from .views import GrupoGestorViewSet
 from .views import MembroGestorViewSet
 from .views import MembroUglViewSet
 from .views import RhViewSet
+from .views import AtorViewSet
 
 from .views import ImagemPracaViewSet
 
@@ -36,6 +37,9 @@ membrougl_router.register(r'unidadegestora', MembroUglViewSet)
 rh_router = routers.NestedSimpleRouter(router, r'pracas', lookup='praca')
 rh_router.register(r'rh', RhViewSet)
 
+ator_router = routers.NestedSimpleRouter(router, r'pracas', lookup='praca')
+ator_router.register(r'atores', AtorViewSet)
+
 urlpatterns = [
     url(r'^', include(router.urls)),
     url(r'^', include(imagem_router.urls)),
@@ -44,5 +48,6 @@ urlpatterns = [
     url(r'^', include(membrogestor_router.urls)),
     url(r'^', include(membrougl_router.urls)),
     url(r'^', include(rh_router.urls)),
+    url(r'^', include(ator_router.urls)),
     url(r'^distancia/$', DistanceView.as_view(), name='distancia'),
 ]

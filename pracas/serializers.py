@@ -7,6 +7,7 @@ from .models import ImagemPraca
 from .models import MembroGestor
 from .models import MembroUgl
 from .models import Rh
+from .models import Ator
 
 
 class DynamicFieldsModelSerializer(serializers.ModelSerializer):
@@ -149,22 +150,33 @@ class RhDetailSerializer(serializers.ModelSerializer):
                   'local_trabalho_descricao', 'data_entrada', 'data_saida',)
 
 
+class AtorListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Ator
+        fields = ('nome', 'area', 'imagem')
+
+
+class AtorDetailSerializer(serializers.ModelSerializer):
+    area_descricao = serializers.CharField(source='get_area_display',
+                                           read_only=True)
+    descricao_descricao = serializers.CharField(source='get_descricao_display',
+                                                read_only=True)
+
+    class Meta:
+        model = Ator
+        fields = ('id_pub', 'nome', 'area', 'area_descricao', 'descricao',
+                  'descricao_descricao', 'endereco', 'telefone1', 'telefone2',
+                  'email', 'lat', 'long')
+
+
 class PracaSerializer(PracaBaseSerializer):
     imagem = ImagemPracaSerializer(many=True, read_only=True)
     parceiros = ParceiroListSerializer(many=True, read_only=True)
     unidade_gestora = MembroUglSerializer(
         source='ugl', many=True, read_only=True)
     rh = RhListSerializer(source='get_rh_ativos', many=True, read_only=True)
-    # grupo_gestor = serializers.SerializerMethodField()
-
-    # def get_grupo_gestor(self, obj):
-    #     import ipdb
-    #     ipdb.set_trace()
-    #     if obj.get_grupogestor():
-    #         serializer = GrupoGestorSerializer(obj.get_grupogestor())
-    #         return serializer.data
-    #     else:
-    #         return None
+    atores = AtorListSerializer(many=True, read_only=True)
 
     class Meta:
         model = Praca
@@ -174,9 +186,9 @@ class PracaSerializer(PracaBaseSerializer):
                   'repasse', 'bio', 'telefone1', 'telefone2', 'fax', 'email1',
                   'email2', 'pagina', 'data_inauguracao', 'header_img', 'lat',
                   'long', 'gestor', 'unidade_gestora', 'grupo_gestor',
-                  'parceiros', 'rh', 'imagem',)
+                  'parceiros', 'rh', 'atores', 'imagem',)
         read_only_fields = ('id_pub', 'gestor', 'unidade_gestora',
-                            'grupo_gestor', 'imagem', 'parceiros')
+                            'grupo_gestor', 'imagem', 'parceiros', 'atores')
 
 
 class DistanciaSerializer(PracaListSerializer):

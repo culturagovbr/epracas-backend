@@ -160,3 +160,82 @@ VINCULO_CHOICES = (
     ('vol', VOLUNTARIO),
     ('otr', OUTRO),
 )
+
+# Area de Atuação de Atores
+"""
+Lista de Áreas de Atuação de Atores de uma Praça
+"""
+
+ASSISTENCIA_SOCIAL = "Assistencia Social"
+COMERCIO = "Comércio, Serviço e Produção"
+CULTURA = "Cultura"
+ENSINO = "Ensino e Pesquisa"
+ESPORTE = "Esporte"
+SAUDE = "Saúde"
+COMUNICACAO = "Veículos de Comunicação Local"
+OUTROS = "Outros"
+
+ATUACAO_CHOICES = (
+    ('asso', ASSISTENCIA_SOCIAL),
+    ('comr', COMERCIO),
+    ('cult', CULTURA),
+    ('ens', ENSINO),
+    ('espt', ESPORTE),
+    ('saud', SAUDE),
+    ('com', COMUNICACAO),
+    ('otr', OUTROS)
+)
+
+# Descrição de Atividade do Ator
+"""
+Lista de Descrições de Atividades de Atores de uma Praça
+"""
+
+ARTES_CENICAS = "artes cênicas, espetáculos e atividades complementares"
+CRIACAO_ARTISTICA = "criação artística"
+GESTAO_DE_ESPACOS = "gestão de espaços para artes cênicas, espetáculos e outras atividades artísticas"
+ATIVIDADES_BIBLIOTECAS = "atividades de bibliotecas e arquivos"
+ATIVIDADES_MUSEUS = "atividades de museus e de exploração, restauração artística e conservação de lugares e prédios históricos e atrações similares"
+ATIVIDADES_JARDINS = "atividades de jardins botânicos, zoológicos, parques nacionais, reservas ecológicas e áreas de proteção ambiental"
+GESTAO_ESPORTES = "gestão de instalações de esportes"
+CLUBES_SOCIAIS = "clubes sociais, esportivos e similares"
+ATIVIDADES_FISICAS = "atividades de condicionamento físico"
+ATIVIDADES_ESPORTIVAS_NE = "atividades esportivas não especificadas anteriormente"
+PARQUES_DIVERSAO = "parques de diversão e parques temáticos"
+ATIVIDADES_RECREACAO = "atividades de recreação e lazer não especificadas anteriormente"
+EDUCACAO_INFANTIL = "educação infantil e ensino fundamental"
+ENSINO_MEDIO = "ensino médio"
+EDUCACAO_SUPERIOR = "educação superior"
+EDUCACAO_PROFISSIONAL = "educação profissional de nível técnico e tecnológico"
+ATIVIDADES_APOIO = "atividades de apoio à educação"
+OUTRAS_ATIVIDADES_ENSINO = "outras atividades de ensino"
+ATIVIDADES_CINEMATOGRAFICAS = "atividades cinematográficas, produção de vídeos e de programas de televisão"
+ATIVIDADES_SOM = "atividades de gravação de som e de edição de música"
+ATIVIDADES_RADIO = "atividades de rádio"
+ATIVIDADES_TELEVISAO = "atividades de televisão"
+ATIVIDADES_SAUDE = "atividades de atenção à saúde humana integradas com assistência social, prestadas em residências coletivas e particulares"
+
+DESCRICAO_CHOICES = (
+    (1, ARTES_CENICAS),
+    (2, CRIACAO_ARTISTICA),
+    (3, GESTAO_DE_ESPACOS),
+    (4, ATIVIDADES_BIBLIOTECAS),
+    (5, ATIVIDADES_MUSEUS),
+    (6, ATIVIDADES_JARDINS),
+    (7, GESTAO_ESPORTES),
+    (8, CLUBES_SOCIAIS),
+    (9, ATIVIDADES_FISICAS),
+    (10, ATIVIDADES_ESPORTIVAS_NE),
+    (11, PARQUES_DIVERSAO),
+    (12, ATIVIDADES_RECREACAO),
+    (13, EDUCACAO_INFANTIL),
+    (14, ENSINO_MEDIO),
+    (15, EDUCACAO_SUPERIOR),
+    (16, EDUCACAO_PROFISSIONAL),
+    (17, ATIVIDADES_APOIO),
+    (18, OUTRAS_ATIVIDADES_ENSINO),
+    (19, ATIVIDADES_CINEMATOGRAFICAS),
+    (20, ATIVIDADES_SOM),
+    (21, ATIVIDADES_TELEVISAO),
+    (22, ATIVIDADES_SAUDE),
+)

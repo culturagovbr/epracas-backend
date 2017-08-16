@@ -20,6 +20,7 @@ from .models import MembroGestor
 from .models import ImagemPraca
 from .models import MembroUgl
 from .models import Rh
+from .models import Ator
 
 from .serializers import PracaSerializer
 from .serializers import PracaListSerializer
@@ -31,6 +32,7 @@ from .serializers import ParceiroDetailSerializer
 from .serializers import MembroUglSerializer
 from .serializers import RhDetailSerializer
 from .serializers import RhListSerializer
+from .serializers import AtorDetailSerializer
 
 from .permissions import IsAdminOrManagerOrReadOnly
 from .permissions import IsOwnerOrReadOnly
@@ -251,3 +253,34 @@ class RhViewSet(DefaultMixin, ModelViewSet):
                 else:
                     return Response(serializer.errors,
                                     status=status.HTTP_400_BAD_REQUEST)
+
+
+class AtorViewSet(DefaultMixin, ModelViewSet):
+
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
+
+    serializer_class = AtorDetailSerializer
+    queryset = Ator.objects.all()
+
+    def create(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        ator = AtorDetailSerializer(data=request.data)
+        if ator.is_valid():
+            ator.save(praca=praca)
+            return Response(ator.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(ator.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def destroy(self, request, praca_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        ator = get_object_or_404(Ator, pk=pk)
+
+        ator.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
