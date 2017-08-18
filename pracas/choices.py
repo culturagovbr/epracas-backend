@@ -168,6 +168,7 @@ Lista de Áreas de Atuação de Atores de uma Praça
 
 ASSISTENCIA_SOCIAL = "Assistencia Social"
 COMERCIO = "Comércio, Serviço e Produção"
+COMUNIDADE = "Comunidade"
 CULTURA = "Cultura"
 ENSINO = "Ensino e Pesquisa"
 ESPORTE = "Esporte"
@@ -177,7 +178,8 @@ OUTROS = "Outros"
 
 ATUACAO_CHOICES = (
     ('asso', ASSISTENCIA_SOCIAL),
-    ('comr', COMERCIO),
+    ('cmrc', COMERCIO),
+    ('comu', COMUNIDADE),
     ('cult', CULTURA),
     ('ens', ENSINO),
     ('espt', ESPORTE),
