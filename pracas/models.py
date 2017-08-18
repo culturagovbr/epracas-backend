@@ -136,10 +136,11 @@ class Praca(IdPubIdentifier):
         null=True,
         max_length=15
         )
-    email1 = models.EmailField(
+    email1 = models.CharField(
         _('Primeiro Email de Contato'),
         blank=True,
         null=True,
+        max_length=200,
         )
     email2 = models.EmailField(
         _('Segundo Email de Contato'),
@@ -248,10 +249,11 @@ class Parceiro(IdPubIdentifier):
         null=True,
         max_length=15
         )
-    email = models.EmailField(
+    email = models.CharField(
         _('Email de Contato'),
         blank=True,
         null=True,
+        max_length=200,
         )
     ramo_atividade = models.IntegerField(
         _('Ramo de Atividade'),
@@ -374,10 +376,11 @@ class MembroUgl(IdPubIdentifier):
         null=True,
         max_length=15
         )
-    email = models.EmailField(
+    email = models.CharField(
         _('Email de Contato'),
         blank=True,
         null=True,
+        max_length=200,
         )
 
     def get_absolute_url(self):
@@ -448,10 +451,11 @@ class Ator(IdPubIdentifier):
         null=True,
         max_length=15
         )
-    email = models.EmailField(
+    email = models.CharField(
         _('Email de Contato'),
         blank=True,
         null=True,
+        max_length=200
         )
     lat = models.DecimalField(
         _('Latitude'),
