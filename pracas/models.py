@@ -439,6 +439,7 @@ class Ator(IdPubIdentifier):
                                     choices=DESCRICAO_CHOICES)
     imagem = models.FileField(blank=True, upload_to=upload_image_to)
     endereco = models.TextField(_('Endereço'), blank=True, null=True)
+    cep = models.CharField(_('CEP'), blank=True, null=True, max_length=9)
     telefone1 = models.CharField(
         _('Telefone de Contato'),
         blank=True,

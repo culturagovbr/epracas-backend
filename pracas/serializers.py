@@ -166,7 +166,7 @@ class AtorDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ator
         fields = ('id_pub', 'nome', 'area', 'area_descricao', 'descricao',
-                  'descricao_descricao', 'endereco', 'telefone1', 'telefone2',
+                  'descricao_descricao', 'endereco', 'cep', 'telefone1', 'telefone2',
                   'email', 'lat', 'long')
 
 
