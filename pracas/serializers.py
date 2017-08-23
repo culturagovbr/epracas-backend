@@ -186,7 +186,10 @@ class PracaSerializer(PracaBaseSerializer):
                   'repasse', 'bio', 'telefone1', 'telefone2', 'fax', 'email1',
                   'email2', 'pagina', 'data_inauguracao', 'header_img', 'lat',
                   'long', 'gestor', 'unidade_gestora', 'grupo_gestor',
-                  'parceiros', 'rh', 'atores', 'imagem',)
+                  'parceiros', 'rh', 'atores', 'imagem','funciona_dia_util',
+                  'hora_abertura_dia_util', 'hora_fechamento_dia_util',
+                  'funciona_sabado', 'hora_abertura_sabado', 'hora_fechamento_sabado',
+                  'funciona_domingo', 'hora_abertura_domingo', 'hora_fechamento_domingo')
         read_only_fields = ('id_pub', 'gestor', 'unidade_gestora',
                             'grupo_gestor', 'imagem', 'parceiros', 'atores')
 

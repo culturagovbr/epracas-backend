@@ -152,6 +152,48 @@ class Praca(IdPubIdentifier):
         blank=True,
         null=True,
         )
+    funciona_dia_util = models.NullBooleanField(
+        _('Segunda - Sexta'),
+        blank=True,
+        )
+    hora_abertura_dia_util = models.TimeField(
+        _('Abre'),
+        null=True,
+        blank=True,
+        )
+    hora_fechamento_dia_util = models.TimeField(
+        _('Fecha'),
+        null=True,
+        blank=True,
+        )
+    funciona_sabado = models.NullBooleanField(
+        _('Sábado'),
+        blank=True,
+        )
+    hora_abertura_sabado = models.TimeField(
+        _('Abre'),
+        null=True,
+        blank=True,
+        )
+    hora_fechamento_sabado = models.TimeField(
+        _('Fecha'),
+        null=True,
+        blank=True,
+        )
+    funciona_domingo = models.NullBooleanField(
+        _('Domingo'),
+        blank=True,
+        )
+    hora_abertura_domingo = models.TimeField(
+        _('Abre'),
+        null=True,
+        blank=True,
+        )
+    hora_fechamento_domingo = models.TimeField(
+        _('Fecha'),
+        null=True,
+        blank=True,
+        )
 
     def get_latlong(self):
         """
