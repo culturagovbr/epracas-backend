@@ -451,8 +451,8 @@ class Rh(IdPubIdentifier):
                               null=True)
     carga_horaria = models.CharField(_('Carga Horaria'), max_length=3,
                                      blank=True, null=True)
-    remuneracao = models.DecimalField(_('Remuneração Mensal'), max_length=7,
-                                      decimal_places=2, max_digits=2,
+    remuneracao = models.DecimalField(_('Remuneração Mensal'), max_length=10,
+                                      decimal_places=2, max_digits=10,
                                       blank=True, null=True)
     local_trabalho = ArrayField(
         models.IntegerField(_('Local de Trabalho no CEU'),
