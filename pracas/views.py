@@ -273,7 +273,13 @@ class AtorViewSet(DefaultMixin, ModelViewSet):
             return Response(ator.data, status=status.HTTP_201_CREATED)
         else:
             return Response(ator.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def list(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
 
+        atores = Ator.objects.filter(praca=praca)
+        serializer = AtorDetailSerializer(atores, many=True)
+        return Response(serializer.data)
 
     def destroy(self, request, praca_pk=None, pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)

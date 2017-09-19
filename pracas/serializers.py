@@ -150,10 +150,9 @@ class RhDetailSerializer(serializers.ModelSerializer):
 
 
 class AtorListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Ator
-        fields = ('nome', 'area', 'imagem')
+        fields = ('id_pub', 'nome', 'area', 'imagem')
 
 
 class AtorDetailSerializer(serializers.ModelSerializer):
