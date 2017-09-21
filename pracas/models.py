@@ -368,6 +368,15 @@ class GrupoGestor(IdPubIdentifier):
 
         return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})
 
+    def get_membros_ativos(self):
+        """
+        Retorna os membros gestores do Grupo
+        """
+        try:
+            return self.membros.filter(data_desligamento=None)
+        except:
+            return None
+
     class Meta:
         ordering = ['-data_instituicao']
 
