@@ -28,6 +28,7 @@ from .serializers import ImagemPracaSerializer
 from .serializers import DistanciaSerializer
 from .serializers import GrupoGestorSerializer
 from .serializers import MembroGestorSerializer
+from .serializers import MembroGestorDetailSerializer
 from .serializers import ParceiroDetailSerializer
 from .serializers import MembroUglSerializer
 from .serializers import RhDetailSerializer
@@ -182,6 +183,29 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
             return Response(membro.data, status=status.HTTP_201_CREATED)
         else:
             return Response(membro.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def list(self, request, praca_pk=None, grupogestor_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+
+        gg = get_object_or_404(GrupoGestor, pk=grupogestor_pk, praca=praca)
+
+        membros = MembroGestor.objects.filter(grupo_gestor=gg, data_desligamento=None)
+        serializer = MembroGestorDetailSerializer(membros, many=True)
+        return Response(serializer.data)
+
+    def destroy(self, request, praca_pk=None, grupogestor_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        gg = get_object_or_404(GrupoGestor, pk=grupogestor_pk)
+        self.check_object_permissions(request, gg)
+
+        membro = get_object_or_404(MembroGestor, pk=pk)
+        self.check_object_permissions(request, membro)
+        membro.data_desligamento = request.data['data_desligamento']
+        membro.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class MembroUglViewSet(DefaultMixin, ModelViewSet):

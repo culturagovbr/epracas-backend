@@ -40,9 +40,20 @@ class MembroGestorSerializer(serializers.ModelSerializer):
         fields = ('nome', 'origem', 'origem_descricao')
 
 
+class MembroGestorDetailSerializer(serializers.ModelSerializer):
+    origem_descricao = serializers.CharField(
+        source='get_origem_display', read_only=True)
+    tipo_documento_descricao = serializers.CharField(
+    source='get_tipo_documento_display', read_only='True')
+
+    class Meta:
+        model = MembroGestor
+        fields = ('id_pub', 'nome', 'origem', 'origem_descricao', 'tipo_documento', 'tipo_documento_descricao', 'data_posse')
+
+
 class GrupoGestorSerializer(serializers.ModelSerializer):
     url = serializers.URLField(read_only=True, source='get_absolute_url')
-    membros = MembroGestorSerializer(read_only=True, many=True)
+    membros = MembroGestorSerializer(source='get_membros_ativos', read_only=True, many=True)
 
     class Meta:
         model = GrupoGestor
