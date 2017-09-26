@@ -226,6 +226,14 @@ class MembroUglViewSet(DefaultMixin, ModelViewSet):
             return Response(membro.data, status=status.HTTP_201_CREATED)
         else:
             return Response(membro.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def list(self, request, praca_pk=None, unidadegestora_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+
+        ugl = MembroUgl.objects.filter(praca=praca)
+
+        serializer = MembroUglSerializer(ugl, many=True)
+        return Response(serializer.data)
 
 
 class RhViewSet(DefaultMixin, ModelViewSet):

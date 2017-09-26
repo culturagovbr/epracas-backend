@@ -63,9 +63,11 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
 
 
 class MembroUglSerializer(serializers.ModelSerializer):
+    tipo_descricao = serializers.CharField(
+    source='get_tipo_display', read_only=True)
     class Meta:
         model = MembroUgl
-        fields = ('nome', 'tipo', 'telefone', 'email')
+        fields = ('id_pub', 'nome', 'tipo', 'tipo_descricao', 'telefone', 'email')
 
 
 class ImagemPracaSerializer(serializers.ModelSerializer):
