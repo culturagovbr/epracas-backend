@@ -12,6 +12,7 @@ from oidc_auth.authentication import JSONWebTokenAuthentication
 
 from core.views import DefaultMixin
 from core.views import MultiSerializerViewSet
+from core.metadata import ChoicesMetadata
 
 from .models import Praca
 from .models import Parceiro
@@ -44,6 +45,7 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
     authentication_classes = (JSONWebTokenAuthentication, )
     permission_classes = (IsAdminOrManagerOrReadOnly, )
 
+    metadata_class = ChoicesMetadata
     serializer_class = PracaSerializer
     queryset = Praca.objects.all()
     search_fields = ('nome', 'municipio', 'uf')
