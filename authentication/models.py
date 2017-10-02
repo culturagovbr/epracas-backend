@@ -119,6 +119,6 @@ class User(AbstractBaseUser, IdPubIdentifier):
         """
         try:
             gestor = self.gestor.get(atual=True)
-            return gestor.praca.get_absolute_url()
+            return gestor.praca.id_pub
         except:
             return None
