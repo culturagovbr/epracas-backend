@@ -22,7 +22,7 @@ class GestorBaseSerializer(serializers.ModelSerializer):
         serializer = PracaListSerializer(
             obj.praca,
             fields=('nome', 'url', 'municipio', 'uf', 'regiao', 'header_img',
-                    'situacao', 'data_inauguracao'))
+                    'situacao', 'situacao_descricao', 'data_inauguracao'))
         return serializer.data
 
     class Meta:
