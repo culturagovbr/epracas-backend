@@ -1,6 +1,8 @@
 from datetime import date
 
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from rest_framework import status
 
@@ -21,6 +23,8 @@ from oidc_auth.authentication import JSONWebTokenAuthentication
 
 from core.views import DefaultMixin
 from core.views import MultiSerializerViewSet
+
+from authentication.models import User
 
 from .models import Gestor
 from .models import ProcessoVinculacao
@@ -62,6 +66,12 @@ class GestorViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
         gestor.atual = False
         gestor.save()
 
+        #Envia e-mail de desvinculação
+        context = dict(gestor=gestor)
+        html = render_to_string('emails/vinculacao_desfeita.html', context)
+        assunto = '[EPRACAS] Desvinculado de praça'
+        send_mail(assunto, html, 'naoresponda@cultura.gov.br', [gestor.user.email], fail_silently=False)
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -84,6 +94,8 @@ class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
 
         self.check_object_permissions(request, processo)
 
+        print(request.data)
+
         if 'situacao' in request.data:
             situacao = {
                 "situacao": request.data.pop('situacao'),
@@ -96,6 +108,22 @@ class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
                 serializer = ProcessoVinculacaoDetailSerializer(processo, data=request.data)
                 if serializer.is_valid():
                     serializer.save()
+
+                    if processo.finalizado:
+                        context = dict(processo=processo)
+                        gestores = User.objects.filter(is_staff=True).values_list('email', flat=True)
+
+                        if processo.aprovado:
+                            #Envia e-mail de aprovação
+                            html = render_to_string('emails/vinculacao_aprovada.html', context)
+                            assunto = '[EPRACAS] Solicitação de vinculação APROVADA'
+                            send_mail(assunto, html, 'naoresponda@cultura.gov.br', [processo.user.email], fail_silently=False)
+                        else:
+                            #Envia e-mail de reprovação
+                            html = render_to_string('emails/vinculacao_reprovada.html', context)
+                            assunto = '[EPRACAS] Solicitação de vinculação REPROVADA'
+                            send_mail(assunto, html, 'naoresponda@cultura.gov.br', [processo.user.email], fail_silently=False)
+
                     return Response(serializer.data)
                 else:
                     raise ValidationError(serializer.errors)
@@ -109,6 +137,15 @@ class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
             return Response(serializer.data)
         else:
             raise ValidationError(serializer.errors)
+
+    def perform_create(self, serializer):
+        processo = serializer.save()
+
+        # Enviar e-mail de nova solicitação de vinculação aos administradores
+        context = dict(processo=processo)
+        html = render_to_string('emails/vinculacao_solicitada.html', context)
+        gestores = User.objects.filter(is_staff=True).values_list('email', flat=True)
+        send_mail('[EPRAÇAS] Nova solicitação de vinculação', html, 'naoresponda@cultura.gov.br', gestores, fail_silently=False)
 
 
 class ArquivoProcessoViewSet(DefaultMixin, ViewSet):

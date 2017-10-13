@@ -112,7 +112,7 @@ WSGI_APPLICATION = 'epracas.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 DATABASES = {'default': dj_database_url.config(
-    default = 'postgres://epracas:epracas123@localhost/epracas_db'
+    default = 'postgres://postgres:1234@localhost/epracas_db'
 )}
 
 
@@ -228,3 +228,9 @@ RAVEN_CONFIG = {
 }
 
 EVENTTOOLS_REPEAT_CHOICES = None
+
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND','django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', '')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 25)
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
