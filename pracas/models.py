@@ -410,7 +410,8 @@ class MembroGestor(IdPubIdentifier):
     titularidade = models.CharField(
         _('Titularidade'),
         max_length=1,
-        choices=TITULARIDADE_CHOICES)
+        choices=TITULARIDADE_CHOICES,
+        default='s')
     email = models.CharField(
         _('Email de Contato'),
         blank=True,
