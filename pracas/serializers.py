@@ -48,7 +48,10 @@ class MembroGestorDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MembroGestor
-        fields = ('id_pub', 'nome', 'origem', 'origem_descricao', 'tipo_documento', 'tipo_documento_descricao', 'data_posse')
+        fields = ('id_pub', 'nome', 'origem', 'origem_descricao',
+                  'tipo_documento', 'tipo_documento_descricao', 'data_posse',
+                  'titularidade', 'email', 'telefone', 'data_desligamento',
+                  'documento_posse')
 
 
 class GrupoGestorSerializer(serializers.ModelSerializer):

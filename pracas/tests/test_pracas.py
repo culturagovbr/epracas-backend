@@ -763,6 +763,30 @@ def test_cadastra_um_novo_membro_no_GG_como_gestor(_common_user, client):
     assert response.status_code == status.HTTP_201_CREATED
 
 
+def test_verifica_se_um_membro_GG_retorna_determinados_campos(client):
+    """
+    Testa o retorno dos campos "origem", "data_posse",
+    "data_desligamento", "documento_posse", "tipo_documento", "titularidade",
+    "nome", "telefone" e "email", nas informações sobre os
+    membros de um Grupo Gestor """
+
+    campos = {"origem", "data_posse", "data_desligamento", "documento_posse",
+              "tipo_documento", "titularidade", "nome", "telefone",
+              "email"}
+
+    praca = mommy.make(Praca)
+    gestor = mommy.make('Gestor', praca=praca, atual=True)
+    grupo_gestor = mommy.make('GrupoGestor', praca=praca)
+    membro = mommy.make('MembroGestor', grupo_gestor=grupo_gestor)
+
+    response = client.get(_membrogestor_list(
+        kwargs={'praca_pk': praca.pk,
+                'grupogestor_pk': grupo_gestor.pk}),
+        content_type="application/json")
+
+    assert campos.issubset(response.json()[0])
+
+
 @pytest.mark.skip
 def test_retorna_200_ok_enpoint_parceiros(client):
     """

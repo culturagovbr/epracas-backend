@@ -37,6 +37,20 @@ ORIGEM_CHOICES = (
     ('me', MORADORES_ENTORNO),
 )
 
+# Grupo Gestor Titularidade Choices
+"""
+Lista de escolhar para a Titularidade de um Membro do Grupo Gerstor de uma
+Praça
+"""
+
+TITULAR = "Titular"
+SUPLENTE = "Suplente"
+
+TITULARIDADE_CHOICES = (
+    ('t', TITULAR),
+    ('s', SUPLENTE),
+)
+
 # Tipo de Documento de Constituição
 """
 Lista de escolhas para o Tipo de Documento de Constituição de um Grupo Gestor
