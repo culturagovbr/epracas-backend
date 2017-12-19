@@ -26,6 +26,7 @@ from .choices import FORMACAO_CHOICES
 from .choices import VINCULO_CHOICES
 from .choices import ATUACAO_CHOICES
 from .choices import DESCRICAO_CHOICES
+from .choices import TITULARIDADE_CHOICES
 
 from atividades.choices import ESPACOS_CHOICES
 
@@ -406,6 +407,22 @@ class MembroGestor(IdPubIdentifier):
         blank=True,
         null=True,
         choices=DOCUMENTO_CHOICES)
+    titularidade = models.CharField(
+        _('Titularidade'),
+        max_length=1,
+        choices=TITULARIDADE_CHOICES)
+    email = models.CharField(
+        _('Email de Contato'),
+        blank=True,
+        null=True,
+        max_length=200,
+        )
+    telefone = models.CharField(
+        _('Telefone de Contato'),
+        blank=True,
+        null=True,
+        max_length=15
+        )
 
     def get_absolute_url(self):
         app_name = self._meta.app_label
