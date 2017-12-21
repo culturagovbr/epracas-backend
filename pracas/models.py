@@ -463,7 +463,7 @@ class MembroUgl(IdPubIdentifier):
 class Rh(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='rh')
     nome = models.CharField(_('Nome'), max_length=300)
-    identificacao = models.CharField(_('Documento Identidade'), max_length=14,
+    identificacao = models.CharField(_('Documento Identidade'), max_length=30,
                                      blank=True, null=True)
     sexo = models.CharField(_('Sexo'), max_length=1, blank=True, null=True,
                             choices=(('f', 'Feminino'), ('m', 'Masculino')))
