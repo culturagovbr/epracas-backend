@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from pracas.serializers import PracaListSerializer
 from .models import Agenda
 from .models import Ocorrencia
 from .models import Relatorio
@@ -48,6 +49,7 @@ class OcorrenciaSerializer(serializers.ModelSerializer):
 class AgendaDetailSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
     ocorrencia = OcorrenciaSerializer()
+    praca_detail = PracaListSerializer(source='praca',read_only=True)
 
     def get_url(self, obj):
         return obj.get_absolute_url()
