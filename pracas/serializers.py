@@ -186,7 +186,7 @@ class AtorDetailSerializer(serializers.ModelSerializer):
 
 class PracaSerializer(PracaBaseSerializer):
     imagem = ImagemPracaSerializer(many=True, read_only=True)
-    parceiros = ParceiroListSerializer(many=True, read_only=True)
+    parceiros = ParceiroDetailSerializer(many=True, read_only=True)
     unidade_gestora = MembroUglSerializer(
         source='ugl', many=True, read_only=True)
     rh = RhListSerializer(source='get_rh_ativos', many=True, read_only=True)
