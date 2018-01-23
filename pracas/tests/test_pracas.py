@@ -684,6 +684,22 @@ def test_retorna_informacoes_sobre_GG(client):
     assert response.data['grupo_gestor']
 
 
+def test_retorna_os_gg_de_uma_praca(client):
+    """
+    Testa o retorno dos Grupos Gestores exclusivos de uma Praça
+    """
+
+    praca = mommy.make(Praca)
+    gg = mommy.make('GrupoGestor', praca=praca)
+    gg2 = mommy.make('GrupoGestor', praca=praca,
+                     _fill_optional=['data_finalizacao'])
+    gg3 = mommy.make('GrupoGestor', _quantity=2)
+
+    response = client.get(_grupogestor_list(kwargs={'praca_pk': praca.pk}))
+
+    assert len(response.data) == 2
+
+
 def test_retorna_qtde_membros_GG(client):
     """
     Testa o retorno contendo a quantidade de membros prevista para o Grupo
