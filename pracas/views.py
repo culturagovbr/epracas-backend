@@ -164,6 +164,13 @@ class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
         else:
             return Response(gg.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+
+        gg = GrupoGestor.objects.filter(praca=praca)
+        serializer = GrupoGestorSerializer(gg, many=True)
+        return Response(serializer.data)
+
 
 class MembroGestorViewSet(DefaultMixin, ModelViewSet):
 
