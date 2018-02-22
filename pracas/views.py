@@ -271,6 +271,20 @@ class RhViewSet(DefaultMixin, ModelViewSet):
         serializer = RhDetailSerializer(rhs, many=True)
         return Response(serializer.data)
 
+    def partial_update(self, request, praca_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        rh = get_object_or_404(Rh, pk=pk)
+
+        rh_serializer = RhDetailSerializer(data=request.data,
+                                           partial=True)
+        if rh_serializer.is_valid():
+            rh_serializer.save(praca=praca)
+            return Response(rh_serializer.data, status=status.HTTP_200_OK)
+        return Response(rh_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     def destroy(self, request, praca_pk=None, pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
         self.check_object_permissions(request, praca)
