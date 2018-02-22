@@ -267,7 +267,7 @@ class RhViewSet(DefaultMixin, ModelViewSet):
     def list(self, request, praca_pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
 
-        rhs = Rh.objects.filter(praca=praca, data_saida=None)
+        rhs = Rh.objects.filter(praca=praca)
         serializer = RhDetailSerializer(rhs, many=True)
         return Response(serializer.data)
 
