@@ -7,8 +7,11 @@ RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates
 RUN apk add --no-cache postgresql-dev
 RUN apk add --no-cache git
 RUN pip install virtualenv uwsgi
-RUN git clone https://gitlab.com/decko/epracas-backend /var/uwsgi
+# ADD this so pip can see the requirements.txt file.
+ADD ["./requirements.txt","/var/uwsgi/requirements.txt"]
+RUN ls -lha /var/uwsgi
 RUN pip install -r /var/uwsgi/requirements.txt
+
 RUN apk del python-dev gcc musl-dev linux-headers wget build-dependencies git
 
 WORKDIR /var/uwsgi
