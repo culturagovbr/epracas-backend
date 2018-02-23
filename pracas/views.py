@@ -207,10 +207,9 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
         self.check_object_permissions(request, praca)
 
         gg = get_object_or_404(GrupoGestor, pk=grupogestor_pk)
-        self.check_object_permissions(request, gg)
 
         membro = get_object_or_404(MembroGestor, pk=pk)
-        self.check_object_permissions(request, membro)
+
         membro.data_desligamento = request.data['data_desligamento']
         membro.save()
 
