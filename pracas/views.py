@@ -202,6 +202,24 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
         serializer = MembroGestorDetailSerializer(membros, many=True)
         return Response(serializer.data)
 
+    def partial_update(self, request, praca_pk=None, grupogestor_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        gg = get_object_or_404(GrupoGestor, pk=grupogestor_pk, praca=praca)
+        
+        membro = get_object_or_404(MembroGestor, pk=pk)
+
+        serializer = MembroGestorSerializer(membro, data=request.data,
+                                           partial=True)
+        
+        if serializer.is_valid():
+            serializer.save(grupo_gestor=gg)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     def destroy(self, request, praca_pk=None, grupogestor_pk=None, pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
         self.check_object_permissions(request, praca)
@@ -276,7 +294,7 @@ class RhViewSet(DefaultMixin, ModelViewSet):
 
         rh = get_object_or_404(Rh, pk=pk)
 
-        rh_serializer = RhDetailSerializer(data=request.data,
+        rh_serializer = RhDetailSerializer(rh, data=request.data,
                                            partial=True)
         if rh_serializer.is_valid():
             rh_serializer.save(praca=praca)
