@@ -339,3 +339,58 @@ def test_retorna_apenas_os_vinculos_ativos_de_RH_no_endpoint_praca(client):
                           content_type="application/json")
 
     assert len(response.data['rh']) == 4
+
+
+def test_edita_informacoes_de_um_RH_como_usuario_nao_autenticado(client):
+    """
+    Testa alterar as informações de um RH como usuário não autenticado
+    """
+
+    praca = mommy.make('Praca')
+    rh = mommy.make('Rh', praca=praca)
+
+    data = {'identidade': '5514142542'}
+
+    response = client.patch(_detail(kwargs={'praca_pk': praca.pk, 'pk': rh.pk})
+                            , data
+                            , content_type="application/json")
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_edita_informacoes_de_um_RH_como_usuario_sem_permissao(_common_user, client):
+    """
+    Testa alterar as informações de um RH como usuário autenticado,
+    porém, sem permissões de gestor.
+    """
+
+    praca = mommy.make('Praca')
+    rh = mommy.make('Rh', praca=praca)
+
+    data = {'identidade': '5514142542'}
+
+    response = client.patch(_detail(kwargs={'praca_pk': praca.pk, 'pk': rh.pk})
+                            , data
+                            , content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_edita_informacoes_de_um_RH_como_gestor_da_Praca(_common_user, client):
+    """
+    Testa alterar as informações de um RH como gestor da Praça
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+    rh = mommy.make('Rh', praca=praca)
+
+    data = json.dumps({'identificacao': '5514142542'})
+
+    response = client.patch(_detail(kwargs={'praca_pk': praca.pk, 'pk': rh.pk})
+                            , data
+                            , content_type="application/json")
+
+    data = json.loads(data)
+    assert response.status_code == status.HTTP_200_OK
+    assert set(data).issubset(response.data)

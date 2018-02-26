@@ -28,6 +28,7 @@ _parceiros_detail = _('pracas:parceiro-detail')
 _grupogestor_list = _('pracas:grupogestor-list')
 _grupogestor_detail = _('pracas:grupogestor-detail')
 _membrogestor_list = _('pracas:membrogestor-list')
+_membrogestor_detail = _('pracas:membrogestor-detail')
 
 User = get_user_model()
 pytestmark = pytest.mark.django_db
@@ -684,6 +685,22 @@ def test_retorna_informacoes_sobre_GG(client):
     assert response.data['grupo_gestor']
 
 
+def test_retorna_os_gg_de_uma_praca(client):
+    """
+    Testa o retorno dos Grupos Gestores exclusivos de uma Praça
+    """
+
+    praca = mommy.make(Praca)
+    gg = mommy.make('GrupoGestor', praca=praca)
+    gg2 = mommy.make('GrupoGestor', praca=praca,
+                     _fill_optional=['data_finalizacao'])
+    gg3 = mommy.make('GrupoGestor', _quantity=2)
+
+    response = client.get(_grupogestor_list(kwargs={'praca_pk': praca.pk}))
+
+    assert len(response.data) == 2
+
+
 def test_retorna_qtde_membros_GG(client):
     """
     Testa o retorno contendo a quantidade de membros prevista para o Grupo
@@ -786,6 +803,68 @@ def test_verifica_se_um_membro_GG_retorna_determinados_campos(client):
 
     assert campos.issubset(response.json()[0])
 
+
+def test_arquivar_um_membro_gestor_de_um_GG_sem_permissoes(client):
+    """
+    Testa arquivar um MembroGestor de um GrupoGestor ativo, usando o verbo
+    DELETE, sem ter credenciais de acesso.
+    """
+
+    praca = mommy.make(Praca)
+    grupo_gestor = mommy.make('GrupoGestor', praca=praca)
+    membro = mommy.make('MembroGestor', grupo_gestor=grupo_gestor)
+
+    response = client.delete(_membrogestor_detail(kwargs={
+        'praca_pk': praca.pk, 'grupogestor_pk': grupo_gestor.pk, 'pk': membro.pk
+        })
+    )
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_arquivar_um_membro_gestor_de_um_GG_com_credenciais(_common_user, client):
+    """
+    Testa arquivar um MembroGestor de um GrupoGestor ativo, usando o verbo
+    DELETE, com usuário logado, sem permissões sobre a Praça.
+    """
+
+    praca = mommy.make(Praca)
+    grupo_gestor = mommy.make('GrupoGestor', praca=praca)
+    membro = mommy.make('MembroGestor', grupo_gestor=grupo_gestor)
+
+    response = client.delete(_membrogestor_detail(kwargs={
+        'praca_pk': praca.pk, 'grupogestor_pk': grupo_gestor.pk, 'pk': membro.pk
+        })
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_arquivar_um_membro_gestor_de_um_GG_como_gestor_da_Praca(_common_user, client):
+    """
+    Testa arquivar um MembroGestor de um GrupoGestor ativo, usando o verbo
+    DELETE, com permissões sobre a Praça.
+    """
+
+    praca = mommy.make(Praca)
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+    grupo_gestor = mommy.make('GrupoGestor', praca=praca)
+    membro = mommy.make('MembroGestor', grupo_gestor=grupo_gestor)
+
+    desligamento = json.dumps({'data_desligamento': '2018-01-01'})
+
+    response = client.delete(_membrogestor_detail(kwargs={
+        'praca_pk': praca.pk, 'grupogestor_pk': grupo_gestor.pk, 'pk': membro.pk
+        }),
+        desligamento,
+        content_type="application/json"
+    )
+
+    from pracas.models import MembroGestor
+    membrogestor = MembroGestor.objects.get(pk=membro.pk)
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert membrogestor.data_desligamento
 
 @pytest.mark.skip
 def test_retorna_200_ok_enpoint_parceiros(client):

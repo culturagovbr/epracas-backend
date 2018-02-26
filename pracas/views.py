@@ -164,6 +164,13 @@ class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
         else:
             return Response(gg.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+
+        gg = GrupoGestor.objects.filter(praca=praca)
+        serializer = GrupoGestorSerializer(gg, many=True)
+        return Response(serializer.data)
+
 
 class MembroGestorViewSet(DefaultMixin, ModelViewSet):
 
@@ -195,15 +202,32 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
         serializer = MembroGestorDetailSerializer(membros, many=True)
         return Response(serializer.data)
 
+    def partial_update(self, request, praca_pk=None, grupogestor_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        gg = get_object_or_404(GrupoGestor, pk=grupogestor_pk, praca=praca)
+        
+        membro = get_object_or_404(MembroGestor, pk=pk)
+
+        serializer = MembroGestorSerializer(membro, data=request.data,
+                                           partial=True)
+        
+        if serializer.is_valid():
+            serializer.save(grupo_gestor=gg)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
     def destroy(self, request, praca_pk=None, grupogestor_pk=None, pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
         self.check_object_permissions(request, praca)
 
         gg = get_object_or_404(GrupoGestor, pk=grupogestor_pk)
-        self.check_object_permissions(request, gg)
 
         membro = get_object_or_404(MembroGestor, pk=pk)
-        self.check_object_permissions(request, membro)
+
         membro.data_desligamento = request.data['data_desligamento']
         membro.save()
 
@@ -260,9 +284,23 @@ class RhViewSet(DefaultMixin, ModelViewSet):
     def list(self, request, praca_pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
 
-        rhs = Rh.objects.filter(praca=praca, data_saida=None)
+        rhs = Rh.objects.filter(praca=praca)
         serializer = RhDetailSerializer(rhs, many=True)
         return Response(serializer.data)
+
+    def partial_update(self, request, praca_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        rh = get_object_or_404(Rh, pk=pk)
+
+        rh_serializer = RhDetailSerializer(rh, data=request.data,
+                                           partial=True)
+        if rh_serializer.is_valid():
+            rh_serializer.save(praca=praca)
+            return Response(rh_serializer.data, status=status.HTTP_200_OK)
+        return Response(rh_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def destroy(self, request, praca_pk=None, pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
