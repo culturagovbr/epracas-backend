@@ -505,7 +505,7 @@ class Ator(IdPubIdentifier):
     area = models.CharField(_('Área de Atuação'), max_length=4,
                             choices=ATUACAO_CHOICES)
     descricao = models.IntegerField(_('Descrição da Atividade do Ator'),
-                                    choices=DESCRICAO_CHOICES)
+                                    choices=DESCRICAO_CHOICES, null=True)
     imagem = models.FileField(blank=True, upload_to=upload_image_to)
     endereco = models.TextField(_('Endereço'), blank=True, null=True)
     cep = models.CharField(_('CEP'), blank=True, null=True, max_length=9)

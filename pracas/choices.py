@@ -206,7 +206,7 @@ ATUACAO_CHOICES = (
 """
 Lista de Descrições de Atividades de Atores de uma Praça
 """
-
+EM_BRANCO = "não se aplica"
 ARTES_CENICAS = "artes cênicas, espetáculos e atividades complementares"
 CRIACAO_ARTISTICA = "criação artística"
 GESTAO_DE_ESPACOS = "gestão de espaços para artes cênicas, espetáculos e outras atividades artísticas"
@@ -232,6 +232,7 @@ ATIVIDADES_TELEVISAO = "atividades de televisão"
 ATIVIDADES_SAUDE = "atividades de atenção à saúde humana integradas com assistência social, prestadas em residências coletivas e particulares"
 
 DESCRICAO_CHOICES = (
+    (0, EM_BRANCO),
     (1, ARTES_CENICAS),
     (2, CRIACAO_ARTISTICA),
     (3, GESTAO_DE_ESPACOS),
