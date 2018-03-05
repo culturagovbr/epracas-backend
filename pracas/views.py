@@ -171,6 +171,16 @@ class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
         serializer = GrupoGestorSerializer(gg, many=True)
         return Response(serializer.data)
 
+    def destroy(self, request, praca_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        gg = get_object_or_404(GrupoGestor, pk=pk)
+        
+        gg.data_finalizacao = request.data['data_finalizacao']
+        gg.save()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class MembroGestorViewSet(DefaultMixin, ModelViewSet):
 
