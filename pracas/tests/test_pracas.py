@@ -714,13 +714,14 @@ def test_arquivar_um_GG_como_gestor_da_Praca(_common_user, client):
     gg = mommy.make('GrupoGestor', praca=praca)
     finalizacao = json.dumps({'data_finalizacao': '2018-01-01'})
 
-    response = client.patch(_grupogestor_detail(
-                                  kwargs={
-                                      'praca_pk': gg.praca.pk,
-                                      'pk': gg.pk
-                                  }),finalizacao,
-                                  content_type="application/json"
-                                  )
+    response = client.delete(_grupogestor_detail(
+        kwargs={
+            'praca_pk': gg.praca.pk,
+            'pk': gg.pk
+        }),
+        finalizacao, 
+        content_type="application/json"
+        )
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
 
