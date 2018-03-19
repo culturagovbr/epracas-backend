@@ -61,6 +61,16 @@ class AgendaDetailSerializer(serializers.ModelSerializer):
 
         return agenda
 
+    def update(self, instance, validated_data):
+        ocorrencia_data = validated_data.pop('ocorrencia')
+        ocorrencia = OcorrenciaSerializer(instance, data=ocorrencia_data)
+
+        if ocorrencia.is_valid(raise_exception=True):
+            ocorrencia.save()
+            validated_data['ocorrencia'] = ocorrencia_data
+            return instance
+        raise serializers.ValidationError
+
     class Meta:
         model = Agenda
         fields = '__all__'

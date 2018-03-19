@@ -87,6 +87,12 @@ class Agenda(IdPubIdentifier, BaseEvent):
     descricao = models.TextField(
         _('Descrição da Atividade'), blank=True, null=True)
 
+    def get_manager(self):
+        """
+        Retorna o atual gestor da Praça
+        """
+        return self.praca.get_manager()
+
 
 class Ocorrencia(BaseOccurrence):
 

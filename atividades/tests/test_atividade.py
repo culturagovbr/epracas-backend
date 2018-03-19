@@ -157,12 +157,13 @@ def test_return_JSON_list_with_occurencies_from_an_event(client):
     assert len(calendar['calendar']) == 4
 
 
-def test_create_an_event_with_occurences_using_POST(client):
+def test_create_an_event_with_occurences_using_POST(_common_user, client):
     """
     Testa a cricao de um evento e o retorno da resposta utilizando POST
     """
 
     praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
     data = json.dumps({
         'praca': str(praca.id_pub),
         'titulo': 'Festival Teste',
@@ -190,13 +191,14 @@ def test_create_an_event_with_occurences_using_POST(client):
     assert data['praca'] in str(response.data['praca'])
 
 
-def test_create_and_returning_a_list_of_dates(client):
+def test_create_and_returning_a_list_of_dates(_common_user, client):
     """
     Testa a criação de uma agenda via POST e o retorno de um calendario
     com as ocorrencias do evento
     """
 
     praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
     data = json.dumps({
         'praca': str(praca.id_pub),
         'titulo': 'Festival Teste',
@@ -323,12 +325,13 @@ def test_persisting_an_image_on_report_about_occurence(_create_temporary_file, c
     assert len(response.data) == 2
 
 
-def test_persisting_an_occurrence_with_just_one_weekday(client):
+def test_persisting_an_occurrence_with_just_one_weekday(_common_user, client):
     """
     Testa a persistencia de um evento utilizando somente um dia da semana.
     """
 
     praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
     data = json.dumps({
         'praca': str(praca.id_pub),
         'titulo': 'Festival Teste',
@@ -421,3 +424,105 @@ def test_persist_a_list_with_ages_targeted_of_event(_common_user, client):
     assert response.status_code == status.HTTP_201_CREATED
     assert 'faixa_etaria' in response.data
     assert 1, 2 in response.data['faixa_etaria']
+
+
+def test_update_information_of_an_event(client):
+    """
+    Testa a persistencia de dados de um evento como um usuário anonimo.
+    """
+
+    praca = mommy.make('Praca')
+    atividade = mommy.make('agenda', praca=praca)
+
+    data = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'festa',
+        'justificativa': 'justificativa',
+        'faixa_etaria': [2],
+        'espaco': [1],
+        'tipo': 3,
+        'publico': 2,
+        'carga_horaria': 20,
+        'publico_esperado': 800,
+        'territorio': 2,
+        'descricao': 'asdadad',
+        'ocorrencia': {
+            'start': '2018-3-14T01:01',
+            'repeat_until': '2018-3-14',
+            'frequency_type': 'once',
+        },
+    })
+
+    response = client.patch(_detail(kwargs={'pk': atividade.id_pub}),
+                           data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+def test_update_information_of_an_event_using_common_credentials(_common_user, client):
+    """
+    Testa a persistencia de dados de um evento como um usuário logado, sem
+    permissões sobre uma Praça.
+    """
+
+    praca = mommy.make('Praca')
+    atividade = mommy.make('Agenda', praca=praca)
+
+    data = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'festa',
+        'justificativa': 'justificativa',
+        'faixa_etaria': [2],
+        'espaco': [1],
+        'tipo': 3,
+        'publico': 2,
+        'carga_horaria': 20,
+        'publico_esperado': 800,
+        'territorio': 2,
+        'descricao': 'asdadad',
+        'ocorrencia': {
+            'start': '2018-3-14T01:01',
+            'repeat_until': '2018-3-14',
+            'frequency_type': 'once',
+        },
+    })
+
+    response = client.patch(_detail(kwargs={'pk': atividade.id_pub}),
+                           data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_update_information_of_an_event_using_manager_credentials(_common_user, client):
+    """
+    Testa a persistencia de dados de um evento como um usuário logado, sem
+    permissões sobre uma Praça.
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+    atividade = mommy.make('Agenda', praca=praca)
+
+    data = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'festa',
+        'justificativa': 'justificativa',
+        'faixa_etaria': [2],
+        'espaco': [1],
+        'tipo': 3,
+        'publico': 2,
+        'carga_horaria': 20,
+        'publico_esperado': 800,
+        'territorio': 2,
+        'descricao': 'asdadad',
+        'ocorrencia': {
+            'start': '2018-3-14T01:01',
+            'repeat_until': '2018-3-14',
+            'frequency_type': 'once',
+        },
+    })
+
+    response = client.patch(_detail(kwargs={'pk': atividade.id_pub}),
+                           data, content_type="application/json")
+
+    assert response.status_code == status.HTTP_200_OK
