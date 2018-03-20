@@ -671,6 +671,59 @@ def test_cria_um_novo_grupo_gestor_com_credenciais(_common_user, client):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
+def test_arquiva_um_GG_sem_credenciais(client):
+    """
+    Testa a finalização de um Grupo Gestor de uma Praça quando não esta logado
+    """
+
+    finalizacao = json.dumps({'data_finalizacao': '2018-01-01'})
+    gg = mommy.make('GrupoGestor')
+
+    response = client.delete(_grupogestor_detail(
+                                  kwargs={
+                                      'praca_pk': gg.praca.pk,
+                                      'pk': gg.pk
+                                  }),finalizacao)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+def test_arquiva_um_GG_com_credenciais(_common_user, client):
+    """
+    Testa a finalização de um Grupo Gestor de uma Praça quando esta logado
+    """
+
+    finalizacao = json.dumps({'data_finalizacao': '2018-01-01'})
+    gg = mommy.make('GrupoGestor')
+
+    response = client.delete(_grupogestor_detail(
+                                  kwargs={
+                                      'praca_pk': gg.praca.pk,
+                                      'pk': gg.pk
+                                  }),finalizacao)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+
+def test_arquivar_um_GG_como_gestor_da_Praca(_common_user, client):
+    """
+    Testa arquivar um MembroGestor de um GrupoGestor ativo, usando o verbo
+    DELETE, com permissões sobre a Praça.
+    """
+
+    praca = mommy.make(Praca)
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+    gg = mommy.make('GrupoGestor', praca=praca)
+    finalizacao = json.dumps({'data_finalizacao': '2018-01-01'})
+
+    response = client.delete(_grupogestor_detail(
+        kwargs={
+            'praca_pk': gg.praca.pk,
+            'pk': gg.pk
+        }),
+        finalizacao, 
+        content_type="application/json"
+        )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
 
 def test_retorna_informacoes_sobre_GG(client):
     """
