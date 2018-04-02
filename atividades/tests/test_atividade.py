@@ -68,9 +68,9 @@ def test_return_event_properties(client):
         'descricao',
         'justificativa',
         'tipo',
-        # 'area',
-        # 'parceiros',
-        # 'faixa_etaria',
+        'area',
+        #'parceiros',
+        'faixa_etaria',
         'publico',
         'territorio',
         'carga_horaria',
@@ -526,3 +526,44 @@ def test_update_information_of_an_event_using_manager_credentials(_common_user, 
                            data, content_type="application/json")
 
     assert response.status_code == status.HTTP_200_OK
+
+
+def test_create_atividade_with_area(_common_user, client):
+    """
+    Testa a criação de uma atividade com área e subárea
+    """
+
+    praca = mommy.make('Praca')
+    gestor = mommy.make('Gestor', praca=praca, user=_common_user, atual=True)
+    area = mommy.make('Area', nome="Artes Cênicas")
+    subarea = mommy.make('Area', nome='Circo', parent=area)
+
+    atividade = json.dumps({
+        'praca': str(praca.id_pub),
+        'titulo': 'Teste Atividade',
+        'justificativa': 'justificativa',
+        'faixa_etaria': [2],
+        'area': str(subarea.id_pub),
+        'espaco': [1],
+        'tipo': 3,
+        'publico': 2,
+        'carga_horaria': 20,
+        'publico_esperado': 800,
+        'territorio': 2,
+        'descricao': 'asdadad',
+        'ocorrencia': {
+            'start': '2018-3-14T01:01',
+            'repeat_until': '2018-3-14',
+            'frequency_type': 'once',
+        },
+    })
+
+    response = client.post(_list(), atividade, content_type="application/json")
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert 'area' in response.data
+    assert response.data['area'] == subarea.id_pub
+
+    from atividades.models import Agenda
+    agenda = Agenda.objects.get(id_pub=response.data['id_pub'])
+    assert agenda.area.id_pub == subarea.id_pub

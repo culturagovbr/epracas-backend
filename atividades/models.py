@@ -53,7 +53,7 @@ class Agenda(IdPubIdentifier, BaseEvent):
         _('Titulo do Evento'),
         max_length=140,
         blank=False, )
-    # area = models.ForeignKey(Area)
+    area = models.ForeignKey(Area, blank=True, null=True)
     justificativa = models.TextField(
         _('Justificativa da Atividade'), blank=True, null=True)
     faixa_etaria = ArrayField(
