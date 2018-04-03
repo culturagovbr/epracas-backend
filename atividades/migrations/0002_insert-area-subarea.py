@@ -3,61 +3,83 @@
 from __future__ import unicode_literals
 
 from django.db import migrations
+from django.utils.text import slugify
 
 areas = [
-    { 'nome':"Artes Cênicas", 'slug':"1" },
-        { 'nome':"Circo", 'slug':"101", 'parent_id':'1' },
-        { 'nome':"Dança", 'slug':"102", 'parent_id':'1' },
-        { 'nome':"Mímica", 'slug':"103", 'parent_id':'1' },
-        { 'nome':"Ópera", 'slug':"104", 'parent_id':'1' },
-        { 'nome':"Teatro", 'slug':"105", 'parent_id':'1' },
-    { 'nome':"Audiovisual", 'slug':"2" },
-        { 'nome':"Preservação/Restauração da Memória Cinematográfica", 'slug':"201", 'parent_id':'2' },
-        { 'nome':"Produção Cinematográfica", 'slug':"202", 'parent_id':'2' },
-        { 'nome':"Produção Radiofônica", 'slug':"203", 'parent_id':'2' },
-        { 'nome':"Produção Televisiva", 'slug':"204", 'parent_id':'2' },
-        { 'nome':"Rádios/TVs Comunitárias", 'slug':"205", 'parent_id':'2' },
-        { 'nome':"Exibição Cinematográfica", 'slug':"206", 'parent_id':'2' },
-    { 'nome':"Música", 'slug':"3" },
-        { 'nome':"Música Erudita", 'slug':"301", 'parent_id':'3' },
-        { 'nome':"Música Instrumental", 'slug':"302", 'parent_id':'3' },
-        { 'nome':"Música Popular", 'slug':"303", 'parent_id':'3' },
-        { 'nome':"Orquestra", 'slug':"304", 'parent_id':'3' },
-        { 'nome':"Música em Geral", 'slug':"305", 'parent_id':'3' },            
-    { 'nome':"Artes Visuais", 'slug':"4" },
-        { 'nome':"Fotografia", 'slug':"401", 'parent_id':'4' },
-        { 'nome':"Gráficas", 'slug':"402", 'parent_id':'4' },
-        { 'nome':"Plásticas", 'slug':"403", 'parent_id':'4' },
-    { 'nome':"Patrimônio Cultural", 'slug':"5" },
-        { 'nome':"Acervo", 'slug':"501", 'parent_id':'5' },
-        { 'nome':"Afro Brasileira", 'slug':"502", 'parent_id':'5' },
-        { 'nome':"Arqueológico", 'slug':"503", 'parent_id':'5' },
-        { 'nome':"Arquitetônico", 'slug':"504", 'parent_id':'5' },
-        { 'nome':"Artesanato", 'slug':"505", 'parent_id':'5' },
-        { 'nome':"Ecológico", 'slug':"506", 'parent_id':'5' },
-        { 'nome':"Folclore", 'slug':"507", 'parent_id':'5' },
-        { 'nome':"Histórico", 'slug':"508", 'parent_id':'5' },
-        { 'nome':"Indígena", 'slug':"509", 'parent_id':'5' },
-        { 'nome':"Museu", 'slug':"510", 'parent_id':'5' },
-    { 'nome':"Livro, Leitura e Literatura", 'slug':"6" },
-        { 'nome':"Edição de Livros e outros", 'slug':"601", 'parent_id':'6' },
-        { 'nome':"Evento literário", 'slug':"602", 'parent_id':'6' },
-        { 'nome':"Leitura", 'slug':"603", 'parent_id':'6' },
-        { 'nome':"Contação de história", 'slug':"604", 'parent_id':'6' },
-        { 'nome':"Sarau", 'slug':"605", 'parent_id':'6' },
-        { 'nome':"Outros", 'slug':"606", 'parent_id':'6' },
-    { 'nome':"Esportes", 'slug':"7" },
-        { 'nome':"Futebol", 'slug':"701", 'parent_id':'7' },
-        { 'nome':"Vôlei", 'slug':"702", 'parent_id':'7' },
-        { 'nome':"Basquete", 'slug':"703", 'parent_id':'7' },
-        { 'nome':"Skate", 'slug':"704", 'parent_id':'7' },
-        { 'nome':"Handebol", 'slug':"705", 'parent_id':'7' },
-        { 'nome':"Futevôlei", 'slug':"706", 'parent_id':'7' },
-        { 'nome':"Capoeira", 'slug':"707", 'parent_id':'7' },
-        { 'nome':"Outros", 'slug':"708", 'parent_id':'7' },
-    { 'nome':"Assistência Social", 'slug':"8" },
-    { 'nome':"Saúde", 'slug':"9" },
-    { 'nome':"Outros", 'slug':"10" },
+    { 'nome':"Artes Cênicas", 'children':
+    [
+        { 'nome':"Circo",  },
+        { 'nome':"Dança", },
+        { 'nome':"Mímica", },
+        { 'nome':"Ópera", },
+        { 'nome':"Teatro",},
+    ]
+    },
+    { 'nome':"Audiovisual", 'children':
+    [
+        { 'nome':"Preservação/Restauração da Memória Cinematográfica", },
+        { 'nome':"Produção Cinematográfica", },
+        { 'nome':"Produção Radiofônica", },
+        { 'nome':"Produção Televisiva", },
+        { 'nome':"Rádios/TVs Comunitárias", },
+        { 'nome':"Exibição Cinematográfica", },
+    ]
+    },
+    { 'nome':"Música", 'children': 
+    [
+        { 'nome':"Música Erudita", },
+        { 'nome':"Música Instrumental", },
+        { 'nome':"Música Popular", },
+        { 'nome':"Orquestra", },
+        { 'nome':"Música em Geral", },            
+    ]
+    },
+    { 'nome':"Artes Visuais", 'children':
+    [
+        { 'nome':"Fotografia", },
+        { 'nome':"Gráficas", },
+        { 'nome':"Plásticas", },
+    ]
+    },
+    { 'nome':"Patrimônio Cultural", 'children':
+    [
+        { 'nome':"Acervo", },
+        { 'nome':"Afro Brasileira", },
+        { 'nome':"Arqueológico", },
+        { 'nome':"Arquitetônico", },
+        { 'nome':"Artesanato", },
+        { 'nome':"Ecológico", },
+        { 'nome':"Folclore", },
+        { 'nome':"Histórico", },
+        { 'nome':"Indígena", },
+        { 'nome':"Museu", },
+    ]
+    },
+    { 'nome':"Livro, Leitura e Literatura", 'children':
+    [
+        { 'nome':"Edição de Livros e outros", },
+        { 'nome':"Evento literário", },
+        { 'nome':"Leitura", },
+        { 'nome':"Contação de história", },
+        { 'nome':"Sarau", },
+        { 'nome':"Outros", },
+    ]
+    },
+    { 'nome':"Esportes", 'children':
+    [
+        { 'nome':"Futebol", },
+        { 'nome':"Vôlei", },
+        { 'nome':"Basquete", },
+        { 'nome':"Skate", },
+        { 'nome':"Handebol", },
+        { 'nome':"Futevôlei", },
+        { 'nome':"Capoeira", },
+        { 'nome':"Outros", },
+    ]
+    },
+    { 'nome':"Assistência Social", },
+    { 'nome':"Saúde", },
+    { 'nome':"Outros", },
 ]
 
 
@@ -65,13 +87,13 @@ def create_areas(apps, schema_editor):
     Area = apps.get_model('atividades', 'Area')
 
     for area in areas:
-        area_db = Area(nome=area['nome'],slug=area['slug'])
-        if('parent_id' in area):
-            father_db = Area.objects.get(slug=area['parent_id'])
-            print("\n","Area name:", area['nome'])
-            print("\n","Parent name: ", father_db.nome)
-            area_db.parent_id = father_db.id_pub
-        area_db.save()
+        parent = Area(nome=area['nome'], slug=slugify(area['nome']))
+        parent.save()
+        if 'children' in area:
+            for child in area['children']:
+                area_child = Area(nome=child['nome'], parent=parent, slug=slugify("{}__{}".format(parent.nome, child['nome'])))
+                area_child.save()
+        
 
 
 class Migration(migrations.Migration):
