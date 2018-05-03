@@ -5,6 +5,7 @@ from .models import Agenda
 from .models import Ocorrencia
 from .models import Relatorio
 from .models import RelatorioImagem
+from .models import Area
 
 from .choices import ESPACOS_CHOICES
 
@@ -86,3 +87,10 @@ class AgendaDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Agenda
         fields = '__all__'
+
+class AreaSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+
+    class Meta:
+        model = Area
+        fields = ('url','nome','parent','slug')
