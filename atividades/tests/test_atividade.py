@@ -580,3 +580,19 @@ def test_return_200_OK_on_areas_endpoint_url(client):
 
     response = client.get(url_esperada)
     assert response.status_code == status.HTTP_200_OK
+
+def test_return_areas_list(client):
+    """
+    Testa o retorno de uma lista com as Areas
+    """
+
+    url_atividades = '/api/v1/areas/'
+
+    quantidade = 5
+
+    mommy.make('Area', _quantity=quantidade)
+
+    response = client.get(url_atividades)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == quantidade
