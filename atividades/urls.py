@@ -6,9 +6,11 @@ from .views import AgendaViewSet
 from .views import RelatorioViewSet
 from .views import RelatorioImagensViewSet
 
+from .views import AreaViewSet
 
 router = routers.SimpleRouter()
 router.register(r'atividades', AgendaViewSet)
+router.register(r'areas', AreaViewSet)
 
 atividades_router = routers.NestedSimpleRouter(router, r'atividades', lookup='agenda')
 atividades_router.register(r'relatorios', RelatorioViewSet, base_name='relatorio')
@@ -21,3 +23,5 @@ urlpatterns = [
     url(r'^', include(atividades_router.urls)),
     url(r'^', include(relatorio_router.urls)),
 ]
+
+
