@@ -12,10 +12,12 @@ from .models import Agenda
 from .models import Relatorio
 from .models import RelatorioImagem
 
+from .models import Area
 from .serializers import AgendaDetailSerializer
 from .serializers import RelatorioSerializer
 from .serializers import RelatorioImagemSerializer
 
+from .serializers import AreaSerializer
 
 
 class AgendaViewSet(DefaultMixin, ModelViewSet):
@@ -71,3 +73,12 @@ class RelatorioImagensViewSet(DefaultMixin, ViewSet):
         serializer = RelatorioImagemSerializer(queryset, many=True)
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class AreaViewSet(DefaultMixin, ModelViewSet):
+
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
+
+    serializer_class = AreaSerializer
+
+    queryset = Area.objects.all()

@@ -567,3 +567,32 @@ def test_create_atividade_with_area(_common_user, client):
     from atividades.models import Agenda
     agenda = Agenda.objects.get(id_pub=response.data['id_pub'])
     assert agenda.area.id_pub == subarea.id_pub
+
+def test_return_200_OK_on_areas_endpoint_url(client):
+    """
+    Testa a URL do endpoint areas e verifica
+    o retorno a uma requisição
+    """
+
+    url_esperada = '/api/v1/areas/'
+    url_resolvida = reverse('atividades:area-list')
+    assert url_resolvida == url_esperada
+
+    response = client.get(url_esperada)
+    assert response.status_code == status.HTTP_200_OK
+
+def test_return_areas_list(client):
+    """
+    Testa o retorno de uma lista com as Areas
+    """
+
+    url_atividades = '/api/v1/areas/'
+
+    quantidade = 5
+
+    mommy.make('Area', _quantity=quantidade)
+
+    response = client.get(url_atividades)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.data) == quantidade
