@@ -5,6 +5,7 @@ from .models import Agenda
 from .models import Ocorrencia
 from .models import Relatorio
 from .models import RelatorioImagem
+from .models import Area
 
 from .choices import ESPACOS_CHOICES
 
@@ -61,6 +62,35 @@ class AgendaDetailSerializer(serializers.ModelSerializer):
 
         return agenda
 
+    def update(self, instance, validated_data):
+        instance.titulo = validated_data.get('titulo', instance.titulo)
+        instance.justificativa = validated_data.get('justificativa', instance.justificativa)
+        instance.faixa_etaria = validated_data.get('faixa_etaria', instance.faixa_etaria)
+        instance.espaco = validated_data.get('espaco', instance.espaco)
+        instance.tipo = validated_data.get('tipo', instance.tipo)
+        instance.publico = validated_data.get('publico', instance.publico)
+        instance.carga_horaria = validated_data.get('carga_horaria', instance.carga_horaria)
+        instance.publico_esperado = validated_data.get('publico_esperado', instance.publico_esperado)
+        instance.territorio = validated_data.get('territorio', instance.territorio)
+        instance.descricao = validated_data.get('descricao', instance.descricao)
+        
+        ocorrencia_data = validated_data.pop('ocorrencia')
+        ocorrencia = OcorrenciaSerializer(instance, data=ocorrencia_data)
+        
+
+        if ocorrencia.is_valid(raise_exception=True):
+            ocorrencia.save()
+            validated_data['ocorrencia'] = ocorrencia_data
+            return instance
+        raise serializers.ValidationError
+
     class Meta:
         model = Agenda
         fields = '__all__'
+
+class AreaSerializer(serializers.ModelSerializer):
+    url = serializers.URLField(source='get_absolute_url', read_only=True)
+
+    class Meta:
+        model = Area
+        fields = ('url','nome','parent','slug')

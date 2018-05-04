@@ -53,7 +53,7 @@ class Agenda(IdPubIdentifier, BaseEvent):
         _('Titulo do Evento'),
         max_length=140,
         blank=False, )
-    # area = models.ForeignKey(Area)
+    area = models.ForeignKey(Area, blank=True, null=True)
     justificativa = models.TextField(
         _('Justificativa da Atividade'), blank=True, null=True)
     faixa_etaria = ArrayField(
@@ -86,6 +86,12 @@ class Agenda(IdPubIdentifier, BaseEvent):
         choices=TERRITORIO_CHOICES)
     descricao = models.TextField(
         _('Descrição da Atividade'), blank=True, null=True)
+
+    def get_manager(self):
+        """
+        Retorna o atual gestor da Praça
+        """
+        return self.praca.get_manager()
 
 
 class Ocorrencia(BaseOccurrence):
