@@ -72,6 +72,7 @@ class AgendaDetailSerializer(serializers.ModelSerializer):
         instance.publico_esperado = validated_data.get('publico_esperado', instance.publico_esperado)
         instance.territorio = validated_data.get('territorio', instance.territorio)
         instance.descricao = validated_data.get('descricao', instance.descricao)
+        instance.area = validated_data.get('area',instance.area)
         
         ocorrencia_data = validated_data.pop('ocorrencia')
         ocorrencia = OcorrenciaSerializer(instance, data=ocorrencia_data)
