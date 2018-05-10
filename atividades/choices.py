@@ -123,11 +123,11 @@ PUBLICO_CHOICES = (
 )
 
 
-CRIANCAS = "Crianças"
-ADOLESCENTES = "Adolescentes"
-JOVENS = "Jovens"
-ADULTOS = "Adultos"
-IDOSOS = "Idosos"
+CRIANCAS = "Crianças (0 a 12 anos)"
+ADOLESCENTES = "Adolescentes (13 a 17 anos)"
+JOVENS = "Jovens (18 a 29)"
+ADULTOS = "Adultos (30 a 59)"
+IDOSOS = "Idosos (60 anos ou mais)"
 LIVRE = "Livre"
 
 FAIXA_ETARIA_CHOICES = (
