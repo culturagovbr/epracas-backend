@@ -7,8 +7,8 @@ from rest_framework.compat import is_authenticated
 class IsAdminOrManagerOrReadOnly(BasePermission):
     """
     Permite leitura de qualquer usuário e permite a atualização de informações
-    por administradores e gestores de Praça e a adição de novas instancias por
-    administradores.
+    por administradores MinC e a adição de novas instancias por administradores MinC.
+    Exclusivo para administradores MinC.
     """
 
     def __init__(self):
@@ -37,8 +37,8 @@ class IsAdminOrManagerOrReadOnly(BasePermission):
 
 class IsOwnerOrReadOnly(BasePermission):
     """
-    Permite leitura por qualquer usuário, mas administradores e gestores de
-    Praça podem adicionar novas instancias.
+    Mesmas permissões que o IsAdminOrManagerOrReadOnly, porém mais permissivo 
+    para englobar também o gestor da praça
     """
 
     def __init__(self):
