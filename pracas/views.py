@@ -41,9 +41,8 @@ from .permissions import IsOwnerOrReadOnly
 
 
 class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
-
-    authentication_classes = (JSONWebTokenAuthentication, )
-    permission_classes = (IsOwnerOrReadOnly, )
+    authentication_classes = (JSONWebTokenAuthentication,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
     metadata_class = ChoicesMetadata
     serializer_class = PracaSerializer
@@ -56,7 +55,6 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
 
 
 class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
-
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -108,6 +106,16 @@ class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
         else:
             raise ValidationError(serializer.errors)
 
+    def destroy(self, request, praca_pk=None, pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        self.check_object_permissions(request, praca)
+
+        imagem = get_object_or_404(ImagemPraca, pk=pk)
+
+        imagem.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class DistanceView(DefaultMixin, APIView):
     def post(self, request, latlong=None):
@@ -126,7 +134,6 @@ class DistanceView(DefaultMixin, APIView):
 
 
 class ParceiroViewSet(DefaultMixin, ModelViewSet):
-
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -146,7 +153,6 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
 
 
 class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
-
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -176,14 +182,14 @@ class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
         self.check_object_permissions(request, praca)
 
         gg = get_object_or_404(GrupoGestor, pk=pk)
-        
+
         gg.data_finalizacao = request.data['data_finalizacao']
         gg.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class MembroGestorViewSet(DefaultMixin, ModelViewSet):
 
+class MembroGestorViewSet(DefaultMixin, ModelViewSet):
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -202,7 +208,7 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
             return Response(membro.data, status=status.HTTP_201_CREATED)
         else:
             return Response(membro.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def list(self, request, praca_pk=None, grupogestor_pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
 
@@ -217,18 +223,17 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
         self.check_object_permissions(request, praca)
 
         gg = get_object_or_404(GrupoGestor, pk=grupogestor_pk, praca=praca)
-        
+
         membro = get_object_or_404(MembroGestor, pk=pk)
 
         serializer = MembroGestorSerializer(membro, data=request.data,
-                                           partial=True)
-        
+                                            partial=True)
+
         if serializer.is_valid():
             serializer.save(grupo_gestor=gg)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
     def destroy(self, request, praca_pk=None, grupogestor_pk=None, pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
@@ -245,7 +250,6 @@ class MembroGestorViewSet(DefaultMixin, ModelViewSet):
 
 
 class MembroUglViewSet(DefaultMixin, ModelViewSet):
-
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -262,7 +266,7 @@ class MembroUglViewSet(DefaultMixin, ModelViewSet):
             return Response(membro.data, status=status.HTTP_201_CREATED)
         else:
             return Response(membro.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def list(self, request, praca_pk=None, unidadegestora_pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
 
@@ -273,7 +277,6 @@ class MembroUglViewSet(DefaultMixin, ModelViewSet):
 
 
 class RhViewSet(DefaultMixin, ModelViewSet):
-
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -311,7 +314,6 @@ class RhViewSet(DefaultMixin, ModelViewSet):
             return Response(rh_serializer.data, status=status.HTTP_200_OK)
         return Response(rh_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
     def destroy(self, request, praca_pk=None, pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
         self.check_object_permissions(request, praca)
@@ -338,7 +340,6 @@ class RhViewSet(DefaultMixin, ModelViewSet):
 
 
 class AtorViewSet(DefaultMixin, ModelViewSet):
-
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
 
@@ -355,7 +356,7 @@ class AtorViewSet(DefaultMixin, ModelViewSet):
             return Response(ator.data, status=status.HTTP_201_CREATED)
         else:
             return Response(ator.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
     def list(self, request, praca_pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)
 
