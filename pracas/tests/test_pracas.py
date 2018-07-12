@@ -523,6 +523,27 @@ def test_upload_an_image_to_a_Praca_gallery_as_manager(
     assert response.data['id_pub'] in response.data['arquivo']
 
 
+def test_excluir_image_to_a_Praca_gallery_como_gestor_da_praca(
+        _create_temporary_file, _common_user, client):
+    """
+    Testa o envio de uma imagem para a galeria de uma Praça utilizando
+    credenciais de gestor da Praça.
+    """
+
+    praca = mommy.make(Praca)
+    gestor = mommy.make('Gestor', user=_common_user, praca=praca, atual=True)
+
+    test_file = _create_temporary_file
+    test_file.name = 'foto.jpg'
+
+    response = client.delete(
+        _imagem_list(kwargs={'praca_pk': praca.pk}),
+        {'arquivo': test_file},
+        format='multipart')
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+
+
 def test_change_title_of_an_image_at_gallery_wo_credentials(
     _create_temporary_file, client):
     """
