@@ -42,7 +42,7 @@ from .permissions import IsOwnerOrReadOnly
 
 class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
     authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsOwnerOrReadOnly,)
+    permission_classes = (IsAdminOrManagerOrReadOnly,)
 
     metadata_class = ChoicesMetadata
     serializer_class = PracaSerializer
