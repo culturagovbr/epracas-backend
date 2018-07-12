@@ -15,6 +15,7 @@ from core.helper_functions import test_reverse as _
 from model_mommy import mommy
 
 from pracas.models import Praca
+from pracas.models import ImagemPraca
 
 from authentication.tests.test_user import _admin_user
 from authentication.tests.test_user import _common_user
@@ -523,25 +524,26 @@ def test_upload_an_image_to_a_Praca_gallery_as_manager(
     assert response.data['id_pub'] in response.data['arquivo']
 
 
-def test_excluir_image_to_a_Praca_gallery_como_gestor_da_praca(
+def test_excluir_imagem_de_uma_Praca_como_gestor_da_praca(
         _create_temporary_file, _common_user, client):
     """
-    Testa o envio de uma imagem para a galeria de uma Praça utilizando
+    Testa a exclusão de uma imagem da galeria de uma Praça utilizando
     credenciais de gestor da Praça.
     """
 
     praca = mommy.make(Praca)
     gestor = mommy.make('Gestor', user=_common_user, praca=praca, atual=True)
+    imagem = mommy.make('ImagemPraca', praca=praca)
 
     test_file = _create_temporary_file
     test_file.name = 'foto.jpg'
 
     response = client.delete(
-        _imagem_list(kwargs={'praca_pk': praca.pk}),
-        {'arquivo': test_file},
-        format='multipart')
+        _imagem_detail(kwargs={'praca_pk': praca.pk, 'pk': imagem.pk}))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
+    with pytest.raises(ImagemPraca.DoesNotExist):
+        imagem.refresh_from_db()
 
 
 def test_change_title_of_an_image_at_gallery_wo_credentials(
