@@ -1,48 +1,41 @@
 from datetime import date
-
 from django.shortcuts import get_object_or_404
-
+from oidc_auth.authentication import JSONWebTokenAuthentication
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from oidc_auth.authentication import JSONWebTokenAuthentication
-
+from core.metadata import ChoicesMetadata
 from core.views import DefaultMixin
 from core.views import MultiSerializerViewSet
-from core.metadata import ChoicesMetadata
-
-from .models import Praca
-from .models import Parceiro
-from .models import GrupoGestor
-from .models import MembroGestor
-from .models import ImagemPraca
-from .models import MembroUgl
-from .models import Rh
 from .models import Ator
-
-from .serializers import PracaSerializer
-from .serializers import PracaListSerializer
-from .serializers import ImagemPracaSerializer
+from .models import GrupoGestor
+from .models import ImagemPraca
+from .models import MembroGestor
+from .models import MembroUgl
+from .models import Parceiro
+from .models import Praca
+from .models import Rh
+from .permissions import IsOwnerOrReadOnly
+from .serializers import AtorDetailSerializer
 from .serializers import DistanciaSerializer
 from .serializers import GrupoGestorSerializer
-from .serializers import MembroGestorSerializer
+from .serializers import ImagemPracaSerializer
 from .serializers import MembroGestorDetailSerializer
-from .serializers import ParceiroDetailSerializer
+from .serializers import MembroGestorSerializer
 from .serializers import MembroUglSerializer
+from .serializers import ParceiroDetailSerializer
+from .serializers import PracaListSerializer
+from .serializers import PracaSerializer
 from .serializers import RhDetailSerializer
 from .serializers import RhListSerializer
-from .serializers import AtorDetailSerializer
-
-from .permissions import IsAdminOrManagerOrReadOnly
-from .permissions import IsOwnerOrReadOnly
 
 
 class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
     authentication_classes = (JSONWebTokenAuthentication,)
-    permission_classes = (IsAdminOrManagerOrReadOnly,)
+    permission_classes = (IsOwnerOrReadOnly,)
 
     metadata_class = ChoicesMetadata
     serializer_class = PracaSerializer
