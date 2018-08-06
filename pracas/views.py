@@ -144,6 +144,18 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
         else:
             return Response(parceiro.errors, status=400)
 
+    def partial_update(self, request, pk=None, praca_pk=None):
+        praca = get_object_or_404(Praca, pk=praca_pk)
+        parceiro = get_object_or_404(Parceiro, pk=pk)
+
+        self.check_object_permissions(request, praca)
+        serializer = ParceiroDetailSerializer(parceiro, data=request.data,
+                                              partial=True)
+        if serializer.is_valid():
+            serializer.save(Parceiro=parceiro)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class GrupoGestorViewSet(DefaultMixin, ModelViewSet):
     authentication_classes = (JSONWebTokenAuthentication,)
