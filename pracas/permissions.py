@@ -1,7 +1,6 @@
+from rest_framework.compat import is_authenticated
 from rest_framework.permissions import BasePermission
 from rest_framework.permissions import SAFE_METHODS
-
-from rest_framework.compat import is_authenticated
 
 
 class IsAdminOrManagerOrReadOnly(BasePermission):
@@ -56,7 +55,7 @@ class IsOwnerOrReadOnly(BasePermission):
         elif request.method in self.MANAGER_SAFE_METHODS:
             try:
                 return request.user.is_staff or obj.get_manager().user == request.user
-            except AttributeError:
+            except:
                 return False
         else:
             return request.user.is_staff
