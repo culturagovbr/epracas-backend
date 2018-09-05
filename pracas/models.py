@@ -223,7 +223,7 @@ class Praca(IdPubIdentifier):
         Retorna o grupo gestor vigente da Praça
         """
         try:
-            return self.grupo_gestor.get(data_finalizacao=None)
+            return self.grupo_gestor.filter(data_finalizacao=None).order_by('-data_instituicao')[0]
         except:
             return None
 
