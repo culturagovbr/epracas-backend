@@ -26,6 +26,18 @@ class ChoicesMetadata(SimpleMetadata):
                     for choice_value, choice_name in field.choices.items()
                 ]
                 field_info[field_name] = choices
+
+            elif (isinstance(field, serializers.ListField)):
+
+                choices['choices'] = [
+                    {
+                        'value': choice_value,
+                        'display_name': force_text(choice_name, strings_only=True)
+                    }
+                    for choice_value, choice_name in field.child.choices.items()
+                ]
+                field_info[field_name] = choices
         
+
         metadata['selections'] = field_info
         return metadata
