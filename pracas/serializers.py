@@ -44,7 +44,7 @@ class MembroGestorDetailSerializer(serializers.ModelSerializer):
     origem_descricao = serializers.CharField(
         source='get_origem_display', read_only=True)
     tipo_documento_descricao = serializers.CharField(
-    source='get_tipo_documento_display', read_only='True')
+        source='get_tipo_documento_display', read_only='True')
 
     class Meta:
         model = MembroGestor
@@ -56,7 +56,8 @@ class MembroGestorDetailSerializer(serializers.ModelSerializer):
 
 class GrupoGestorSerializer(serializers.ModelSerializer):
     url = serializers.URLField(read_only=True, source='get_absolute_url')
-    membros = MembroGestorSerializer(source='get_membros_ativos', read_only=True, many=True)
+    membros = MembroGestorSerializer(
+        source='get_membros_ativos', read_only=True, many=True)
 
     class Meta:
         model = GrupoGestor
@@ -67,10 +68,12 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
 
 class MembroUglSerializer(serializers.ModelSerializer):
     tipo_descricao = serializers.CharField(
-    source='get_tipo_display', read_only=True)
+        source='get_tipo_display', read_only=True)
+
     class Meta:
         model = MembroUgl
-        fields = ('id_pub', 'nome', 'tipo', 'tipo_descricao', 'telefone', 'email')
+        fields = (
+            'id_pub', 'nome', 'tipo', 'tipo_descricao', 'telefone', 'email')
 
 
 class ImagemPracaSerializer(serializers.ModelSerializer):
@@ -130,8 +133,9 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
 class ParceiroDetailSerializer(ParceiroBaseSerializer):
     class Meta:
         model = Parceiro
-        fields = ('id_pub', 'praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
-                  'ramo_atividade', 'acoes', 'tempo_parceria', 'recursos_financeiros', 'imagem')
+        fields = (
+            'id_pub', 'praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
+            'ramo_atividade', 'acoes', 'tempo_parceria', 'recursos_financeiros', 'imagem')
 
 
 class ParceiroListSerializer(ParceiroBaseSerializer):
