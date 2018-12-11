@@ -6,7 +6,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 class DefaultMixin(object):
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filter_backends = (
+        DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
 
 
 class MultiSerializerViewSet(ModelViewSet):
