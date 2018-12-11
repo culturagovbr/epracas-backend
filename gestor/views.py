@@ -88,6 +88,7 @@ class ProcessoViewSet(DefaultMixin, MultiSerializerViewSet, ModelViewSet):
     }
 
     filter_fields = ('praca', 'aprovado', 'finalizado')
+    ordering_fields = ('finalizado', 'data_abertura')
 
     def partial_update(self, request, pk=None):
         processo = get_object_or_404(ProcessoVinculacao, pk=pk)
