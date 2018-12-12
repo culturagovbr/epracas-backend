@@ -9,6 +9,18 @@ from rest_framework import serializers
 
 class ChoicesMetadata(SimpleMetadata):
 
+    def format_choices(self, items):
+        choices = OrderedDict()
+        choices['choices'] = [
+            {
+                'value': choice_value,
+                'display_name': force_text(choice_name, strings_only=True)
+            }
+            for choice_value, choice_name in items
+        ]
+
+        return choices
+
     def determine_metadata(self, request, view):
         metadata = super(ChoicesMetadata, self).determine_metadata(request, view)
 
@@ -18,26 +30,12 @@ class ChoicesMetadata(SimpleMetadata):
             choices = OrderedDict()
             if (not isinstance(field, (serializers.RelatedField, serializers.ManyRelatedField))
                 and hasattr(field, 'choices')):
-                choices['choices'] = [
-                    {
-                        'value': choice_value,
-                        'display_name': force_text(choice_name, strings_only=True)
-                    }
-                    for choice_value, choice_name in field.choices.items()
-                ]
+                choices = self.format_choices(field.choices.items())
                 field_info[field_name] = choices
 
             elif (isinstance(field, serializers.ListField)):
-
-                choices['choices'] = [
-                    {
-                        'value': choice_value,
-                        'display_name': force_text(choice_name, strings_only=True)
-                    }
-                    for choice_value, choice_name in field.child.choices.items()
-                ]
+                choices = self.format_choices(field.child.choices.items())
                 field_info[field_name] = choices
         
-
         metadata['selections'] = field_info
         return metadata
