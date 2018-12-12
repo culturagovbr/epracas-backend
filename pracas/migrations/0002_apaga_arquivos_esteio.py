@@ -23,5 +23,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(remove_arquivos_esteio, migrations.RunPython.noop),
+        migrations.RunPython(remove_arquivos_esteio),
     ]
