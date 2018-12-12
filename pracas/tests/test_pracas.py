@@ -742,7 +742,7 @@ def test_arquivar_um_GG_como_gestor_da_Praca(_common_user, client):
             'praca_pk': gg.praca.pk,
             'pk': gg.pk
         }),
-        finalizacao, 
+        finalizacao,
         content_type="application/json"
         )
 
@@ -1203,3 +1203,19 @@ def test_propriedades_de_um_membro_UGL(client):
 
     for field in fields:
         assert field in response.data['unidade_gestora'][0]
+
+
+def test_busca_praca_por_municipio_com_acento(client):
+    """
+    Testa a busca por nome do município da praça ignorando os acentos
+    """
+
+    praca = mommy.make('Praca', municipio='Mûnĩcípio')
+    mommy.make('Praca', _quantity=5)
+
+    search = 'municipio'
+
+    response = client.get(_list(), params={"search": search},
+                          content_type="application/json")
+
+    assert str(praca.id_pub) == response.data[0]['id_pub']
