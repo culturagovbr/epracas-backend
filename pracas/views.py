@@ -31,6 +31,7 @@ from .serializers import PracaListSerializer
 from .serializers import PracaSerializer
 from .serializers import RhDetailSerializer
 from .serializers import RhListSerializer
+from .filters import UnaccentSearchFilter
 
 
 class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
@@ -40,7 +41,8 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
     metadata_class = ChoicesMetadata
     serializer_class = PracaSerializer
     queryset = Praca.objects.all()
-    search_fields = ('nome', 'municipio', 'uf')
+    filter_backends = (UnaccentSearchFilter,)
+    search_fields = ('~nome', '~municipio', '~uf')
 
     serializers = {
         'list': PracaListSerializer,
