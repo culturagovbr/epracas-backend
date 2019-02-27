@@ -15,6 +15,8 @@ from authentication.tests.test_user import _common_user
 
 from pracas.tests.test_pracas import _create_temporary_file
 
+from atividades.models import Agenda
+
 
 pytestmark = pytest.mark.django_db
 
@@ -596,3 +598,25 @@ def test_return_areas_list(client):
 
     assert response.status_code == status.HTTP_200_OK
     assert len(response.data) == quantidade
+
+
+def test_return_options(client):
+    evento = mommy.make('Agenda', _fill_optional=['faixa_etaria', 'espaco', 
+        'publico', 'territorio'])
+
+    response = client.options(
+        reverse('atividades:agenda-detail', kwargs={'pk': evento.id_pub}))
+
+    field_names = ['faixa_etaria', 'espaco', 'tipo', 'publico', 'territorio']
+
+    for field in field_names:
+        try:
+            choices_items = Agenda._meta.get_field(field).base_field.choices
+        except AttributeError:
+             choices_items = Agenda._meta.get_field(field).choices
+
+        request_items = response.data['selections'][field]['choices']
+
+        for request_item, choices_item in zip(request_items, choices_items):
+            assert request_item['value'] == choices_item[0]
+            assert request_item['display_name'] == choices_item[1]
