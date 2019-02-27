@@ -1210,12 +1210,12 @@ def test_busca_praca_por_municipio_com_acento(client):
     Testa a busca por nome do município da praça ignorando os acentos
     """
 
-    praca = mommy.make('Praca', municipio='Mûnĩcípio')
+    praca = mommy.make('Praca', municipio='Ceilândia')
     mommy.make('Praca', _quantity=5)
 
-    search = 'municipio'
+    search = 'ceilandia'
 
-    response = client.get(_list(), params={"search": search},
+    response = client.get(_list(), {"search": search},
                           content_type="application/json")
 
     assert str(praca.id_pub) == response.data[0]['id_pub']
