@@ -45,14 +45,10 @@ que irá manter o pytest verificando os arquivos de teste. Ao alterar algum dess
 
 ### Ambiente de desenvolvimento containerizado
 A aplicação encontra-se preparada para ser executada como um container Docker.
-Você pode utilizar o container simplesmente e coloca-lo em seu stack, ou ainda utilizar o docker-compose e subir uma pilha completa da aplicação.
-
+Você pode utilizar o docker-compose para subir os serviços necessários para subir o ambiente.
+Execute os seguintes comandos para subir o ambientena porta 8000:
 ```bash
-docker build -t epracas-dev .
-```
-e executar da seguinte maneira:
-```bash
-docker run --name epracas-backend -p 8000:8000 -d epracas-dev
+docker-compose up
 ```
 
 ### Configurando as variáveis de ambiente
