@@ -6,11 +6,29 @@ services:
       - "8000:8000"
     volumes:
       - ./:/var/uwsgi/
+    command: ["uwsgi", "--http", ":8000", "--wsgi-file", "/var/uwsgi/epracas/wsgi.py", "--master", "--stats", ":8001", "--chdir", "/var/uwsgi"]
     links:
       - db
+    working_dir: /var/uwsgi/
     environment:
       DEBUG: 'True'
       DATABASE_URL: 'postgres://epracas:epracas123@db/epracas_db'
+    depends_on:
+      - db
+  migration:
+    build: .
+    working_dir: /var/uwsgi/
+    command: sh -c "python manage.py makemigrations && python manage.py migrate"
+    environment:
+      DEBUG: 'True'
+      DATABASE_URL: 'postgres://epracas:epracas123@db/epracas_db'
+    volumes:
+      - ./:/var/uwsgi/
+    links:
+      - db
+    depends_on:
+      - db
+      - epracas-backend
   db:
     image: "postgres:9.6"
     environment:
