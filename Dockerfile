@@ -1,13 +1,10 @@
 FROM python:3.6-alpine
 
-LABEL maintainer André "decko" de Brito <decko@birosca.mobi>
-
 RUN apk add --no-cache python-dev gcc musl-dev linux-headers
 RUN apk add --no-cache --virtual=build-dependencies wget ca-certificates
 RUN apk add --no-cache postgresql-dev
 RUN apk add --no-cache git
 RUN pip install virtualenv uwsgi
-# ADD this so pip can see the requirements.txt file.
 COPY . /var/uwsgi
 RUN ls -lha /var/uwsgi
 RUN pip install -r /var/uwsgi/requirements.txt

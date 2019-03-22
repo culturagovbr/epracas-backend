@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   epracas-backend:
     build: .
@@ -13,8 +13,7 @@ services:
     environment:
       DEBUG: 'True'
       DATABASE_URL: 'postgres://epracas:epracas123@db/epracas_db'
-    depends_on:
-      - db
+
   migration:
     build: .
     working_dir: /var/uwsgi/
@@ -27,9 +26,15 @@ services:
     links:
       - db
     depends_on:
-      - db
-      - epracas-backend
+      db:
+        condition: service_healthy
+
   db:
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U epracas -d epracas_db || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     image: "postgres:9.6"
     environment:
       POSTGRES_DB: epracas_db
