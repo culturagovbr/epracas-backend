@@ -48,6 +48,20 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
         'list': PracaListSerializer,
     }
 
+    def retrieve(self, request, pk=None):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        grupos_gestores = serializer.data.get('grupo_gestor')
+        grupo_gestor_ativo = None
+        for grupo_gestor in grupos_gestores:
+            if grupo_gestor['st_ativo'] is True:
+                grupo_gestor_ativo = grupo_gestor
+
+        response = serializer.data
+        response['grupo_gestor'] = grupo_gestor_ativo
+
+        return Response(response)
+
 
 class ImagemPracaViewSet(DefaultMixin, ModelViewSet):
     authentication_classes = (JSONWebTokenAuthentication,)

@@ -121,13 +121,13 @@ class Praca(IdPubIdentifier):
         )
     telefone1 = models.CharField(
         _('Telefone de Contato'),
-        blank=True,
+        blank=False,
         null=True,
         max_length=15
         )
     telefone2 = models.CharField(
         _('Telefone de Contato'),
-        blank=True,
+        blank=False,
         null=True,
         max_length=15
         )
@@ -267,7 +267,6 @@ class ImagemPraca(IdPubIdentifier):
         app_name = self._meta.app_label
         basename = self._meta.object_name.lower()
         url = app_name + ':' + basename + '-detail'
-
         return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})
 
 
@@ -355,12 +354,29 @@ class GrupoGestor(IdPubIdentifier):
         upload_to=upload_grupogestor_to,
         blank=True,
         null=True)
+    nomeacao = models.FileField(
+        _('Nomeação do Grupo Gestor'),
+        upload_to=upload_grupogestor_to,
+        blank=True,
+        null=True)
+    regimento_interno = models.FileField(
+        _('Regimento Interno da Praça'),
+        upload_to=upload_grupogestor_to,
+        blank=True,
+        null=True)
     tipo_documento = models.CharField(
         _('Tipo de documento de constituição'),
         max_length=1,
         blank=True,
         null=True,
         choices=DOCUMENTO_CHOICES)
+
+    @property
+    def st_ativo(self):
+        st_ativo = True
+        if self.data_finalizacao:
+            st_ativo = False
+        return st_ativo
 
     def get_absolute_url(self):
         app_name = self._meta.app_label
