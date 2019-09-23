@@ -309,7 +309,7 @@ class Parceiro(IdPubIdentifier):
         )
     tempo_parceria = models.IntegerField(
         _('Tempo previsto para a parceria'),
-        null=True
+        default=0
         )
     recursos_financeiros = models.DecimalField(
         _('Recursos Financeiros'),
