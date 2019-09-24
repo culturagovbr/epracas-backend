@@ -121,7 +121,7 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
 
 
 class ParceiroBaseSerializer(serializers.ModelSerializer):
-    tempo_parceria = serializers.IntegerField(allow_null=True)
+    tempo_parceria = serializers.IntegerField(null=True, blank=True)
     
     class Meta:
         model = Parceiro
@@ -130,7 +130,7 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
 
 
 class ParceiroDetailSerializer(ParceiroBaseSerializer):
-    tempo_parceria = serializers.IntegerField(allow_null=True)
+    tempo_parceria = serializers.IntegerField(null=True, blank=True)
     
     class Meta:
         model = Parceiro
