@@ -128,7 +128,7 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
                   'ramo_atividade', 'acoes', 'tempo_parceria', 'imagem')
     
     def update(self, instance, validated_data):
-        instance.borrower = validated_data.get('tempo_parceria')
+        instance.tempo_parceria = validated_data.get('tempo_parceria')
         instance.save()
 
         return instance
@@ -141,7 +141,7 @@ class ParceiroDetailSerializer(serializers.ModelSerializer):
                   'ramo_atividade', 'acoes', 'tempo_parceria', 'recursos_financeiros', 'imagem')
 
     def update(self, instance, validated_data):
-        instance.borrower = validated_data.get('tempo_parceria')
+        instance.tempo_parceria = validated_data.get('tempo_parceria')
         instance.save()
 
         return instance
