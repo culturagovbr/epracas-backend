@@ -140,9 +140,9 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
         parceiro = ParceiroDetailSerializer(data=request.data)
         if parceiro.is_valid():
             parceiro.save(praca=praca)
-            return Response(parceiro.data, status=status.HTTP_200_OK)
+            return Response(parceiro.data, status=201)
         else:
-            return Response(parceiro.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(parceiro.errors, status=400)
 
     def partial_update(self, request, pk=None, praca_pk=None):
         praca = get_object_or_404(Praca, pk=praca_pk)

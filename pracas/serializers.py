@@ -129,7 +129,7 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
 
 class ParceiroDetailSerializer(ParceiroBaseSerializer):
     class Meta:
-        model = Parceiro(allow_null=True)
+        model = Parceiro
         fields = ('id_pub', 'praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
                   'ramo_atividade', 'acoes', 'tempo_parceria', 'recursos_financeiros', 'imagem')
 
