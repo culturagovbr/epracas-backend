@@ -133,12 +133,18 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
 
         return instance
 
-class ParceiroDetailSerializer(ParceiroBaseSerializer):
+class ParceiroDetailSerializer(serializers.ModelSerializer):
+    tempo_parceria = serializers.IntegerField(null=True, blank=True)
     class Meta:
         model = Parceiro
         fields = ('id_pub', 'praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
                   'ramo_atividade', 'acoes', 'tempo_parceria', 'recursos_financeiros', 'imagem')
 
+    def update(self, instance, validated_data):
+        instance.borrower = validated_data.get('tempo_parceria')
+        instance.save()
+
+        return instance
 
 class ParceiroListSerializer(ParceiroBaseSerializer):
     class Meta:
