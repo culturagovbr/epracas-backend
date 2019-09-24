@@ -150,7 +150,7 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
 
         self.check_object_permissions(request, praca)
         serializer = ParceiroDetailSerializer(parceiro, data=request.data,
-                                              partial=True)
+                                              partial=True, allow_null=True)
         if serializer.is_valid():
             serializer.save(Parceiro=parceiro)
             return Response(serializer.data, status=status.HTTP_200_OK)
