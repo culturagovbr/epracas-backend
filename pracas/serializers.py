@@ -121,30 +121,18 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
 
 
 class ParceiroBaseSerializer(serializers.ModelSerializer):
-    tempo_parceria = serializers.IntegerField(null=True, blank=True)
     class Meta:
         model = Parceiro
         fields = ('praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
                   'ramo_atividade', 'acoes', 'tempo_parceria', 'imagem')
-    
-    def update(self, instance, validated_data):
-        instance.tempo_parceria = validated_data.get('tempo_parceria')
-        instance.save()
 
-        return instance
 
 class ParceiroDetailSerializer(serializers.ModelSerializer):
-    tempo_parceria = serializers.IntegerField(null=True, blank=True)
     class Meta:
         model = Parceiro
         fields = ('id_pub', 'praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
                   'ramo_atividade', 'acoes', 'tempo_parceria', 'recursos_financeiros', 'imagem')
 
-    def update(self, instance, validated_data):
-        instance.tempo_parceria = validated_data.get('tempo_parceria')
-        instance.save()
-
-        return instance
 
 class ParceiroListSerializer(ParceiroBaseSerializer):
     class Meta:
