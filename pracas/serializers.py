@@ -119,8 +119,19 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
                   'gestor', 'data_inauguracao')
         read_only_fields = ('url', 'gestor', 'header_img', 'id_pub')
 
+class BlankableIntegerField(serializers.IntegerField):
+    """
+    We wanted to be able to receive an empty string ('') for a decimal field
+    and in that case turn it into a None number
+    """
+    def to_internal_value(self, data):
+        if data == '':
+            return None
+
+        return super(BlankableIntegerField, self).to_internal_value(data)
 
 class ParceiroBaseSerializer(serializers.ModelSerializer):
+    tempo_parceria = BlankableIntegerField(allow_null=True)
         
     class Meta:
         model = Parceiro
@@ -129,7 +140,8 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
 
 
 class ParceiroDetailSerializer(ParceiroBaseSerializer):
-        
+    tempo_parceria = BlankableIntegerField(allow_null=True)
+    
     class Meta:
         model = Parceiro
         fields = ['id_pub', 'praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
