@@ -307,10 +307,8 @@ class Parceiro(IdPubIdentifier):
         blank=True,
         null=True,
         )
-    tempo_parceria = models.CharField(
+    tempo_parceria = models.IntegerField(
         _('Tempo previsto para a parceria'),
-        default='',
-        max_length=5,
         blank=True,
         null=True
         )
