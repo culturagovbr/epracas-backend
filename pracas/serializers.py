@@ -126,7 +126,12 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
         model = Parceiro
         fields = ('praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
                   'ramo_atividade', 'acoes', 'tempo_parceria', 'imagem')
+    
+    def update(self, instance, validated_data):
+        instance.borrower = validated_data.get('tempo_parceria')
+        instance.save()
 
+        return instance
 
 class ParceiroDetailSerializer(ParceiroBaseSerializer):
     class Meta:
