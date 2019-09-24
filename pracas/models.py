@@ -270,6 +270,16 @@ class ImagemPraca(IdPubIdentifier):
 
         return reverse(url, kwargs={'praca_pk': self.praca.pk, 'pk': self.pk})
 
+class BlankableIntegerField(models.IntegerField):
+    """
+    We wanted to be able to receive an empty string ('') for a decimal field
+    and in that case turn it into a None number
+    """
+    def to_internal_value(self, data):
+        if data == '':
+            return None
+
+        return super(BlankableIntegerField, self).to_internal_value(data)
 
 class Parceiro(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='parceiros', null=True)
@@ -307,7 +317,7 @@ class Parceiro(IdPubIdentifier):
         blank=True,
         null=True,
         )
-    tempo_parceria = models.IntegerField(
+    tempo_parceria = BlankableIntegerField(
         _('Tempo previsto para a parceria'),
         blank=True,
         null=True
