@@ -135,8 +135,8 @@ class ParceiroBaseSerializer(serializers.ModelSerializer):
         
     class Meta:
         model = Parceiro
-        fields = ['praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
-                  'ramo_atividade', 'acoes', 'tempo_parceria', 'imagem']
+        fields = ['praca', 'nome', 'endereco', 'contato', 'telefone', 'email', 'ramo_atividade',
+                  'acoes', 'tempo_parceria', 'imagem']
 
 
 class ParceiroDetailSerializer(ParceiroBaseSerializer):
@@ -144,8 +144,8 @@ class ParceiroDetailSerializer(ParceiroBaseSerializer):
     
     class Meta:
         model = Parceiro
-        fields = ['id_pub', 'praca', 'nome', 'endereco', 'contato', 'telefone', 'email',
-                  'ramo_atividade', 'acoes', 'tempo_parceria', 'recursos_financeiros', 'imagem']
+        fields = ['id_pub', 'praca', 'nome', 'endereco', 'contato', 'telefone', 'email', 'ramo_atividade',
+                  'acoes', 'tempo_parceria', 'recursos_financeiros', 'imagem']
 
 
 class ParceiroListSerializer(ParceiroBaseSerializer):

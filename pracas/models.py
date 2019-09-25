@@ -281,6 +281,7 @@ class BlankableIntegerField(models.IntegerField):
 
         return super(BlankableIntegerField, self).to_internal_value(data)
 
+
 class Parceiro(IdPubIdentifier):
     praca = models.ForeignKey(Praca, related_name='parceiros', null=True)
     nome = models.CharField(
