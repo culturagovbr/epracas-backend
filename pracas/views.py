@@ -31,6 +31,7 @@ from .serializers import PracaListSerializer
 from .serializers import PracaSerializer
 from .serializers import RhDetailSerializer
 from .serializers import RhListSerializer
+from .filters import UnaccentSearchFilter
 
 
 class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
@@ -40,11 +41,26 @@ class PracaViewSet(DefaultMixin, MultiSerializerViewSet):
     metadata_class = ChoicesMetadata
     serializer_class = PracaSerializer
     queryset = Praca.objects.all()
-    search_fields = ('nome', 'municipio', 'uf')
+    filter_backends = (UnaccentSearchFilter,)
+    search_fields = ('~nome', '~municipio', '~uf')
 
     serializers = {
         'list': PracaListSerializer,
     }
+
+    def retrieve(self, request, pk=None):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        grupos_gestores = serializer.data.get('grupo_gestor')
+        grupo_gestor_ativo = None
+        for grupo_gestor in grupos_gestores:
+            if grupo_gestor['st_ativo'] is True:
+                grupo_gestor_ativo = grupo_gestor
+
+        response = serializer.data
+        response['grupo_gestor'] = grupo_gestor_ativo
+
+        return Response(response)
 
 
 class ImagemPracaViewSet(DefaultMixin, ModelViewSet):

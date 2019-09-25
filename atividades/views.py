@@ -19,11 +19,14 @@ from .serializers import RelatorioImagemSerializer
 
 from .serializers import AreaSerializer
 
+from core.metadata import ChoicesMetadata
+
 
 class AgendaViewSet(DefaultMixin, ModelViewSet):
 
     authentication_classes = (JSONWebTokenAuthentication,)
     permission_classes = (IsOwnerOrReadOnly,)
+    metadata_class = ChoicesMetadata
 
     serializer_class = AgendaDetailSerializer
     partial = True

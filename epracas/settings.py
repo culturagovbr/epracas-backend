@@ -53,6 +53,9 @@ DJANGO_APPS = (
 
     # Admin
     # 'django.contrib.admin',
+
+    # Postgres extensions:
+    'django.contrib.postgres',
 )
 THIRD_PARTY_APPS = (
     'rest_framework_docs',
