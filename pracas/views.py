@@ -165,8 +165,11 @@ class ParceiroViewSet(DefaultMixin, ModelViewSet):
         parceiro = get_object_or_404(Parceiro, pk=pk)
 
         self.check_object_permissions(request, praca)
+        if request.data['tempo_parceria'] == 'null':
+            request.data._mutable = True
+            request.data['tempo_parceria'] = None
         serializer = ParceiroDetailSerializer(parceiro, data=request.data,
-                                              partial=True)
+                                      partial=True)
         if serializer.is_valid():
             serializer.save(Parceiro=parceiro)
             return Response(serializer.data, status=status.HTTP_200_OK)
