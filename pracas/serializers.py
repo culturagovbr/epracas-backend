@@ -63,8 +63,7 @@ class GrupoGestorSerializer(serializers.ModelSerializer):
         model = GrupoGestor
         fields = ('url', 'id_pub', 'data_instituicao', 'data_finalizacao',
                   'tipo_documento', 'documento_constituicao', 'estatuto',
-                  'nomeacao', 'previsao_espacos', 'membros',
-                  'regimento_interno', 'st_ativo',)
+                  'previsao_espacos', 'membros')
 
 
 class MembroUglSerializer(serializers.ModelSerializer):
@@ -108,7 +107,7 @@ class PracaBaseSerializer(serializers.ModelSerializer):
 
     def get_grupo_gestor(self, obj):
         if obj.get_grupogestor():
-            serializer = GrupoGestorSerializer(obj.get_grupo_gestor_ativo())
+            serializer = GrupoGestorSerializer(obj.get_grupogestor())
             return serializer.data
         else:
             return None
@@ -120,9 +119,8 @@ class PracaListSerializer(PracaBaseSerializer, DynamicFieldsModelSerializer):
         fields = ('url', 'id_pub', 'nome', 'municipio', 'uf', 'regiao',
                   'modelo', 'modelo_descricao', 'situacao',
                   'situacao_descricao', 'repasse', 'contrato', 'header_img',
-                  'gestor', 'data_inauguracao',)
-        read_only_fields = ('url', 'gestor', 'header_img',
-                            'id_pub')
+                  'gestor', 'data_inauguracao')
+        read_only_fields = ('url', 'gestor', 'header_img', 'id_pub')
 
 
 class ParceiroBaseSerializer(serializers.ModelSerializer):
@@ -197,7 +195,6 @@ class PracaSerializer(PracaBaseSerializer):
         source='ugl', many=True, read_only=True)
     rh = RhListSerializer(source='get_rh_ativos', many=True, read_only=True)
     atores = AtorListSerializer(many=True, read_only=True)
-    grupo_gestor = GrupoGestorSerializer(many=True, read_only=True)
 
     class Meta:
         model = Praca
@@ -207,14 +204,12 @@ class PracaSerializer(PracaBaseSerializer):
                   'repasse', 'bio', 'telefone1', 'telefone2', 'fax', 'email1',
                   'email2', 'pagina', 'data_inauguracao', 'header_img', 'lat',
                   'long', 'gestor', 'unidade_gestora', 'grupo_gestor',
-                  'parceiros', 'rh', 'atores', 'imagem', 'funciona_dia_util',
+                  'parceiros', 'rh', 'atores', 'imagem','funciona_dia_util',
                   'hora_abertura_dia_util', 'hora_fechamento_dia_util',
-                  'funciona_sabado', 'hora_abertura_sabado',
-                  'funciona_domingo', 'hora_abertura_domingo',
-                  'hora_fechamento_sabado', 'hora_fechamento_domingo')
+                  'funciona_sabado', 'hora_abertura_sabado', 'hora_fechamento_sabado',
+                  'funciona_domingo', 'hora_abertura_domingo', 'hora_fechamento_domingo')
         read_only_fields = ('id_pub', 'gestor', 'unidade_gestora',
-                            'grupo_gestor', 'imagem', 'parceiros',
-                            'atores',)
+                            'grupo_gestor', 'imagem', 'parceiros', 'atores')
 
 
 class DistanciaSerializer(PracaListSerializer):
