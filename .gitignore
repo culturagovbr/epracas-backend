@@ -66,3 +66,6 @@ epracas/initial_data.json
 media/
 
 .DS_Store
+
+#ide
+epracas-backend.iml
